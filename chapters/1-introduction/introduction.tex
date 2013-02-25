@@ -2,13 +2,32 @@
 
 \section{Background}
 	\subsection{Motivation}
+	
 	\subsection{Innovation}
+		According to the article “JavaScript as an Embedded DSL” there are three widely known approaches for representing JavaScript as DSL with the purpose of making client side web application development safer. The first approach is to create a standalone language (e.g. a DSL) that include the desired safe language features and which is then compiled to JavaScript. An example of such an approach is the Google language Dart. The second approach is to start with another existing languages like Java or C\# and compile it to JavaScript. An example here of could be the Google Web Toolkit (GWT) or ScriptSharp (Script\#). The third approach is to design a language on top of JavaScript with some extended features such as static typing and then compile it back to JavaScript. An example here of is Microsofts TypeScript.
+
+		The article then introduces a fourth approach which involves embedding the DSL into the host language Scala using a technique called Lightweight Modular Staging. We use a similar approach in this project as we attempt to create a DSL that is embedded into a host language (C\#). The staging features of the Scala language is not available in C\# so we are limited to using language features that C\# and the .NET framework provides. Because of time constraints on our project the features we will be able to utilize are further limited by our defined scope.
+
+		The fact that our DSL is embedded in the C\# host language is what makes it different from the above described approaches though similar to the fourth approach. The primary different benefit of our approach is that client side code essentially is compiled together with server side code. This makes it possible to achieve a compile time guarantee of a correct communication interface between client side and server side .NET web applications developed from Code Behind.
 
 \section{Problem Definition}
+	To improve development of web applications with ASP.NET Web Forms from Code Behind it’s beneficial to investigate how JavaScript can be safely represented in order to acheive compile time validation in a similar manner as with HTML. The goal of this project is to achieve this through the implementation of an internal DSL in C\# which uses expression trees for representing JavaScript abstract syntax.
+
+	Developing web applications instead of native applications is a strong tendency in software development today. JavaScript contributes to enriching the user experience and sometimes provide functionality which is indispensable for such web applications.
+
+	ASP.NET Web Forms provides the possibility of building the HTML document from Code Behind which helps improve correctness through compile time validation. Writing JavaScript code from ASP.NET Code Behind is not possible in the same way as with HTML. From Code Behind JavaScript is injected into the application as hard coded text strings and thus a compile time validation is not possible. This increases the possibility of writing faulty code that emits errors which are not discovered before client side runtime. Runtime errors are generally harder to debug and in worst case exposed to the end user while leaving the application in a corrupt state.
+
+	This project is based on a case study concerning form validation and will focus on generation of correct JavaScript and optimizing the DSL syntax.
 
 \section{Method}
+	We will analyze ECMAScript 5.1 in order to identify what language features are needed to fulfill the requirements set by our case study, and which features are undesirable in a safe representation of JavaScript. Furthermore we will investigate how JavaScript has been implemented as an internal DSL in Scala (based on Kossakowski et. al.) and lastly investigate useful C\# features for implementing an internal DSL including Expression Trees, generics and operator overloading.
+
+	We will design and implement a C\# class library (software construction project) to represent JavaScript as an internal DSL with support for the JavaScript features identified in the analysis. The class library will be able to generate JavaScript code corresponding to the DSL abstract syntax.
+
+	We will set up a unit test suite to ensure that the generated JavaScript is corresponds correctly to the DSL abstract syntax. Furthermore we will evaluate the feasibility of C\# as host language for an internal DSL.
 
 \section{Scope}
-	\subsection{Case Study}
+	\subsection{Case Study: Form Validation}
 	\subsection{Focus}
+		The focus of this project will be getting as near as possible to a solution which functions correctly. Thus, performance will be assessed when necessary but not be of highest priority.
 
