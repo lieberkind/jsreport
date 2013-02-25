@@ -4,16 +4,66 @@
 
 \section{Identification of Unsafe JavaScript Features}
 	\subsection{No compile time validation}
+		In general enforcing correctness at compile time instead of runtime make the development process safer as some errors (e.g. syntax errors like missing semicolons) are not possible to overlook or ignore. Furthermore discovering errors as early as possible makes the debugging process easier hence compile time errors should be preferred over runtime errors. So the fact that JavaScript is an interpreted language that is not compiled makes it a less safe language.
+
 	\subsection{Dynamic type system}
+		JavaScript has a dynamic type system which in some situations make the development process faster but also less safe as some errors will not emerge at all (or maybe emerge at runtime). E.g. it is possible to by mistake add a Number value with a Boolean value without getting any warnings. In other words it is possible to forget enforcing that a variable has a specific type. This problem is increased especially when parsing external input as it is done e.g. in form validation.
+	
 	\subsection{Reuse of identifiers in declarations}
+		JavaScript allows declaring multiple variables or functions with the same name in the same execution context without any warnings. This makes it possible by mistake to override earlier declared variables or functions. This kind of errors can be difficult and time consuming to discover because of their hidden nature.
+
 	\subsection{No block scope}
+		JavaScript’s syntax comes from C. In all other C-Like languages a block creates scope. This is not the case in JavaScript even though its block syntax suggests that it does (“The Good Parts” p. 102). This can be a source of confusion especially for programmers that are used to block scope. Scope related errors might be difficult to debug as obviously no warnings are given (since there is no block scope) when a variable from an outer block is assigned a value by mistake.
+
 	\subsection{Many falsy values}
+		JavaScript has multiple falsy values which are not interchangeable. This is another source of errors that can be difficult to discover (“The Good Parts” p. 106).
 
 \section{Existing Similar Approaches}
+	\begin{itemize}
+		\item ScriptSharp (C\# to JavaScript)
+		\item JavaScript as an embedded DSL (Odersky et. al.) (Scala)
+		\item SharpKit (C\# to JavaScript)
+		\item (WebSharper) (F\# to JavaScript)
+	\end{itemize}
 
 \section{Case Study: Necessary JavaScript Language Features}
 
 \section{Possible Approaches}
 	\subsection{Challenges in general}
+		\begin{itemize}
+			\item DSL Syntax
+			\item Scope
+			\item Declaration of Variable and Functions
+			\item Expressions
+		\end{itemize}
+
 	\subsection{Direct conversion from host to target language}
+		\begin{itemize}
+			\item Code quotations (F\#)
+				\begin{itemize}
+					\item Generates AST from native F\# code
+					\item AST can be used on client and server side
+				\end{itemize}
+			\item Roslyn (C\#)
+				\begin{itemize}
+					\item License (http://msdn.microsoft.com/en-us/vstudio/jj150688) maybe not making the use of Roslyn very attractive?
+				\end{itemize}
+		\end{itemize}
+
+
+
 	\subsection{Generating target code using host language (internal DSL)}
+		\begin{itemize}
+			\item Abstract Syntax
+			\item Operator Overloading
+				\begin{itemize}
+					\item Assignment operator not possible to overload
+						\begin{itemize}
+							\item Possible solution identifier/variable dictionary that is used for checking that all variables are in a correct state (before generating the next JavaScript statement) and otherwise flag an error (runtime).
+						\end{itemize}
+				\end{itemize}
+			\item Expression Trees (C\#)
+				\begin{itemize}
+					\item Can be used for generating code on client and server side
+				\end{itemize}
+		\end{itemize}
