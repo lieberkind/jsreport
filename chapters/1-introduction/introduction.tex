@@ -1,34 +1,96 @@
 \chapter{Introduction}
+	This bachelor project has been produced by Tomas Alan Lieberkind and Asger Schlichtkrull from the 1st February 2013 to the 22nd May 2013 at the IT-University of Copenhagen. The project has been supervised by Peter Sestoft.
 
-\section{Background}
-
-	\subsection{Motivation}
-
-	\subsection{Innovation}
-		According to the article “JavaScript as an Embedded DSL” there are three widely known approaches for representing JavaScript as DSL with the purpose of making client side web application development safer. The first approach is to create a standalone language (e.g. a DSL) that include the desired safe language features and which is then compiled to JavaScript. An example of such an approach is the Google language Dart. The second approach is to start with another existing languages like Java or C\# and compile it to JavaScript. An example here of could be the Google Web Toolkit (GWT) or ScriptSharp (Script\#). The third approach is to design a language on top of JavaScript with some extended features such as static typing and then compile it back to JavaScript. An example here of is Microsofts TypeScript.
-
-		The article then introduces a fourth approach which involves embedding the DSL into the host language Scala using a technique called Lightweight Modular Staging. We use a similar approach in this project as we attempt to create a DSL that is embedded into a host language (C\#). The staging features of the Scala language is not available in C\# so we are limited to using language features that C\# and the .NET framework provides. Because of time constraints on our project the features we will be able to utilize are further limited by our defined scope.
-
-		The fact that our DSL is embedded in the C\# host language is what makes it different from the above described approaches though similar to the fourth approach. The primary different benefit of our approach is that client side code essentially is compiled together with server side code. This makes it possible to achieve a compile time guarantee of a correct communication interface between client side and server side .NET web applications developed from Code Behind.
-
-\section{Problem Definition}
-	To improve development of web applications with ASP.NET Web Forms from Code Behind it’s beneficial to investigate how JavaScript can be safely represented in order to acheive compile time validation in a similar manner as with HTML. The goal of this project is to achieve this through the implementation of an internal DSL in C\# which uses expression trees for representing JavaScript abstract syntax.
+\section{Motivation}
+	To improve development of web applications with ASP.NET Web Forms from Code Behind it is beneficial to investigate how JavaScript can be safely represented in order to acheive compile time validation.
 
 	Developing web applications instead of native applications is a strong tendency in software development today. JavaScript contributes to enriching the user experience and sometimes provide functionality which is indispensable for such web applications.
 
-	ASP.NET Web Forms provides the possibility of building the HTML document from Code Behind which helps improve correctness through compile time validation. Writing JavaScript code from ASP.NET Code Behind is not possible in the same way as with HTML. From Code Behind JavaScript is injected into the application as hard coded text strings and thus a compile time validation is not possible. This increases the possibility of writing faulty code that emits errors which are not discovered before client side runtime. Runtime errors are generally harder to debug and in worst case exposed to the end user while leaving the application in a corrupt state.
+	ASP.NET Web Forms provides the possibility of building HTML documents from Code Behind which improves correctness through compile time validation. Writing JavaScript code from ASP.NET Code Behind is not possible in the same way as with HTML. From Code Behind JavaScript is embedded into the application as hard coded text strings and thus compile time validation is not possible. This increases the possibility of writing faulty code that emits errors which are not discovered before client side runtime. Runtime errors are generally harder to debug and in worst case exposed to the end user while leaving the application in a corrupt state.
 
-	This project is based on a case study concerning form validation and will focus on generation of correct JavaScript and optimizing the DSL syntax.
+	Achieving compile time validation of JavaScript is not a ground-breaking thought, and there are several projects out in the open that does exactly this; TypeScript by Microsoft and Dart by Google are just a few.
+
+	Depending on the problem at hand one weakness with those solutions could be that the server side code and the client side code (JavaScript) is written as two independent units, and nothing ties them safely together. Essentially server side code and client side code is compiled separately. 
+
+	Another problem is that of reusability. In cases such as form validation it is necessary to write the same piece of code in two different languages in order to validate both on client side and server side.
+
+	This project strides towards finding a solution that incorporates compile time validation, generation of client side code from server side code, and safely tiing client and server side together.
+
+\section{Reading Guide}
+
+	This report is directed to people with interest in how JavaScript can be safely written in ASP.NET WebForms projects. It is assumed that the reader has a general understanding of Abstract Syntax Trees for representing programs source code and a basic understanding of JavaScript. Third party libraries used in the project, namely Roslyn and Script\#, will be introduced and thus knowledge about these is not a prerequisite.
+
+	This document consists of six chapters.
+
+	Chapter one introduces the project, the motivation behind it and its scope. Additionally it introduces the case study upon which it is based.
+
+	Chapter two briefly introduces ASP.NET Web Forms and the usage of Code Behind to develop web applications. Furthermore it explains why JavaScript can be considered an unsafe language.
+
+	Chapter three introduces various technologies that can be useful to the project and describes how they can be used in combination to approach the project in different ways. Furthermore an analysis is conducted in order to investigate which approach is most convenient to implement.
+
+	The MiCS project is an implementation of the approach chosen in chapter three. Chapter four describes the MiCS project in details, starting with the overall flow needed to convert C\# to JavaScript, the architecture of the project, the implementation of the stages described in the flow and correctness testing of the project.
+
+	Chapter five and six evaluates the solution from chapter four, reflects on the design goals set in the problem definition and discusses what direction the project should take from here.
+
+\section{Problem definition}
+	The problem definition has changed since the beginning of this project. In the original problem definition it was stated that we would represent JavaScript as an internal DSL in C\#. Instead we widened our perspective, to include other possible approaches to safe JavaScript development in ASP.NET Web Forms. Below, the revised problem definition is listed.
+	\begin{itemize}
+
+	\item Study JavaScript and describe its unsafe language features.
+
+	\item Investigate how JavaScript can be safely represented within ASP.NET Web Forms. This includes compile time validation and how to activate the generated JavaScript in a safe manner (client-server side consistency).
+
+	\item Investigate how to implement a solution that generates JavaScript from server side code (client-server side portability).
+
+	\item Implement and test a class library that supports safe JavaScript development from Code Behind.
+
+
+	\end{itemize}
+
+
+
+	\subsection{Learning goals}
+		\begin{itemize}
+
+		\item Knowledge of JavaScript in general and the more subtle language features of the language.
+		\item Knowledge of ASP.NET Web Forms.
+	 	\item Knowledge of the difference between C\#/.NET (as a static typed) language and JavaScript (dynamically typed language).
+		\item Better understanding of web development and the communication between client and server side...
+		\item Basic knowledge of cross compilers and abstract syntax trees.
+		\end{itemize}
 
 \section{Method}
-	We will analyze ECMAScript 5.1 in order to identify what language features are needed to fulfill the requirements set by our case study, and which features are undesirable in a safe representation of JavaScript. Furthermore we will investigate how JavaScript has been implemented as an internal DSL in Scala (based on Kossakowski et. al.) and lastly investigate useful C\# features for implementing an internal DSL including Expression Trees, generics and operator overloading.
-
-	We will design and implement a C\# class library (software construction project) to represent JavaScript as an internal DSL with support for the JavaScript features identified in the analysis. The class library will be able to generate JavaScript code corresponding to the DSL abstract syntax.
-
-	We will set up a unit test suite to ensure that the generated JavaScript is corresponds correctly to the DSL abstract syntax. Furthermore we will evaluate the feasibility of C\# as host language for an internal DSL.
+	\begin{itemize}
+	\item We will study JavaScript literature to obtain a better understanding JavaScript and which of its features can be considered unsafe. 
+	\item We will investigate what technologies and libraries can contribute to the project and how these combined can be used to approach solutions in different ways.
+	\item We will analyse and compare the solutions in order to find the one that best fits this project
+	\item We will design and implement the solution from step 2.
+	\item We will set up a unit test suite in order to ensure that everything works as expected.
+	\end{itemize}
 
 \section{Scope}
-	\subsection{Case Study: Form Validation}
+	As a complete mapping from C\# to JavaScript is unrealistic to implement in the given period of time, the project is based on a case study. Only the subset of C\# needed to fulfill the requirements set by the case study will be taken into account.
+
+	\subsection{Case Study}
+		A very common use case of JavaScript is form validation. Users can disable JavaScript in their browser and consequently forms have to be validated on the server side. But as a user experience enriching feature, they are often validated on client side as well, as to avoid the waiting time for an extra page load. Our case study concerns the validation of a registration form. Specifically, we would like to be able to:
+
+		\begin{itemize}
+		\item Validate strings using Regular Expressions to check if email addresses, postal addresses and phone numbers are correctly formatted
+		\item Validate the length of strings to check that users do not enter a single letter, or an exceptionally long string, e.g. for their name
+		\item Validate something based on the choice of something else
+
+		\item The name has to consist of at least a first name and a last name, cannot be less than 5 characters long and not exceed 128 characters
+		\item At least one delivery method has to be checked. If “Snailmail” is checked, the address and zip code fields have to be filled in. If “E-mail” is checked, the “E-mail” field has to be filled in.
+		\item The address has to follow the format: (streetname) (house number)[, (floor number). (TH|TV|SAL)] where everything within the brackets is optional. For example, the addresses “Amagerbrogade 125, 3.TV” and “Englodden 4” are valid addresses whereas “Griffenfeldsgade” and “Svinget 34, 4” are not.
+		\item The zip code has to consist of four characters (Danish zip code).
+		\item The e-mail has to be a valid e-mail
+		\item The phone number has to consist of 8 numbers, where the first number cannot be “0”.
+		\end{itemize}
+
 	\subsection{Focus}
-		The focus of this project will be getting as near as possible to a solution which functions correctly. Thus, performance will be assessed when necessary but not be of highest priority.
+		The project primarily serves as a proof-of-concept and therefore the main focus will be to generate code that actually works, and can fulfill the requirements set by the case study. Performance and the quality of the generated code will not be assessed.
+
+\section{Target Users}
+	The target users are developers who write web applications where correctness is of high priority. The target user wants to display a 100\% working application to his users or nothing at all (or maybe an error message). It is better to show an error message than to display an application which can exist in a corrupt, or partly corrupt, state. The target user develops using ASP.NET Web Forms.
+
 
