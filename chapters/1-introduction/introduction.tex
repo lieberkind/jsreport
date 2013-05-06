@@ -75,16 +75,28 @@
 		A very common use case of JavaScript is form validation. Users can disable JavaScript in their browser and consequently forms have to be validated on the server side. But as a user experience enriching feature, they are often validated on client side as well, as to avoid the waiting time for an extra page load. Our case study concerns the validation of a registration form. Specifically, we would like to be able to:
 
 		\begin{itemize}
-		\item Validate strings using Regular Expressions to check if email addresses, postal addresses and phone numbers are correctly formatted
-		\item Validate the length of strings to check that users do not enter a single letter, or an exceptionally long string, e.g. for their name
-		\item Validate something based on the choice of something else
+			\item Validate strings using Regular Expressions to check if email addresses, postal addresses and phone numbers are correctly formatted
+			\item Validate the length of strings to check that users do not enter a single letter, or an exceptionally long string, e.g. for their name
+			\item Validate something based on the choice of something else
+		\end{itemize}
 
-		\item The name has to consist of at least a first name and a last name, cannot be less than 5 characters long and not exceed 128 characters
-		\item At least one delivery method has to be checked. If “Snailmail” is checked, the address and zip code fields have to be filled in. If “E-mail” is checked, the “E-mail” field has to be filled in.
-		\item The address has to follow the format: (streetname) (house number)[, (floor number). (TH|TV|SAL)] where everything within the brackets is optional. For example, the addresses “Amagerbrogade 125, 3.TV” and “Englodden 4” are valid addresses whereas “Griffenfeldsgade” and “Svinget 34, 4” are not.
-		\item The zip code has to consist of four characters (Danish zip code).
-		\item The e-mail has to be a valid e-mail
-		\item The phone number has to consist of 8 numbers, where the first number cannot be “0”.
+		Figure~\ref{registrationForm} shows the registration form, and below, the validation criteria are explained.
+
+		\begin{figure}
+			\begin{center}
+				\centerline{\includegraphics[width=7cm]{resources/images/registrationform.png}}
+			\end{center}
+			\caption{The form that we aim at validating}
+			\label{registrationForm}
+		\end{figure}
+
+		\begin{itemize}
+			\item The name has to consist of at least a first name and a last name, cannot be less than 5 characters long and not exceed 128 characters
+			\item At least one delivery method has to be checked. If “Snailmail” is checked, the address and zip code fields have to be filled in. If “E-mail” is checked, the “E-mail” field has to be filled in.
+			\item The address has to follow the format: (streetname) (house number)[, (floor number). (TH|TV|SAL)] where everything within the brackets is optional. For example, the addresses “Amagerbrogade 125, 3.TV” and “Englodden 4” are valid addresses whereas “Griffenfeldsgade” and “Svinget 34, 4” are not.
+			\item The zip code has to consist of four characters (Danish zip code).
+			\item The e-mail has to be a valid e-mail
+			\item The phone number has to consist of 8 numbers, where the first number cannot be “0”.
 		\end{itemize}
 
 	\subsection{Focus}
