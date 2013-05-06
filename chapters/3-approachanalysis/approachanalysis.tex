@@ -1,146 +1,53 @@
-\chapter{Technical Analysis}
+\chapter{Approach Analysis}
 
-\section{The JavaScript Language}
-
-\section{Identification of Unsafe JavaScript Features}
-	\subsection{No compile time validation}
-		In general enforcing correctness at compile time instead of runtime make the development process safer as some errors (e.g. syntax errors like missing semicolons) are not possible to overlook or ignore. Furthermore discovering errors as early as possible makes the debugging process easier hence compile time errors should be preferred over runtime errors. So the fact that JavaScript is an interpreted language that is not compiled makes it a less safe language.
-
-	\subsection{Dynamic type system}
-		JavaScript has a dynamic type system which in some situations make the development process faster but also less safe as some errors will not emerge at all (or maybe emerge at runtime). E.g. it is possible to by mistake add a Number value with a Boolean value without getting any warnings. In other words it is possible to forget enforcing that a variable has a specific type. This problem is increased especially when parsing external input as it is done e.g. in form validation.
+\section{Technologies}
+	\subsection{ScriptSharp}
+	\subsection{Microsoft Roslyn} % (fold)
+	\label{ssub:microsoft_roslyn}
 	
-	\subsection{Reuse of identifiers in declarations}
-		JavaScript allows declaring multiple variables or functions with the same name in the same execution context without any warnings. This makes it possible by mistake to override earlier declared variables or functions. This kind of errors can be difficult and time consuming to discover because of their hidden nature.
+	% subsection microsoft_roslyn (end)
 
-	\subsection{No block scope}
-		JavaScript’s syntax comes from C. In all other C-Like languages a block creates scope. This is not the case in JavaScript even though its block syntax suggests that it does (“The Good Parts” p. 102). This can be a source of confusion especially for programmers that are used to block scope. Scope related errors might be difficult to debug as obviously no warnings are given (since there is no block scope) when a variable from an outer block is assigned a value by mistake.
-
-	\subsection{Many falsy values}
-		JavaScript has multiple falsy values which are not interchangeable. This is another source of errors that can be difficult to discover (“The Good Parts” p. 106).
-
-\section{Existing Similar Approaches}
-	\begin{itemize}
-		\item ScriptSharp (C\# to JavaScript)
-		\item JavaScript as an embedded DSL (Odersky et. al.) (Scala)
-		\item SharpKit (C\# to JavaScript)
-		\item (WebSharper) (F\# to JavaScript)
-	\end{itemize}
-
-% section section_name (end)
-
-% section  (end)
-
-\section{Case Study: Necessary JavaScript Language Features}
-
-\section{Possible Approaches}
-	\subsection{Stages}
-		Before discussing different approaches it make sense to clarify the possible stages in the process of “going” from host to target language. The process displayed in Figure~\ref{compilationStages} moves from left to right and possibly skips stages on the way.
-		
-		\begin{figure}
-			\begin{center}
-				\centerline{\includegraphics[width=14cm]{resources/images/stages.png}}
-			\end{center}
-			\caption{The four stages when going from host to target language}
-			\label{compilationStages}
-		\end{figure}
-		
-		The host language concrete syntax, whether an internal DSL or the host languages native syntax, is what the end user will be utilizing. From this concrete syntax a host language abstract syntax tree (hereinafter AST) can be generated. This AST can be traversed in order to map the host language AST to a JavaScript representation (typically also an AST) in the host language. Finally, JavaScript can be generated from the JavaScript AST.
+	\subsection{Code Quotations} % (fold)
+	\label{ssub:code_quotations}
 	
-	% subsection stages (end)
-	\subsection{Internal DSL Approaches}
-		The Internal DSL approaches has been separated into two categories. The first where the DSL is used to build a host language AST which later can be mapped to a target language AST. The second where the target language AST is created directly (i.e. the Host Language Abstract Syntax stage is skipped). One significant difference in these two approaches has to do with the possibility of executing code both on server side and client side. When generating the host language AST before mapping to the target language AST its easier to also execute the code in the host language context through dynamic compilation of the host language AST (this approach is discussed in xx).
+	% subsection code_quotations (end)
 
-		\subsubsection{Internal DSL Directly to JavaScript AST}
-			When utilizing an internal DSL one would need classes for representing primitive types, expression, statements etc. All the target language features that one will make available needs to be mapped to a DSL representation. Every DSL call would then instantiate an equivalent target language AST node.
+	\subsection{Expression Trees} % (fold)
+	\label{ssub:expression_trees}
+	
+	% subsection expression_trees (end)
 
-			One thing important to consider when creating a DSL representing a different language is its syntax. The DSL syntax should resemble the target language concrete syntax so that the DSL is easily utilized by the target users. At the same time, it should make the verbose instantiation (see Figure~\ref{approachComparison}) of host abstract syntax less cumbersome.
+	\subsection{Internal DSL} % (fold)
+	\label{ssub:internal_dsl}
+	
+	% subsection internal_dsl (end)
 
-			\begin{figure}
-				\begin{center}
-					\centerline{\includegraphics[width=14cm]{resources/images/approachComparison.png}}
-				\end{center}
-				\caption{Declaration of variables using navtive C\#, JavaScript, C\# Expression Trees and JavaScript Experimental AST in C\#}
-				\label{approachComparison}
-			\end{figure}
+\section{Stages} % (fold)
+\label{sec:stages}
 
-		\subsubsection{C\# Internal DSL}
-			To approach the project initially we did some experiments with a DSL (in C\#) that created a JavaScript AST directly (i.e. the Host Language Abstract Syntax stage was skipped). Using helper factory methods to create AST nodes, operator overloading and a scope and block handling mechanism (utilizing Statement Lambdas) one can arrive at a DSL syntax that could be somewhat compared to concrete syntax (see Figure~\ref{kiwiExample}).
+% section stages (end)
 
-			\begin{figure}
-				\begin{center}
-					\centerline{\includegraphics[width=14cm]{resources/images/kiwiExample.png}}
-				\end{center}
-				\caption{Example of Experimental C\# DSL Syntax}
-				\label{kiwiExample}
-			\end{figure}
+\section{Possible Approaches} % (fold)
+\label{sec:possible_approaches}
 
-			There are though different problems with this approach. First of all the syntax is a bit different from any of the existing syntaxes, i.e. it doesn’t exactly resemble regular C\# or JavaScript. This implies that there will be a learning effort before the DSL can be used. Furthermore the syntax is a bit verbose and not optimal when it comes to readability.
+	\subsubsection{Map of Possible Approaches} % (fold)
+	\label{ssub:map_of_possible_approaches}
+	
+	% subsubsection map_of_possible_approaches (end)
 
-		\subsubsection{F\# Internal DSL}
-			One problem with the C\# DSL implementation is that the initial declaration and assignment of the variable “i” is done using “=” operator where any subsequent assignments should be done using the “Assign(...)” method (or possibly through overloading an existing operator e.g. \"\%=\"). The main reason for this is that it is not possible to override the assignment operator in C\#. This is a critical problem because if the regular C\# assignment operator “=” was used incorrectly by mistake it would not trigger any exceptions and therefore cause a difficult to debug error. The example in Figure~\ref{kiwiProblems} shows exactly this. The variable "i" is assigned in an incorrect manner after its initial declaration according to the DSL syntax.
+	\subsection{Internal DSL Approaches} % (fold)
+	\label{ssub:internal_dsl_approaches}
+	
+	% subsubsection internal_dsl_approaches (end)
 
-			\begin{figure}
-				\begin{center}
-					\centerline{\includegraphics[width=14cm]{resources/images/kiwiProblems.png}}
-				\end{center}
-				\caption{Example of Experimental C\# DSL Syntax}
-				\label{kiwiProblems}
-			\end{figure}
+	\subsection{Host Language Approaches} % (fold)
+	\label{sub:host_language_approaches}
+	
+	% subsection host_language_approaches (end)
 
-			This would not be an issue in F\# as the assignment operator could be overloaded. Furthermore it is even possible to implement new operators consisting of one or more characters from a given set, consequently making it possible to implement some special JavaScript operators such as strict equal (===).
+% section possible_approaches (end)
 
-			One problem though with the F\# DSL approach is the fact that the F\# native syntax and programming paradigm (e.g. the use of immutable types) is radically different from that of JavaScript (and C\# for that matter). This would imply an even bigger learning curve according to our target user as one would have learn the F\# syntax and programming paradigm together with the DSL. Even if F\# was the language of choice there are other powerful language features (Code Quotations) that might bias you toward a different approach (see section “Using F\# Code Quotations”).
+\section{Deciding on Approach} % (fold)
+\label{sec:deciding_on_approach}
 
-		\subsubsection{DSL to Host AST}
-			To accommodate the mixed side execution goal one possibility in C\# is to utilize Expression Trees. With this approach the DSL would build a host language AST represented as an Expression Tree which hereafter could be mapped to JavaScript. The host language AST can also be compiled into host language executable code using the Compile() feature on Expression Trees. With an F\# DSL approach a similar pattern could be achieved with Code Quotations (the Expr type). A more straightforward solution to the mixed side execution goal would though be to not use a DSL. Instead one would use the concrete syntax of host language. Then utilize dynamic compilation to retrieve the host language AST which is what we’ll discuss in the next section (“Using Roslyn”).
-
-	\subsection{Native Host Language Approaches} % (fold)
-		\label{sub:native_host_language_approaches}
-		Instead of using an internal DSL, tools (or in some cases language features) exist to generate AST’s from native host language code. These can be traversed and processed as desired by the programmer.
-
-		As tools handle the generation of a host language AST, the workload imposed on the programmer by using this approach is considerably smaller than using e.g. an internal DSL. When using an internal DSL it is up to the programmer to implement a library that represents its concrete syntax.
-
-		The workload is also lightened on the end user. When using tools to generate a host language AST it is possible for the end user to write native code and have it converted to JavaScript instead of having to learn how to use a new library.
-
-		As the host language AST is generated from native host language code it is possible to use the same code on both client side and server side, as the client side code is generated from the server side code. This is very useful with cases such as form validation as it is not necessary for the end user to write the same logic in two different languages. Furthermore, it allows the end user to generate client side code reusing code from previous C\# projects.
-
-		Another benefit of using native host language code, is the possibility of testing on server side. As the code is able to run and evaluate on server side, the end user won’t have to write tests in two different languages as the unit testing framework has effectively also been applied to the client side code.
-
-		One disadvantage of using an AST generated from a native host language is that there are no restrictions on what the end user might do. The scope of the project is set by our case study, and as such, our solution will be unable to convert every single construct of an entire language. Should the end user choose to use a language construct that our solution does not support, it will result in a (server-side) runtime error, whereas a DSL would already discover this on compile time. The reason for this is the intrinsic limiting nature of a DSL (REF BOOK: Domain Specific Languages).
-
-		\subsubsection{Using F\# Code Quotations}
-			Code Quotations is a built-in feature in the F\# language which lets a developer generate an abstract syntax tree that represents the corresponding F\# code. Code Quotations cover the entire F\# language, meaning that theoretically all F\# constructs can be mapped to a corresponding JavaScript construct.
-
-			The main disadvantage of using Code Quotations is that they require the end user to know a different language from the one in which ASP.NET WebForms Applications are typically written (C\#). This would probably not be a very great barrier if the syntax of the language didn’t vary as much as F\# does from C\#. Also, C\# and JavaScript are somewhat similar in syntax, whereas F\#s and JavaScripts syntaxes are beyond comparison.
-
-		\subsubsection{Using C\# Expression Trees}
-			Expression Trees is a built-in feature in the C\# (and Visual Basic) language that “represents code in a tree-like data structure, where each node is an expression, for example, a method call or a binary operation”\# (REF MSDN). Expression Trees are often used with LINQ to build dynamic queries, which can be useful when fetching data from a database with filters specified by the user (these filters may be provided through a user interface).
-			Expression Trees can be generated from lambda expressions, and thus it is possible to retrieve a representation of simple pieces of code, such as the following:
-
-			\begin{lstlisting}
-				Func<int, int, bool> function = (a, b) => a > b
-			\end{lstlisting}
-
-			or more sophisticated ones such as LINQ queries.  A major pitfall using Expression Trees is that they cannot be generated from lambda statements, which prevents the possibility of generating AST’s from blocks of code.
-
-		\subsubsection{Using Microsoft Roslyn}
-			Roslyn is a Microsoft project that exposes the C\# and Visual Basic compilers as services. Even though the two are alike, we will focus on C\#. As with F\# Code Quotations, Roslyn is able to generate an AST from C\# source code, and as with Code Quotations, Roslyn is full fidelity (REF) which means that all C\# constructs can be recognized and parsed into syntax nodes. In fact, the AST generated by Roslyn contains every single character of the original source code, down to the last piece of whitespace. Thus, Roslyn combines the advantages of Code Quotations and Expression Trees by allowing the generation of an AST from every C\# construct (including blocks), and avoiding the unfamiliar F\# syntax.
-
-
-	\subsection{A note on 3rd party libraries} % (fold)
-		\label{sub:a_note_on_3rd_party_libraries}
-		This section is going to containe some information on Script\# and FSharp.JavaScript
-
-	\subsection{Approach Matrix} % (fold)
-		\label{sub:approach_matrix}
-		See Figure~\ref{ApproachMatrix}
-
-		\begin{figure}
-			\begin{center}
-				\centerline{\includegraphics[width=18cm]{resources/images/ApproachMatrix.png}}
-			\end{center}
-			\caption{Approach Matrix}
-			\label{ApproachMatrix}
-		\end{figure}
-		
-	% subsection approach_matrix (end)
+% section deciding_on_approach (end)
