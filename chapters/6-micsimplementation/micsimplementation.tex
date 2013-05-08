@@ -1,8 +1,9 @@
 \chapter{MiCS Implementation}
+	... indledning ...
 
 \section{Types in MiCS} % (fold)
 \label{sec:types_in_mics}
-	To help understand the core type validation and type mapping in general its beneficial to realise the different kind of types that are utilized in MiCS.
+	To help understand the core type validation and MiCS type mapping in general its beneficial to realise the different kind of types that are utilized in MiCS.
 
 	\begin{figure}[H]
 		\begin{center}
@@ -12,27 +13,37 @@
 		\label{typesOverview}
 	\end{figure}
 
+	Since one of the goals of MiCS is to be able to execute the same code on both client and server side (server client portability) its required that the .NET core types are used when writing MiCS code. This is in contrast to how Script\# works in its original manner where the Script\# core types (that reflect the equivalent JavaScript types) are used. This has some benefits but is also an obstacle that prevents server client portability.
+
 	\subsection{Core Types} % (fold)
 	\label{sub:core_types}
-		To build the ScriptSharp AST correctly the ScriptSharp core types are required to be associated to the ScriptSharp AST nodes. Their interface is defined to only have features that ScriptSharp can mirror when generating JavaScript which enables full compile time validation. Furthermore the ScriptSharp core types define their equivalent script name (in the class attributes) that is used by the ScriptSharp script generator. An example is the System.Char type (see figure \ref{char}) which is converted to the JavaScript String type as no JavaScript Char type exists.
+		To build the ScriptSharp AST correctly the ScriptSharp core types are required to be associated to the AST nodes. One reason why the ScriptSharp core types are required is that they define their equivalent script name (in the class attributes) that is used by the ScriptSharp script generator. An example is the System.Char (see figure \ref{char}) type which is converted to the JavaScript String type as no JavaScript Char type exists.
 
 	\begin{figure}[H]
-		\begin{center}
-			\centerline{\includegraphics[width=13cm]{resources/images/Char.png}}
-		\end{center}
+			\includegraphics[width=13cm]{resources/images/Char.png}
 		\caption{The core type System.Char defined in the Script\# mscorlib.dll.}
 		\label{char}
 	\end{figure}
+
+	MiCS utilizes the regular .NET core types when a user is writing MiCS code but when generating the client side script the Script\# defined core types are used. This implies that some kind of mapping between the two kinds of core types are required. This mapping of core types is explained in section \ref{sub:type_mapping}.
 	% subsection core_types (end)
 
 	\subsection{User Types} % (fold)
 	\label{sub:user_types}
-		...
+		User types are the types that are defined by the MiCS end user. The user types considered here are either MixedSide types or ClientSide types (i.e. types that have method members that have the either the MixedSide attribute or the ClientSide on them). User type definitions is what the generated client side script eventually will consist of. 
+
+		Pure server side types are obviously also user types but they are not that relevant in a MiCS context and therefore not discussed here.
 	% subsection user_types (end)
 
 	\subsection{DOM Types} % (fold)
 	\label{sub:dom_types}
-		...
+		Document Object Model (DOM) types are Script\# infrastructure defined in the System.Html namespace (Script.Web.dll). These classes that represent DOM objects from the browser. The purpose of these classes is only to represent the interface of the actual DOM types in the browser. This is also seen if one looks at the implementation of these types as all their methods and properties on these types return null or false. Like the Script\# core types, DOM types also has their script names in the attribute [ScriptName]. The DOM types are only meant for ClientSide code.
+
+		\begin{figure}[H]
+				\includegraphics[width=7cm]{resources/images/Document.png}
+			\caption{Script\# definition of the DOM type Document.}
+			\label{fig:document}
+		\end{figure}
 	% subsection dom_types (end)
 
 % section types_in_mics (end)
@@ -76,14 +87,12 @@
 
 	\subsection{Type Mapping} % (fold)
 	\label{sub:type_mapping}
-		In contrast to using ScriptSharp in the original manner (where the ScriptSharp core types are used when writing code instead of the .NET core types) our project only uses the ScriptSharp core types when mapping to the ScriptSharp JavaScript AST. For this reason the ScriptSharp core types are handled by its own type manager class (ScriptSharpTypeManager.cs). The ScriptSharp core types’ source code are loaded into their own SemanticModel on the TypeManager class. From here the (Roslyn) TypeSymbols are retrieved before they are mapped to ScriptSharp TypeSymbols needed when building the ScriptSharp AST.
+		In contrast to using Script\# in the original manner (where the Script\# core types are used when writing code instead of the .NET core types) our project only uses the Script\# core types when mapping to the Script\# JavaScript AST. For this reason the Script\# core types are handled by its own type manager class (ScriptSharpTypeManager.cs). The Script\# core types’ source code are loaded into their own SemanticModel on the TypeManager class. From here the (Roslyn) types are retrieved before they are mapped to Script\# TypeSymbols needed when building the Script\# AST.
 
 		Since the .NET core types are used when writing MiCS code and since these are mapped to the ScriptSharp core types a mapping specification is needed. To facilitate this mapping we have created some simple classes to hold the specification (MiCSCoreMapping.cs, MiCSCoreTypeMapping.cs and MiCSCoreMemberMapping.cs) which then can queried using LINQ. This mapping specification contains information on the core types that we currently support. So if a core type is not described in the specification then it is not supported. If the core type is found in the specification then the same pattern applies for its members. If a type member is not found then it is not supported. The mapping specification also holds information on a member’s return type, number of arguments and the arguments’ types.
 
 		\begin{figure}[H]
-			\begin{center}
-				\centerline{\includegraphics[width=10cm]{resources/images/InitiationOfTypeMapping.png}}
-			\end{center}
+				\includegraphics[width=8cm]{resources/images/InitiationOfTypeMapping.png}
 			\caption{Instantiation example of a single core type (System.String) mapping specification.}
 			\label{coreTypeMapping}
 		\end{figure}
@@ -94,7 +103,7 @@
 
 \section{Building the ScriptSharp AST} % (fold)
 \label{sec:building_the_scriptsharp_ast}
-	... 
+	Building the Script\# AST consists of taking the mapped (Script\#) AST nodes and putting them together to form the Script\# AST. The builder classes utilize the Roslyn infrastructure by extending the SyntaxWalker class which makes them capable of traversing the Roslyn AST.
 	\begin{figure}[H]
 		\begin{center}
 			\centerline{\includegraphics[width=16cm]{resources/images/BuilderClasses.png}}
@@ -102,6 +111,30 @@
 		\caption{Classes that built the Script\# AST by traversing the Roslyn AST and utilizing Map(...) extension methods.}
 		\label{builderClasses}
 	\end{figure}
+
+	The NamespaceBuilder class is responsible for building all of its defined types. This is done by instantiating a ClassBuilder which in turn is responsible for building all of its member methods (which is done by instantiating a MethodBuilder). This implies that the building of the Script\# AST is done in a depth first manner. The NamespaceBuilder and ClassBuilder classes are somewhat trivial. 
+
+	\begin{figure}[H]
+		\begin{center}
+			\centerline{\includegraphics[width=16cm]{resources/images/VisitClassDeclaration.png}}
+		\end{center}
+		\caption{Empty Script\# class is created and then built by using a MethodBuilder to retrieve all its member methods. The ssClasses property on the builder holds all the classes that will be returned to the NamespaceBuilder who created this class builder.}
+		\label{visitClassDeclaration}
+	\end{figure}
+
+	The ClassBuilder has an important feature that it ensures that only user defined types will be mapped to the Script\# AST (and generated as script types). DOM (or core) types doesn’t need to be defined in script as these obviously already exists in JavaScript.
+
+	The MethodBuilder class is a little more complex as it needs to only build a method if its a MixedSide or ClientSide method. Furthermore it needs to handle a method’s return type, arguments and body statements. The StatementBuilder and ExpressionBuilder is however the most complex as building compound statements and expressions are more complicated. Before a compound statement or expression can be build all the child nodes and their associated types (if any) needs to be mapped.
+
+	\begin{figure}[H]
+		\begin{center}
+			\centerline{\includegraphics[width=16cm]{resources/images/VisitIfStatement.png}}
+		\end{center}
+		\caption{To built an IfStatement node its child nodes; condition, if-block and else-block (if any) has to be built first.}
+		\label{visitIfStatement}
+	\end{figure}
+
+	When a builder class is done building the node(s) are returned to the parent builder class. Once all the namespaces has been built these constitute the Script\# AST which is then passed on in the overall workflow (to script generation).
 % section building_the_scriptsharp_ast (end)
 
 \section{Script Generation} % (fold)
