@@ -18,13 +18,13 @@
 			\label{fig:MixedSidePrinciple}
 		\end{figure}
 
-		Code annotated with the ClientSide attribute is only meant to be run on the client in form of generated JavaScript. Therefore, it should not make instances of, or calls to methods on, objects that exist only on serverside, as no JavaScript will be generated from server side code. Consequently, if client side code interacts with server side code, it will ultimately result in an error when the JavaScript is generated as some methods and classes will not have been generated. However, JavaScript will be generated from code annotated with either the ClientSide attribute or the MixedSide attribute, so method calls to these are perfectly legal.
+		Code annotated with the ClientSide attribute is only meant to be run on the client in form of generated JavaScript. Therefore, it should not make instances of, or calls to methods on, objects that exist only on serverside, as no JavaScript will be generated from server side code. Consequently, if client side code interacts with server side code, it will ultimately result in an error when the JavaScript is generated as some methods and classes will not have been generated. However, JavaScript will be generated from code annotated with either the ClientSide attribute or the MixedSide attribute, so calls from client side to client side or client side to mixed side code are perfectly legal.
 
-		Code that is not annotated with any attributes is regarded as server side code. No JavaScript will be generated from server side code. Server side code should only make calls to other server side code, or to mixed side code.
+		Code that is not annotated with any attributes is regarded as server side code. No JavaScript will be generated from server side code, so server side code should only make calls to other server side code, or to mixed side code.
 
 		As shown in Figure~\ref{fig:MixedSidePrinciple}, MixedSide code should be available both to client side code and server side code. As no communication should happen between client side and server side code, code annotated with the MixedSide attribute should only be able to interact with other code that has also been annotated with the MixedSide attribute. 
 
-		If the MixedSide Principle is not violated and only built-in types and members that can be mapped are used, the users’ code is valid.
+		If the MixedSide Principle is not violated and only supported .NET types and members are used, the users’ code is valid.
 
 	% subsection the_mixedside_principle (end)
 
@@ -69,9 +69,20 @@
 
 		The validation of a member access is done in a very similar way, only checking if the member exists in the allowed-members structure or in the core mapping as well.
 
+		TODO: Write about how invociations are validated: Only core types need to be validated (with arguments and return types), as user types will automatically be validated by the compiler.
 
 
-
+% \begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={TextBox,Panel,CheckBox, Button}]
+% TextBox NameBox = new TextBox() { ID = "name", Text = "Name" };
+% Panel CheckBoxGroup = new Panel();
+% CheckBox SnailMailCheck = new CheckBox() { ID = "dmSnailmail", Text = "Snail Mail" };
+% CheckBox EmailCheck = new CheckBox() { ID = "dmEmail", Text = "E-Mail" };
+% TextBox AddressBox = new TextBox() { ID = "address", Text = "Address" };
+% TextBox ZipcodeBox = new TextBox() { ID = "zipcode", Text = "Zip Code" };
+% TextBox EmailBox = new TextBox() { ID = "email", Text = "E-mail" };
+% TextBox PhoneBox = new TextBox() { ID = "phone", Text = "Phone" };
+% Button SubmitButton = new Button() { Text = "Register" };
+% \end{lstlisting}
 
 
 
