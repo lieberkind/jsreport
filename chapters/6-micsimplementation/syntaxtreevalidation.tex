@@ -1,0 +1,59 @@
+\section{Syntax Tree Validation} % (fold)
+\label{sec:syntax_tree_validation}
+	As we only support a fairly limited set of C\#’s built-in constructs and types, it is important to make sure that users only make use of those that we are able to map to Script\#. Should users utilise one of the constructs or types that we are not able to map, this should be pointed out with an understandable error message. It should not be left to the users to debug or understand a Roslyn or Script\# exception. Furthermore, it is important to make sure that users use their own code correctly. The remainder of this section will describe how a Validator class is used to achieve this.
+
+	As mentioned above, it is necessary to make sure that users only utilise C\# constructs (method declarations, various statements and expressions, etc.) that we can correctly map to Script\#. At the moment, this is handled by the Builder classes, and will be explained in a later section. However, optimally this should be the responsibility of the Validator class. How this can be achieved is described in future work. It should also be confirmed that users utilise types and their members correctly. This is handled by the validator class. It should be noted that currently only methods are supported as members. 
+
+	To explain correct usage of types and members, it is beneficial to divide them into two categories; the ones that are built into the .NET platform and the ones users define themselves. Understanding “correct usage of .NET built-in types and members” is straightforward; it means that users are only allowed to use the types and members that can be mapped correctly to Script\#. How this is achieved is described later in this section. However, “correct usage of the types defined by the users themselves” requires some explanation. For this, the MixedSide Principle is introduced.
+
+	\subsection{The MixedSide Principle} % (fold)
+	\label{sub:the_mixedside_principle}
+		The MixedSide Principle is a constraint that the user has to adhere to in order for MiCS to function correctly. As explained earlier the user can write server side code, which is only meant to be run only on the server, mixed side code, which is meant to be run both on server and client side and client side code, which is only meant to be run client side. The MixedSide Principle describes a simple ruleset for the interaction between serverside, mixedside and clientside code.
+
+		\begin{figure}[H]
+			\begin{center}
+				\centerline{\includegraphics[width=12cm]{resources/images/MixedSidePrinciple.png}}
+			\end{center}
+			\caption{Visualization of The MixedSide Principle}
+			\label{fig:MixedSidePrinciple}
+		\end{figure}
+
+		Code annotated with the ClientSide attribute is only meant to be run on the client in form of generated JavaScript. Therefore, it should not make instances of, or calls to methods on, objects that exist only on serverside, as no JavaScript will be generated from server side code. Consequently, if client side code interacts with server side code, it will ultimately result in an error when the JavaScript is generated as some methods and classes will not have been generated. However, JavaScript will be generated from code annotated with either the ClientSide attribute or the MixedSide attribute, so method calls to these are perfectly legal.
+
+		Code that is not annotated with any attributes is regarded as server side code. No JavaScript will be generated from server side code. Server side code should only make calls to other server side code, or to mixed side code.
+
+		As shown in Figure~\ref{fig:MixedSidePrinciple}, MixedSide code should be available both to client side code and server side code. As no communication should happen between client side and server side code, code annotated with the MixedSide attribute should only be able to interact with other code that has also been annotated with the MixedSide attribute. 
+
+		If the MixedSide Principle is not violated and only built-in types and members that can be mapped are used, the users’ code is valid.
+
+	% subsection the_mixedside_principle (end)
+
+	\subsection{Validating} % (fold)
+	\label{sub:validating}
+
+		There are essentially three situations in which it is necessary to verify correct usage of types and members. The first is object creation. When an instance of a type is created, it is necessary to check the type in question can be mapped. The second situation is when members on type instances are accessed. It is then necessary to check first if the type can be mapped, then if the type has a member corresponding to the one being accessed. The third is invocation of methods. It is then necessary to check if the invocation is done correctly, using the correct arguments and return type.
+
+		The Validator class extends Roslyns SyntaxWalker class and it is thus able to traverse syntax nodes. The Validator takes a CompilationUnit which holds the code to be validated, a string containing an attribute name that decides what methods to validate, and a structure of types and members that the validated methods are allowed to use. It works by looking for classes in the CompilationUnit that contains methods annotated with the given attribute name and validates the body of these methods against the provided structure of members.
+
+		The nature of the Validator requires the Syntax Tree to be validated twice. Once validating all the MixedSide methods against a structure containing all MixedSide types and their members, and once validating all the ClientSide methods against a structure containing all ClientSide types and members, MixedSide types and members and ScriptSharp DOM types and members. This is easily done by creating two instances of the Validator and validating them both, as shown in figure X. In the example, the ScriptSharp DOM types are already contained in the clientSideMembers. 
+
+		\begin{figure}[H]
+			\begin{center}
+				\centerline{\includegraphics[width=14cm]{resources/images/validatorInitiation.png}}
+			\end{center}
+			\caption{Initiating the Syntax Tree Validation process}
+			\label{validatorInitiation}
+		\end{figure}
+
+		The Validation process is best explained by looking at an example. Consider the situation showed in Figure \ref{mixedSideValidationExample}. The Validator traverses the CompilationUnit depth-first and discovers the Validator class. 
+
+		\begin{figure}[H]
+			\begin{center}
+				\centerline{\includegraphics[width=14cm]{resources/images/MixedSideValidationExample.png}}
+			\end{center}
+			\caption{Initiating the Syntax Tree Validation process}
+			\label{mixedSideValidationExample}
+		\end{figure}		
+	
+	% subsection validating (end)
+% section syntax_tree_validation (end)
