@@ -20,9 +20,7 @@
 		To build the ScriptSharp AST correctly the ScriptSharp core types are required to be associated to the AST nodes. One reason why the ScriptSharp core types are required is that they define their equivalent script name (in the class attributes) that is used by the ScriptSharp script generator. An example is the System.Char (see figure \ref{char}) type which is converted to the JavaScript String type as no JavaScript Char type exists.
 
 	\begin{figure}[H]
-		\begin{center}
-			\centerline{\includegraphics[width=13cm]{resources/images/Char.png}}
-		\end{center}
+			\includegraphics[width=13cm]{resources/images/Char.png}
 		\caption{The core type System.Char defined in the Script\# mscorlib.dll.}
 		\label{char}
 	\end{figure}
@@ -32,12 +30,20 @@
 
 	\subsection{User Types} % (fold)
 	\label{sub:user_types}
-		...
+		User types are the types that are defined by the MiCS end user. The user types considered here are either MixedSide types or ClientSide types (i.e. types that have method members that have the either the MixedSide attribute or the ClientSide on them). User type definitions is what the generated client side script eventually will consist of. 
+
+		Pure server side types are obviously also user types but they are not that relevant in a MiCS context and therefore not discussed here.
 	% subsection user_types (end)
 
 	\subsection{DOM Types} % (fold)
 	\label{sub:dom_types}
-		...
+		Document Object Model (DOM) types are Script\# infrastructure defined in the System.Html namespace (Script.Web.dll). These classes that represent DOM objects from the browser. The purpose of these classes is only to represent the interface of the actual DOM types in the browser. This is also seen if one looks at the implementation of these types as all their methods and properties on these types return null or false. Like the Script\# core types, DOM types also has their script names in the attribute [ScriptName]. The DOM types are only meant for ClientSide code.
+
+		\begin{figure}[H]
+				\includegraphics[width=7cm]{resources/images/Document.png}
+			\caption{Script\# definition of the DOM type Document.}
+			\label{fig:document}
+		\end{figure}
 	% subsection dom_types (end)
 
 % section types_in_mics (end)
@@ -86,9 +92,7 @@
 		Since the .NET core types are used when writing MiCS code and since these are mapped to the ScriptSharp core types a mapping specification is needed. To facilitate this mapping we have created some simple classes to hold the specification (MiCSCoreMapping.cs, MiCSCoreTypeMapping.cs and MiCSCoreMemberMapping.cs) which then can queried using LINQ. This mapping specification contains information on the core types that we currently support. So if a core type is not described in the specification then it is not supported. If the core type is found in the specification then the same pattern applies for its members. If a type member is not found then it is not supported. The mapping specification also holds information on a member’s return type, number of arguments and the arguments’ types.
 
 		\begin{figure}[H]
-			\begin{center}
-				\centerline{\includegraphics[width=8cm]{resources/images/InitiationOfTypeMapping.png}}
-			\end{center}
+				\includegraphics[width=8cm]{resources/images/InitiationOfTypeMapping.png}
 			\caption{Instantiation example of a single core type (System.String) mapping specification.}
 			\label{coreTypeMapping}
 		\end{figure}
