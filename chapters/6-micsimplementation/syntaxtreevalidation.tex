@@ -65,7 +65,11 @@
 			\label{fig:ValidatorVisitClassDeclaration}
 		\end{figure}
 
-		The first method visited is the \texttt{IsStringValid()} method. The first statement of the method contains an object creation expression and the Validator now needs to check if the object creation is legal. It is legal either if the created object is a supported core type, or if the object is a user defined MixedSide type (residing within the members structure). As the type exists in the allowed members structure (shown if \ref{fig:mixedSideValidationExample}) the object creation is legal. If it had not existed in the member structure, and had not been a supported core type, the MixedSide Principle would have been violated, and an exception of type \texttt{MixedSidePrincipleViolatedException} had been thrown.
+		The first method visited is the \texttt{IsStringValid()} method. The first statement of the method contains an object creation expression and the Validator now needs to check if the object creation is legal. It is legal either if the created object is a supported core type, or if the object is a user defined MixedSide type (residing within the members structure). As the type exists in the allowed members structure (shown in figure \ref{fig:mixedSideValidationExample}) the object creation is legal and the traversal continues. If it had not existed in the allowed member structure (this could happen if it had been ClientSide), and had not been a supported core type, the MixedSide Principle would have been violated, and an exception of type \texttt{MixedSidePrincipleViolatedException} had been thrown.
+
+		The validation of a member access is done in a very similar way, only checking if the member exists in the allowed-members structure or in the core mapping as well.
+
+
 
 
 
