@@ -1,4 +1,17 @@
 \section{Initializing MiCS} % (fold)
 \label{sec:initializing_mics}
-Bla bla bla 
+
+Før MiCS kan begynde at konvertere C# til JavaScript, skal de nødvendige ressourcer konstrueres. 
+Det er det første der gøres, inden validering, konvertering og injektion finder sted.
+De ressourcer som skal initialiserers, er TypeManager'ne.
+	Indeholder CompilationUnit, Semantiske Modeller, Core Mappings, MixedSide members (Alt med MixedSide) og ClientSide members (Alt med ClientSide / DOM Types) 
+
+
+* How does the MiCS project know what code to generate JavaScript from? // Forklares i afsnit om Roslyn
+* Gathering server side source code (currently from filepaths). // Forklares i WorkFlow afsnit?
+* Adding ScriptSharp DOM classes to semantic model.
+* Adding C# msCoreLib (System) and System.Text.RegularExpressions namespace to C# semantic model.
+
+
+
 % section initializing_mics (end)
