@@ -7,7 +7,7 @@ Basically, MiCS uses Roslyn to generate an AST representing the user’s C\# cod
 
 \begin{figure}[H]
 	\begin{center}
-		\centerline{\includegraphics[width=14cm]{resources/images/internalworkflow.eps}}
+		\centerline{\includegraphics[width=18cm]{resources/images/internalworkflow.eps}}
 	\end{center}
 	\caption{The MiCS internal workflow}
 	\label{fig:mics_internal_workflow}
@@ -21,6 +21,6 @@ Once the syntax tree has been validated, it is ready to be mapped to Script\#. T
 
 When the Roslyn AST has successfully been mapped to Script\#, MiCS uses Script\#’s built-in ScriptGenerator to generate the JavaScript corresponding to the user’s original C\# code. 
 
-When the JavaScript has been generated, it needs to be injected into the users WebForm. This is handled by a MiCSPage class; an extension to a WebForm Page. 
+When the JavaScript has been generated, it needs to be injected into the users WebForm. This is handled by a MiCSPage class; an extension to a WebForm Page. TODO: Is this correct? 
 
 % section workflow_overview (end)
