@@ -1,6 +1,32 @@
 \chapter{Background}
 
-\section{ASP.NET Web Forms}
+\section{ASP.NET Web Forms} % (fold)
+\label{sec:asp_net_web_forms}
+	ASP.NET. Web Forms are the User Interface (UI) elements that give your Web applications their look and feel. Web Forms are similar to Windows Forms (ref http://msdn.microsoft.com/da-dk/library/aa983655(v=vs.71).aspx) in that they provide properties, methods, and events for the controls that are placed onto them. However, these UI elements render themselves into Html (ref http://msdn.microsoft.com/en-us/library/ms973868.aspx). When working with Web Forms you can both write markup code and write regular C\# from Code Behind when building a web application. From Code Behind there is a Page object which has different page lifecycle events which will be triggered when the page is requested. Below is an example where there is added a Button control to the Form “form1” from Code Behind (as opposed to adding the button in markup code).
+
+	\begin{figure}
+					\includegraphics[width=8cm]{resources/images/Markup.png}
+				\caption{Markup code in Default.aspx}
+				\label{markup}
+			\end{figure}
+
+	The Default.aspx page is associated to a Code Behind file Default.aspx.cs where the pages life cycle events can be utilized. In figure \ref{codeBehind} a button control is added to the form “form1” (defined in the markup in figure \ref{markup}) in the page’s Load event.
+
+				\begin{figure}
+					\includegraphics[width=10cm]{resources/images/CodeBehind.png}
+				\caption{Default.aspx.cs Code Behind file associated to the Default.aspx page.}
+				\label{codeBehind}
+			\end{figure}
+	The resulting web page and source will be as below (with Chrome Development Tools).
+
+				\begin{figure}
+					\includegraphics[width=12cm]{resources/images/Html.png}
+				\caption{Resulting web page and source code of the Default.aspx page.}
+				\label{html}
+			\end{figure}
+	There are control classes equivalent to most Html tags so in this manner one can build an entire web application from Code Behind. Some of the benefits of working from Code Behind is that you essentially achieve compile time validation of your markup code and you get to work in object oriented manner.
+% section asp_net_web_forms (end)
+
 
 \section{JavaScript and its Unsafe Language Features}
 

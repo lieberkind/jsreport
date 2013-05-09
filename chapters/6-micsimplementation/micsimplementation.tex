@@ -25,7 +25,7 @@
 		\label{char}
 	\end{figure}
 
-	MiCS utilizes the regular .NET core types when a user is writing MiCS code but when generating the client side script the Script\# defined core types are used. This implies that some kind of mapping between the two kinds of core types are required. This mapping of core types is explained in section \ref{sub:type_mapping}.
+		MiCS utilizes the regular .NET core types when a user is writing MiCS code but when generating the client side script the Script\# defined core types are used. This implies that some kind of mapping between the two kinds of core types are required. This mapping of core types is explained in section \ref{sub:type_mapping}.
 	% subsection core_types (end)
 
 	\subsection{User Types} % (fold)
@@ -87,17 +87,31 @@
 
 	\subsection{Type Mapping} % (fold)
 	\label{sub:type_mapping}
-		In contrast to using Script\# in the original manner (where the Script\# core types are used when writing code instead of the .NET core types) our project only uses the Script\# core types when mapping to the Script\# JavaScript AST. For this reason the Script\# core types are handled by its own type manager class (ScriptSharpTypeManager.cs). The Script\# core types’ source code are loaded into their own SemanticModel on the TypeManager class. From here the (Roslyn) types are retrieved before they are mapped to Script\# TypeSymbols needed when building the Script\# AST.
+		Roslyn type symbols are mapped to Script\# type symbols using the SymbolMapper’s Map(...) extension method created for the Roslyn TypeSymbol. The mapping of TypeSymbols from Roslyn to Script\# can be somewhat confusing since there are the different kinds of types (illustrated in figure \ref{typesOverview}) and there are some special cases (such as null which is mapped to the type Object in JavaScript). To illustrate the functionality of the TypeSymbol Map(...) method we have created the flowchart in figure \ref{typeMappingFlowchart}.
 
-		Since the .NET core types are used when writing MiCS code and since these are mapped to the ScriptSharp core types a mapping specification is needed. To facilitate this mapping we have created some simple classes to hold the specification (MiCSCoreMapping.cs, MiCSCoreTypeMapping.cs and MiCSCoreMemberMapping.cs) which then can queried using LINQ. This mapping specification contains information on the core types that we currently support. So if a core type is not described in the specification then it is not supported. If the core type is found in the specification then the same pattern applies for its members. If a type member is not found then it is not supported. The mapping specification also holds information on a member’s return type, number of arguments and the arguments’ types.
+			\begin{figure}
+			\begin{center}
+					\includegraphics[width=14cm]{resources/images/TypeMappingFlowchart.png}
+					\end{center}
+				\caption{Illustration of the type mapping process performed in SymbolMapper.Map(this TypeSymbol typeSymbol) extension method.}
+				\label{typeMappingFlowchart}
+			\end{figure}
 
-		\begin{figure}[H]
-				\includegraphics[width=8cm]{resources/images/InitiationOfTypeMapping.png}
-			\caption{Instantiation example of a single core type (System.String) mapping specification.}
-			\label{coreTypeMapping}
-		\end{figure}
 
-		An example of a core type mapping is the C\# System.String (see figure \ref{coreTypeMapping}) type which is mapped to the ScriptSharp defined System.String. We are only mapping two of the String type’s members. The field Length which is mapped to the ScriptSharp String type’s Length field (which is the equivalent of the JavaScript String object property length). The second member we map is the IndexOf(Char char) method that returns an int. There are other IndexOf methods that take multiple arguments or a single argument of a different type (than Char) but these are not mapped in our mapping specification.
+		\subsubsection{Core Type Mapping} % (fold)
+		\label{subsub:core:type_mapping}
+			In contrast to using Script\# in the original manner (where the Script\# core types are used when writing code instead of the .NET core types) our project only uses the Script\# core types when mapping to the Script\# JavaScript AST. For this reason the Script\# core types are handled by its own type manager class (ScriptSharpTypeManager.cs). The Script\# core types’ source code are loaded into their own SemanticModel on the TypeManager class. From here the (Roslyn) types are retrieved before they are mapped to Script\# TypeSymbols needed when building the Script\# AST.
+
+			Since the .NET core types are used when writing MiCS code and since these are mapped to the ScriptSharp core types a mapping specification is needed. To facilitate this mapping we have created some simple classes to hold the specification (MiCSCoreMapping.cs, MiCSCoreTypeMapping.cs and MiCSCoreMemberMapping.cs) which then can queried using LINQ. This mapping specification contains information on the core types that we currently support. So if a core type is not described in the specification then it is not supported. If the core type is found in the specification then the same pattern applies for its members. If a type member is not found then it is not supported. The mapping specification also holds information on a member’s return type, number of arguments and the arguments’ types.
+
+			\begin{figure}[H]
+					\includegraphics[width=8cm]{resources/images/InitiationOfTypeMapping.png}
+				\caption{Instantiation example of a single core type (System.String) mapping specification.}
+				\label{coreTypeMapping}
+			\end{figure}
+
+			An example of a core type mapping is the C\# System.String (see figure \ref{coreTypeMapping}) type which is mapped to the ScriptSharp defined System.String. We are only mapping two of the String type’s members. The field Length which is mapped to the ScriptSharp String type’s Length field (which is the equivalent of the JavaScript String object property length). The second member we map is the IndexOf(Char char) method that returns an int. There are other IndexOf methods that take multiple arguments or a single argument of a different type (than Char) but these are not mapped in our mapping specification.
+		% subsection subsection_name (end)
 	% subsection type_mapping (end)
 % section mapping_to_scriptsharp_ast (end)
 
