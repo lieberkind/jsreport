@@ -10,7 +10,9 @@
 				\label{markup}
 			\end{figure}
 
-	The web page Default.aspx is associated to a C\# Code Behind file Default.aspx.cs where the page has different events that can be utilized. In figure \ref{codeBehind} a button control is added to the form \texttt{form1} (defined in markup in figure \ref{markup}) via the page’s Load event. This is opposed to adding the button in markup code.
+	\subsection{Code Behind} % (fold)
+	\label{sub:code_behind}
+		The web page Default.aspx is associated to a C\# Code Behind file Default.aspx.cs where the page has different events that can be utilized. In figure \ref{codeBehind} a button control is added to the form \texttt{form1} (defined in markup in figure \ref{markup}) via the page’s Load event. This is opposed to adding the button in markup code.
 
 
 				\begin{figure}
@@ -18,14 +20,16 @@
 				\caption{Default.aspx.cs Code Behind file associated to the Default.aspx page.}
 				\label{codeBehind}
 			\end{figure}
-	The resulting web page and source will be as shown in figure \ref{html} (with Chrome Development Tools).
+		The resulting web page and source will be as shown in figure \ref{html} (with Chrome Development Tools).
 
 				\begin{figure}
 					\includegraphics[width=12cm]{resources/images/Html.png}
 				\caption{Resulting web page and source code of the Default.aspx page.}
 				\label{html}
 			\end{figure}
-	There are built-in control classes equivalent to most DOM elements so in this manner one can build an entire web application from Code Behind. Some of the benefits of working from Code Behind is that you essentially achieve compile time validation of your markup code and you get to work in object oriented manner.
+		There are built-in control classes equivalent to most DOM elements so in this manner one can build an entire web application from Code Behind. Some of the benefits of working from Code Behind is that you essentially achieve compile time validation of your markup code and you get to work in object oriented manner.
+	% subsection code_behind (end)
+
 % section asp_net_web_forms (end)
 
 
