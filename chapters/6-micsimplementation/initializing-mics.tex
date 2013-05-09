@@ -3,6 +3,32 @@
 
 
 
+% Before the conversion from C# to JavaScript can begin, the TypeManager classes must be initialized, as they are used by essentially all the other classes in MiCS. 
+
+% The CompilationUnit, which is the root of the Roslyn AST and represents the user's C# code. This is the code that is validated by the Validator and the code from which JavaScript is eventually generated.
+
+
+
+
+% The initiation of the TypeManagers is started from the MiCSManager. 
+
+
+
+
+
+
+
+% Før MiCS kan begynde at konvertere C# til JavaScript, skal de nødvendige ressourcer konstrueres. 
+% Det er det første der gøres, inden validering, konvertering og injektion finder sted.
+% De ressourcer som skal initialiserers, er TypeManager'ne.
+% 	Indeholder CompilationUnit, Semantiske Modeller, Core Mappings, MixedSide members (Alt med MixedSide) og ClientSide members (Alt med ClientSide / DOM Types) 
+
+
+% * How does the MiCS project know what code to generate JavaScript from? // Forklares i afsnit om Roslyn
+% * Gathering server side source code (currently from filepaths). // Forklares i WorkFlow afsnit?
+% * Adding ScriptSharp DOM classes to semantic model.
+% * Adding C# msCoreLib (System) and System.Text.RegularExpressions namespace to C# semantic model.
+
 
 
 % section initializing_mics (end)
