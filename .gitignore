@@ -2,6 +2,7 @@
 *.log
 *.gz
 *.toc
+resources/images/internalworkflow-eps-converted-to.pdf
 report.pdf
 *.fls
 *.fdb_latexmk
