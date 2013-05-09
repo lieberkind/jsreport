@@ -1,14 +1,17 @@
-\documentclass[12pt]{report}   % list options between brackets
-\usepackage{listings}              % list packages between braces
-\usepackage{xcolor}
-\usepackage{graphicx}
-\usepackage[parfill]{parskip}	% no identation begining paragraph and empty line between paragraphs
-\usepackage{float}				% Needed to place figure exactly
+
+\documentclass[12pt]{report}   						% list options between brackets
+\usepackage{listings}               			% list packages between braces
+\usepackage{xcolor}								% Needed to define custom colors for code
+\usepackage{graphicx}											% Needed to embed vector graphics								
+\usepackage[parfill]{parskip}							% no identation begining paragraph and empty line between paragraphs
+\usepackage{float}												% Needed to place figure exactly
+%\usepackage[superscript,biblabel]{cite} 	% Needed to superscript references
 \usepackage{epstopdf}
+
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{2}
-\setlength{\belowcaptionskip}{0pt} %space after figure text
-\setlength{\abovecaptionskip}{5pt} %space before figure text
+\setlength{\belowcaptionskip}{0pt} 				%space after figure text
+\setlength{\abovecaptionskip}{5pt} 				%space before figure text
 
 % type user-defined commands here
 \input{csharp-typesetting}
@@ -36,8 +39,7 @@
 \include{chapters/8-evaluation/evaluation}
 \include{chapters/9-conclusion/conclusion}
 
-%\begin{thebibliography}
-  % type bibliography here
-%\end{thebibliography}
+% Todo: Move into seperate file
+\input{bibliography}
 
 \end{document}
