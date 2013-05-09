@@ -17,7 +17,7 @@
 			\label{simplifiedOverview}
 		\end{figure}
 
-		Another important assembly is the Script.Web.dll. This assembly contains classes E.g. for Document Object Model (DOM) representation.
+		Another important assembly is the Script.Web.dll. This assembly contains classes for Document Object Model (DOM) representation.
 
 		Script\# defines a modified version of the .NET mscorlib.dll so that the (modified) .NET core type interfaces resembles the equivalent JavaScript objects. E.g. the ScriptSharp defined System.String type has a CharAt(int index) function that doesn’t exist on the original .NET System.String type but that does exist on a JavaScript string object. One benefit of the modified mscorlib.dll is that it makes the C\# compiler able to validate the C\# code that represents JavaScript code entirely (todo: REF to explanation). 
 
@@ -46,17 +46,17 @@
 
 \section{Stages when going from .NET Language to JavaScript} % (fold)
 \label{sec:stages_when_going_from_net_language_to_javascript}
-	Before discussing different approaches it make sense to clarify the possible stages in the process of “going” from host to target language. The process (displayed in figure \ref{stages}) moves from left to right and possibly skips stages on the way.
+	Before discussing different approaches it make sense to clarify the possible stages in the process of ``going'' from a .NET language to the target language. The process (displayed in figure \ref{stages}) moves from left to right and possibly skips stages on the way.
 
 				\begin{figure}[H]
 			\begin{center}
-				\centerline{\includegraphics[width=12cm]{resources/images/stages.png}}
+				\centerline{\includegraphics[width=14cm]{resources/images/stages.png}}
 			\end{center}
 			\caption{Possible approach stages}
 			\label{stages}
 		\end{figure}
 
-	The host language concrete syntax, whether an internal DSL or the host languages native syntax, is what the end user will be utilizing. From this concrete syntax a host language abstract syntax tree (hereinafter AST) can be generated. This AST can be traversed in order to map the host language AST to a JavaScript representation (typically also an AST) in the host language. Finally, JavaScript can be generated from the JavaScript AST.
+	The .NET concrete syntax is what the end user will be utilizing when writing code. From this concrete syntax a .NET abstract syntax tree (hereinafter AST) can be generated. This AST can be traversed in order to map the .NET AST to a JavaScript representation (typically also an AST) in the .NET language. Finally, JavaScript can be generated from the JavaScript AST.
 % section stages_when_going_from_net_language_to_javascript (end)
 
 \section{Possible Approaches} % (fold)
@@ -65,7 +65,7 @@
 
 					\begin{figure}[H]
 			\begin{center}
-				\centerline{\includegraphics[width=14cm]{resources/images/DSLv2.png}}
+				\centerline{\includegraphics[width=16cm]{resources/images/DSLv2.png}}
 			\end{center}
 			\caption{Map of possible approaches.}
 			\label{approachMap}
