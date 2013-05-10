@@ -2,7 +2,7 @@
 
 	\section{The MixedSide Principle} % (fold)
 	\label{sub:the_mixedside_principle}
-		The MixedSide Principle is a constraint that the user has to adhere to in order for MiCS to function correctly. As explained earlier the user can write server side code, which is only meant to be run only on the server, mixed side code, which is meant to be run both on server and client side and client side code, which is only meant to be run client side. The MixedSide Principle describes a simple ruleset for the interaction between serverside, mixedside and clientside code.
+		The Mixed Side Principle is a fundamental constraint that the user has to comply with in order for MiCS to work. In a MiCS web application project there are three kinds of code the user can write; server side code, mixed side code (annotated with the MixedSide attribute) and client side code (annotated with the ClientSide attribute). The Mixed Side Principle describes a simple rule set for the interactions between server side, mixed side and client side code. The Mixed Side Principle is illustrated in Figure \ref{fig:MixedSidePrinciple}, arrows indicate which kinds of code can be utilized.
 
 		\begin{figure}[H]
 			\begin{center}
@@ -12,13 +12,15 @@
 			\label{fig:MixedSidePrinciple}
 		\end{figure}
 
-		Code annotated with the ClientSide attribute is only meant to be run on the client in form of generated JavaScript. Therefore, it should not make instances of, or calls to methods on, objects that exist only on serverside, as no JavaScript will be generated from server side code. Consequently, if client side code interacts with server side code, it will ultimately result in an error when the JavaScript is generated as some methods and classes will not have been generated. However, JavaScript will be generated from code annotated with either the ClientSide attribute or the MixedSide attribute, so calls from client side to client side or client side to mixed side code are perfectly legal.
+		Code annotated with the ClientSide attribute is only meant to be run on client side in form of generated JavaScript. Therefore ClientSide code cannot make calls to methods on, objects that exist only on server side. This would simply not make sense as server and client side are two different and separated execution contexts.  If client side code were to call server side code, it will ultimately result in a client side error as the server side code will not be mapped to client side. Likewise it will not make sense for server side code to call client side code.
 
-		Code that is not annotated with any attributes is regarded as server side code. No JavaScript will be generated from server side code, so server side code should only make calls to other server side code, or to mixed side code.
+		However mixed side code will both be possible to call from client and server side code. Mixed side code can only consist of C\# constructs that MiCS support and that MiCS therefore can map to client side code. Furthermore mixed side code can only utilize other mixed side code and cannot utilize client side only types such as DOM elements. Because of this it is possible for both server and client side code to call mixed side code.
 
-		As shown in Figure~\ref{fig:MixedSidePrinciple}, MixedSide code should be available both to client side code and server side code. As no communication should happen between client side and server side code, code annotated with the MixedSide attribute should only be able to interact with other code that has also been annotated with the MixedSide attribute. 
+		All three kinds of code can obviously utilize other code of the same kind hence the recursive arrows in the illustartion.
 
-		If the MixedSide Principle is not violated and only supported .NET types and members are used, the users’ code is valid.
+		
+
+
 
 	% subsection the_mixedside_principle (end)
 
