@@ -1,28 +1,30 @@
-\section{Syntax Tree Validation} % (fold)
+\section{Syntax Tree Type Validation} % (fold)
 \label{sec:syntax_tree_validation}
-	As we only support a fairly limited set of C\#’s built-in constructs and types, it is important to make sure that users only make use of those that we are able to map to Script\#. Should users utilise one of the constructs or types that we are not able to map, this should be pointed out with an understandable error message. It should not be left to the users to debug or understand a Roslyn or Script\# exception. Furthermore, it is important to make sure that users use their own code correctly. The remainder of this section will describe how a Validator class is used to achieve this.
+	% As we only support a fairly limited set of C\#’s built-in constructs and types, it is important to make sure that users only make use of those that we are able to map to Script\#. Should users utilise one of the constructs or types that we are not able to map, this should be pointed out with an understandable error message. It should not be left to the users to debug or understand a Roslyn or Script\# exception. Furthermore, it is important to make sure that users use their own code correctly. The remainder of this section will describe how a Validator class is used to achieve this.
 
-	As mentioned above, it is necessary to make sure that users only utilise C\# constructs (method declarations, various statements and expressions, etc.) that we can correctly map to Script\#. At the moment, this is handled by the Builder classes, and will be explained in a later section. However, optimally this should be the responsibility of the Validator class. How this can be achieved is described in future work. It should also be confirmed that users utilise types and their members correctly. This is handled by the validator class. It should be noted that currently only methods are supported as members.
+	It should be confirmed that users utilize types and their members correctly. This is handled by the \texttt{Validator} class. 
+	%It should be noted that currently only methods are supported as members.
 
-	To explain correct usage of types and members, it is beneficial to divide them into two categories; the ones that are built into the .NET platform and the ones users define themselves. Understanding “correct usage of .NET built-in types and members” is straightforward; it means that users are only allowed to use the types and members that can be mapped correctly to Script\#. How this is achieved is described later in this section. However, “correct usage of the types defined by the users themselves” requires some explanation. For this, the MixedSide Principle is introduced.
+	To explain correct usage of types and their members, it is beneficial to divide them into two categories; the ones that are built into the .NET platform (.NET core types) and the ones users define themselves. If the user utilizes only .NET core Types that we can map to ScriptSharp and adhere to the MixedSide Principle, the type validation passes. The remainder of this section focus on how this validation is done.
+	%Understanding “correct usage of .NET built-in types and members” is straightforward; it means that users are only allowed to use the types and members that can be mapped correctly to Script\#. How this is achieved is described later in this section. However, “correct usage of the types defined by the users themselves” requires some explanation. For this, the MixedSide Principle is introduced.
 
 
 
 	\subsection{Validating} % (fold)
 	\label{sub:validating}
 
-		There are essentially three situations in which it is necessary to verify correct usage of types and members. The first is object creation. When an instance of a type is created, it is necessary to check the type in question can be mapped. The second situation is when members on type instances are accessed. It is then necessary to check first if the type can be mapped, then if the type has a member corresponding to the one being accessed. The third is invocation of methods. It is then necessary to check if the invocation is done correctly, using the correct arguments and return type.
+		There are essentially three situations in which it is necessary to verify correct usage of types and members. The first is object creation. When an instance of a type is created, it is necessary to check the type in question can be mapped. The second situation is when members on type instances are accessed. It is then necessary to check first if the type can be mapped, then if the type has a member corresponding to the one being accessed. The third is invocation of methods on .NET core types. It is then necessary to check if the invocation is done correctly, using the correct arguments and return type. Normally, the C\# compiler complains if an invocation is done using an incorrect signature, but as the interface between .NET core types and Script\# core types does not always match, it is important to make sure that the Script\# core type has a member with the corresponding arguments and return type. An invocation that is perfectly legal on .NET core types might be illegal on Script\# core types.
 
-		The Validator class extends Roslyns SyntaxWalker class and it is thus able to traverse syntax nodes. The Validator takes a CompilationUnit which holds the code to be validated, a string containing an attribute name that decides what methods to validate, and a structure of types and members that the validated methods are allowed to use. It works by looking for classes in the CompilationUnit that contains methods annotated with the given attribute name and validates the body of these methods against the provided structure of members.
+		The Validator class extends Roslyns SyntaxWalker class and it is thus able to traverse syntax nodes. The Validator takes a CompilationUnit which holds the code to be validated, a string containing an attribute name (''MixedSide'' or ''ClientSide'') that decides what methods to validate, and a structure of types and members that the validated methods are allowed to use. It works by looking for classes in the CompilationUnit that contains methods annotated with the given attribute name and validates the body of these methods against the provided structure of members.
 
-		The nature of the Validator requires the Syntax Tree to be validated twice. Once validating all the MixedSide methods against a structure containing all MixedSide types and their members, and once validating all the ClientSide methods against a structure containing all ClientSide types and members, MixedSide types and members and ScriptSharp DOM types and members. This is easily done by creating two instances of the Validator and validating them both, as shown in figure X. In the example, the ScriptSharp DOM types are already contained in the clientSideMembers. 
+		The nature of the Validator requires the Syntax Tree to be validated twice. Once validating all the MixedSide methods against a structure containing all MixedSide types and their members, and once validating all the ClientSide methods against a structure containing all ClientSide types and members, MixedSide types and members and ScriptSharp DOM types and members. This is done by creating two instances of the Validator and validating them both, as shown in figure \ref{fig:validatorInitiation}. In the example, the ScriptSharp DOM types are already contained in the clientSideMembers. 
 
 		\begin{figure}[H]
 			\begin{center}
 				\centerline{\includegraphics[width=14cm]{resources/images/validatorInitiation.png}}
 			\end{center}
 			\caption{Initiating the Syntax Tree Validation process}
-			\label{validatorInitiation}
+			\label{fig:validatorInitiation}
 		\end{figure}
 
 		The Validation process is best explained by looking at an example. Consider the situation showed in Figure \ref{fig:mixedSideValidationExample}. 
@@ -49,7 +51,13 @@
 
 		The validation of a member access is done in a very similar way, only checking if the member exists in the allowed-members structure or in the core mapping as well.
 
-		TODO: Write about how invociations are validated: Only core types need to be validated (with arguments and return types), as user types will automatically be validated by the compiler.
+		As mentioned earlier, it is important to validate invocation on core types. This is done using the \texttt{VerifyCorrectUseOfSupportedCoreType} method on the \texttt{TypeManager}. This method first checks if the given invocation is done on a core type, and subsequently uses the Core Mapping Specification (as discussed in section \ref{sub:type_mapping}) to verify that we are able to map the invocation to ScriptSharp.
+		
+
+
+
+		% When an invocation is visited, the \texttt{TypeManager} is asked to 
+		% TODO: Write about how invociations are validated: Only core types need to be validated (with arguments and return types), as user types will automatically be validated by the compiler.
 
 
 % \begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={TextBox,Panel,CheckBox, Button}]
