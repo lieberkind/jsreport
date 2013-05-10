@@ -1,4 +1,5 @@
 \chapter{Approach Analysis}
+	todo: text
 
 \section{Technologies}
 	In this section we will give a brief description of the technologies associated to the different approaches we have considered.
@@ -11,13 +12,13 @@
 
 				\begin{figure}[H]
 			\begin{center}
-				\centerline{\includegraphics[width=14cm]{resources/images/SimplifiedOverview.png}}
+				\centerline{\includegraphics[width=16cm]{resources/images/SimplifiedOverview.png}}
 			\end{center}
 			\caption{Simplified Script\# architecture overview.}
 			\label{simplifiedOverview}
 		\end{figure}
 
-		Another important assembly is the Script.Web.dll. This assembly contains classes E.g. for Document Object Model (DOM) representation.
+		Another important assembly is the Script.Web.dll. This assembly contains classes for Document Object Model (DOM) representation.
 
 		Script\# defines a modified version of the .NET mscorlib.dll so that the (modified) .NET core type interfaces resembles the equivalent JavaScript objects. E.g. the ScriptSharp defined System.String type has a CharAt(int index) function that doesn’t exist on the original .NET System.String type but that does exist on a JavaScript string object. One benefit of the modified mscorlib.dll is that it makes the C\# compiler able to validate the C\# code that represents JavaScript code entirely (todo: REF to explanation). 
 
@@ -48,26 +49,27 @@
 
 \section{Stages when going from .NET Language to JavaScript} % (fold)
 \label{sec:stages_when_going_from_net_language_to_javascript}
-	Before discussing different approaches it make sense to clarify the possible stages in the process of “going” from host to target language. The process (displayed in figure \ref{stages}) moves from left to right and possibly skips stages on the way.
+	Before discussing different approaches it make sense to clarify the possible stages in the process of ``going'' from a .NET language to the target language. The process (displayed in figure \ref{stages}) moves from left to right and possibly skips stages on the way.
 
 				\begin{figure}[H]
 			\begin{center}
-				\centerline{\includegraphics[width=12cm]{resources/images/stages.png}}
+				\centerline{\includegraphics[width=14cm]{resources/images/stages.png}}
 			\end{center}
 			\caption{Possible approach stages}
 			\label{stages}
 		\end{figure}
 
-	The host language concrete syntax, whether an internal DSL or the host languages native syntax, is what the end user will be utilizing. From this concrete syntax a host language abstract syntax tree (hereinafter AST) can be generated. This AST can be traversed in order to map the host language AST to a JavaScript representation (typically also an AST) in the host language. Finally, JavaScript can be generated from the JavaScript AST.
+	The .NET concrete syntax is what the end user will be utilizing when writing code. From this concrete syntax a .NET abstract syntax tree (hereinafter AST) can be generated. This AST can be traversed in order to map the .NET AST to a JavaScript representation (typically also an AST) in the .NET language. Finally, JavaScript can be generated from the JavaScript AST.
 % section stages_when_going_from_net_language_to_javascript (end)
 
 \section{Possible Approaches} % (fold)
 \label{sec:possible_approaches}
 	todo text
 
+	todo: update figure
 					\begin{figure}[H]
 			\begin{center}
-				\centerline{\includegraphics[width=14cm]{resources/images/DSLv2.png}}
+				\centerline{\includegraphics[width=16cm]{resources/images/DSLv2.png}}
 			\end{center}
 			\caption{Map of possible approaches.}
 			\label{approachMap}
@@ -92,28 +94,29 @@
 		\subsubsection{C\# DSL} % (fold)
 		\label{sub:cs_dsl}
 
-			To approach the project initially we did some experiments with a DSL (in C\#) that created a JavaScript AST directly (i.e. the Host Language Abstract Syntax stage was skipped) (See appendix for class diagram and maybe description of scope / block handling mechanism etc.). Using helper factory methods (to create AST nodes), operator overloading and a scope and block handling mechanism (utilizing Statement Lambdas) one can arrive at a DSL syntax that could be somewhat compared to concrete syntax (see example below).
+			To approach the project initially we did some experiments with a DSL (in C\#) that created a JavaScript AST directly (i.e. the .NET Abstract Syntax tree stage was skipped) (TODO: See appendix for class diagram and maybe description of scope / block handling mechanism etc.). Using helper factory methods (to create AST nodes), operator overloading and a scope and block handling mechanism (utilizing Statement Lambdas) one can arrive at a DSL syntax that could be somewhat compared to concrete syntax (see example below).
 
 			todo: redo code example
 
-			There are though different problems with this approach. First of all the syntax is a bit different from any of the existing syntaxes, i.e. it doesn’t exactly resemble regular C\# or JavaScript. This implies that there will be a learning effort before the DSL can be used. Furthermore the syntax is a bit verbose and not optimal when it comes to readability.
+			There are though different problems with this approach. First of all the syntax doesn’t exactly resemble regular C\# or JavaScript. This implies that there will be a learning effort before the DSL can be used. Furthermore the syntax is a bit verbose and readability is also decreased a bit.
+
+			Another problem with the C\# DSL implementation is that the initial declaration and assignment of the variable ``i'' is done using ``='' operator where any subsequent assignments should be done using the ``Assign(...)'' method (or possibly through overloading an existing operator e.g. ``\%=''). The main reason for this is that it is not possible to override the assignment operator in C\# (QUOTATION). This is a critical problem because if the regular C\# assignment operator ``\='' was used incorrectly by mistake it would not trigger any exceptions and therefore cause a difficult to debug error.  The example below shows exactly this. The variable ``i'' is assigned in an incorrect manner after its initial declaration according to the DSL syntax.
+
+			todo: redo code example
 		
 		% subsection subsection_name (end)
 
 		\subsubsection{F\# DSL} % (fold)
 		\label{sub:fs_dsl}
-			One problem with the C\# DSL implementation is that the initial declaration and assignment of the variable “i” is done using “=” operator where any subsequent assignments should be done using the ``Assign(...)'' method (or possibly through overloading an existing operator e.g. ``\%=''). The main reason for this is that it is not possible to override the assignment operator in C\# (QUOTATION). This is a critical problem because if the regular C\# assignment operator ``\='' was used incorrectly by mistake it would not trigger any exceptions and therefore cause a difficult to debug error.  The example below shows exactly this. The variable “i” is assigned in an incorrect manner after its initial declaration according to the DSL syntax.
 
-			todo: redo code example
+			The problem with not being able to overload the assignement operator (illustarted in figure todo: REF) would not be an issue in F\# as the assignment operator could be overloaded. Furthermore it is even possible to implement new operators consisting of one or more characters from a given set of characters, consequently making it possible to implement some special JavaScript operators such as strict equal (===).
 
-			This would not be an issue in F\# as the assignment operator could be overloaded. Furthermore it is even possible to implement new operators consisting of one or more characters from a given set of characters, consequently making it possible to implement some special JavaScript operators such as strict equal (===).
-
-			One problem though with the F\# DSL approach is the fact that the F\# native syntax and programming paradigm (e.g. the use of immutable types) is radically different from that of JavaScript (and C\# for that matter). This would imply an even bigger learning curve according to our target user as one would have learn the F\# syntax and programming paradigm together with the DSL. Even if F\# was the language of choice there are other powerful language features (Code Quotations) that might bias you toward a different approach (see section ``Using F\# Code Quotations'').
+			One problem though with the F\# DSL approach is the fact that the F\# native syntax and programming paradigm (e.g. the use of immutable types) is radically different from that of JavaScript (and C\# for that matter). This would imply a steep learning curve according to our target user as one would have to learn the F\# syntax and programming paradigm together with the DSL. Even if F\# was the language of choice there would be other powerful language features (i.e. Code Quotations) that might bias you toward a different approach (see section \ref{sub:using_fs_code_quotations}).
 		% subsection fs_dsl (end)
 
-		\subsubsection{DSL to Host AST} % (fold)
-		\label{sub:dsl_to_host_ast}
-			To accommodate the mixed side execution goal one possibility in C\# is to utilize Expression Trees. With this approach the DSL would build a host language AST represented as an Expression Tree which hereafter could be mapped to JavaScript. The host language AST can also be compiled into host language executable code using the Compile() feature (todo: QUOTATION) on Expression Trees. With an F\# DSL approach a similar pattern could be achieved with Code Quotations (the Expr type). A more straightforward solution to the mixed side execution goal would though be to not use a DSL. Instead one would use the concrete syntax of host language. Then utilize dynamic compilation to retrieve the host language AST which is what we’ll discuss in the next section (todo: REF ``Using Roslyn'').
+		\subsubsection{DSL to .NET AST} % (fold)
+		\label{sub:dsl_to_net_ast}
+			To accommodate server client portability one option in C\# is to utilize Expression Trees. With this approach the DSL would build a .NET AST represented as an Expression Tree which hereafter could be mapped to JavaScript. The .NET AST can also be compiled into host language executable code using the Compile() feature (todo: QUOTATION) on Expression Trees. With an F\# DSL approach a similar pattern could be achieved with Code Quotations (the Expr type). A more straightforward solution to the mixed side execution goal would though be to not use a DSL. Instead one would use the concrete syntax of host language. Then utilize dynamic compilation to retrieve the host language AST which is what we’ll discuss in the next section (todo: REF ``Using Roslyn'').
 		% subsection dsl_to_host_ast (end)
 	% subsubsection internal_dsl_approaches (end)
 
@@ -163,11 +166,11 @@
 
 						\begin{figure}[H]
 			\begin{center}
-				\centerline{\includegraphics[width=14cm]{resources/images/ApproachMatrix.png}}
+				\centerline{\includegraphics[width=16cm]{resources/images/ApproachMatrix.png}}
 			\end{center}
 			\caption{Approach Matrix.}
 			\label{approachMatrix}
 		\end{figure}
 
-	todo: more text
+	todo: shorter column titles on approach matrix + concluding text
 % section deciding_on_approach (end)
