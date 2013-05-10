@@ -12,14 +12,15 @@ This section will describe the different parts, how they relate to one another a
 \end{figure}
 
 
-The TypeManagers (\texttt{TypeManager}, \texttt{CSharpTypeManager} and\newline \texttt{ScriptSharpTypeManager}) provide information about types used throughout MiCS. For example, the TypeManagers are able to look up the type of a symbol (e.g. a variable). Furthermore, they can determine whether a given type is one that the user has defined, or if it is a built-in .NET-type.
+The TypeManagers (\texttt{TypeManager}, \texttt{CSharpTypeManager} and\newline \texttt{ScriptSharpTypeManager}) provide information about types used throughout MiCS. For example, the TypeManagers are able to lookup the type of an expression or a symbol (e.g. a variable). Furthermore, they can determine whether a given type is one that the user has defined, or if it is a built-in .NET-type.
 
-The \texttt{Validator} class is responsible for validating the user's code in order to ensure correct type usage before the conversion to Script\# begins.
+The \texttt{Validator} class is responsible for validating the user's code in order to ensure correct type usage before the conversion to Script\# AST begins. The \texttt{Validator} is initiated by the MiCSManager and is dependent on the type managers.
 
-Classes in the Builders and Mappers namespaces serve as the backbone of MiCS. They are responsible for converting a Roslyn AST to its' corresponding Script\# AST. The Builders traverse the Roslyn AST and builds a corresponding Script\# AST, with help from the Mappers, that handle the actual conversion from Roslyn SyntaxNodes to the corresponding Script\# constructs. (Stage 3)
+Classes in the Builders and Mappers namespaces are responsible for converting a Roslyn AST to its' corresponding Script\# AST. The Builders traverse the Roslyn AST and builds a corresponding Script\# AST. The Builders are dependent on the Mappers which handle the actual conversion from Roslyn SyntaxNodes (AST nodes) to the corresponding Script\# constructs. (Stage 3)
 
-The \texttt{MiCSManager} class ties the entire MiCS project together and is involved in all of the stages described in section \ref{sec:workflow_overview}. It initializes all the ressource that MiCS needs to function (the TypeManagers) and subsequently initiates all of the processes needed to generate the JavaScript and inject it into the user's web page; first, it starts the validation of the user's code (stage 2). If the validation succeeds, the MiCSManager starts the conversion from Roslyn to Script\# by invoking the Builders (stage 3). When the Script\# AST has been generated, the MiCSManager uses Script\#'s \texttt{ScriptGenerator} to generate the JavaScript source code (stage 4). Lastly, the MiCSManager injects the generated JavaScript into the user's web page by using the pages registered \texttt{ScriptManager} (stage 5). 
+The \texttt{MiCSManager} class ties the entire MiCS project together and is involved in all of the stages described in section \ref{sec:workflow_overview}. It initializes the \texttt{Validator} ,  the TypeManagers and subsequently initiates all of the processes needed to generate JavaScript. 
 
 TODO: Vis og beskriv hvilken del af ScriptSharp vi erstatter med MiCS og Roslyn.
+
 
 % % section architecture (end)
