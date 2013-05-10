@@ -141,7 +141,7 @@
 
 	The ClassBuilder has an important feature; it ensures that only user defined types will be mapped to the Script\# AST (and generated as script types). DOM (or core) types doesn’t need to be defined in Script\# as these obviously already exists in JavaScript (and thus not need to be generated again).
 
-	The MethodBuilder class is a little more complex as it needs to build only the methods that are MixedSide or ClientSide methods. Furthermore it needs to handle a method’s return type, arguments and body statements. The StatementBuilder and ExpressionBuilder is however the most complex as building compound statements and expressions are more complicated. Before a compound statement or expression can be build all the child nodes and their associated types (if any) needs to be mapped.
+	The MethodBuilder class is a little more complex as it needs to build only the methods that are MixedSide or ClientSide methods. Furthermore it needs to handle a method’s return type, arguments and body statements. The StatementBuilder and ExpressionBuilder are however the most complex as building compound statements and expressions are more complicated. Before a compound statement or expression can be built all their child nodes and their associated types (if any) needs to be mapped.
 
 	\begin{figure}[H]
 		\begin{center}
