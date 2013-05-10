@@ -1,5 +1,27 @@
 \chapter{MiCS Design}
 
+	\section{The MixedSide Principle} % (fold)
+	\label{sub:the_mixedside_principle}
+		The MixedSide Principle is a constraint that the user has to adhere to in order for MiCS to function correctly. As explained earlier the user can write server side code, which is only meant to be run only on the server, mixed side code, which is meant to be run both on server and client side and client side code, which is only meant to be run client side. The MixedSide Principle describes a simple ruleset for the interaction between serverside, mixedside and clientside code.
+
+		\begin{figure}[H]
+			\begin{center}
+				\centerline{\includegraphics[width=12cm]{resources/images/MixedSidePrinciple.png}}
+			\end{center}
+			\caption{Visualization of The MixedSide Principle}
+			\label{fig:MixedSidePrinciple}
+		\end{figure}
+
+		Code annotated with the ClientSide attribute is only meant to be run on the client in form of generated JavaScript. Therefore, it should not make instances of, or calls to methods on, objects that exist only on serverside, as no JavaScript will be generated from server side code. Consequently, if client side code interacts with server side code, it will ultimately result in an error when the JavaScript is generated as some methods and classes will not have been generated. However, JavaScript will be generated from code annotated with either the ClientSide attribute or the MixedSide attribute, so calls from client side to client side or client side to mixed side code are perfectly legal.
+
+		Code that is not annotated with any attributes is regarded as server side code. No JavaScript will be generated from server side code, so server side code should only make calls to other server side code, or to mixed side code.
+
+		As shown in Figure~\ref{fig:MixedSidePrinciple}, MixedSide code should be available both to client side code and server side code. As no communication should happen between client side and server side code, code annotated with the MixedSide attribute should only be able to interact with other code that has also been annotated with the MixedSide attribute. 
+
+		If the MixedSide Principle is not violated and only supported .NET types and members are used, the users’ code is valid.
+
+	% subsection the_mixedside_principle (end)
+
 \input{chapters/5-micsdesign/workflowoverview}
 
 \input{chapters/5-micsdesign/architecture}
