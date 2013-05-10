@@ -28,26 +28,39 @@
 				\label{html}
 			\end{figure}
 		There are built-in control classes equivalent to most DOM elements so in this manner one can build an entire web application from Code Behind. Some of the benefits of working from Code Behind is that you essentially achieve compile time validation of your markup code and you get to work in object oriented manner.
+
+		todo: Web Forms unsafe JavaScript example.
 	% subsection code_behind (end)
 
 % section asp_net_web_forms (end)
 
+\section{JavaScript and its Unsafe Language Feature} % (fold)
+\label{sec:javascript_and_its_unsafe_language_feature}
+	todo: text
 
-\section{JavaScript and its Unsafe Language Features}
+	\subsection{No compile time validation} % (fold)
+	\label{sub:no_compile_time_validation}
+		In general enforcing correctness at compile time instead of runtime make the development process safer as some errors (e.g. syntax errors like missing semicolons) are not possible to overlook or ignore. Furthermore discovering errors as early as possible makes the debugging process easier hence compile time errors should be preferred over runtime errors. So the fact that JavaScript is an interpreted language that is not compiled makes it a less safe language.
+	% subsection no_compile_time_validation (end)
 
-		\subsection{No compile time validation}
-			In general enforcing correctness at compile time instead of runtime make the development process safer as some errors (e.g. syntax errors like missing semicolons) are not possible to overlook or ignore. Furthermore discovering errors as early as possible makes the debugging process easier hence compile time errors should be preferred over runtime errors. So the fact that JavaScript is an interpreted language that is not compiled makes it a less safe language.
+	\subsection{Dynamic type system} % (fold)
+	\label{sub:dynamic_type_system}
+		JavaScript has a dynamic type system which in some situations make the development process faster but also less safe as some errors will not emerge at all (or maybe emerge at runtime). E.g. it is possible to by mistake add a Number value with a Boolean value without getting any warnings. In other words it is possible to forget enforcing that a variable has a specific type. This problem is increased especially when parsing external input as it is done e.g. in form validation.
+	% subsection dynamic_type_system (end)
 
-		\subsection{Dynamic type system}
-			JavaScript has a dynamic type system which in some situations make the development process faster but also less safe as some errors will not emerge at all (or maybe emerge at runtime). E.g. it is possible to by mistake add a Number value with a Boolean value without getting any warnings. In other words it is possible to forget enforcing that a variable has a specific type. This problem is increased especially when parsing external input as it is done e.g. in form validation.
-		
-		\subsection{Reuse of identifiers in declarations}
-			JavaScript allows declaring multiple variables or functions with the same name in the same execution context without any warnings. This makes it possible by mistake to override earlier declared variables or functions. This kind of errors can be difficult and time consuming to discover because of their hidden nature.
+	\section{Reuse of identifiers in declarations} % (fold)
+	\label{sec:reuse_of_identifiers_in_declarations}
+		JavaScript allows declaring multiple variables or functions with the same name in the same execution context without any warnings. This makes it possible by mistake to override earlier declared variables or functions. This kind of errors can be difficult and time consuming to discover because of their hidden nature.
+	% section reuse_of_identifiers_in_declarations (end)
 
-		\subsection{No block scope}
-			JavaScript’s syntax comes from C. In all other C-Like languages a block creates scope. This is not the case in JavaScript even though its block syntax suggests that it does (“The Good Parts” p. 102). This can be a source of confusion especially for programmers that are used to block scope. Scope related errors might be difficult to debug as obviously no warnings are given (since there is no block scope) when a variable from an outer block is assigned a value by mistake.
+	\subsection{No block scope} % (fold)
+	\label{sub:no_block_scope}
+		JavaScript’s syntax comes from C. In all other C-Like languages a block creates scope. This is not the case in JavaScript even though its block syntax suggests that it does (“The Good Parts” p. 102). This can be a source of confusion especially for programmers that are used to block scope. Scope related errors might be difficult to debug as obviously no warnings are given (since there is no block scope) when a variable from an outer block is assigned a value by mistake.
+	% subsection no_block_scope (end)
 
-		\subsection{Many falsy values}
-			JavaScript has multiple falsy values which are not interchangeable. This is another source of errors that can be difficult to discover (“The Good Parts” p. 106).
+	\subsection{Many falsy values} % (fold)
+	\label{sub:many_falsy_values}
+		JavaScript has multiple falsy values which are not interchangeable. This is another source of errors that can be difficult to discover (“The Good Parts” p. 106).
+	% subsection many_falsy_values (end)
+% section javascript_and_its_unsafe_language_feature (end)
 
-	% subsection approach_matrix (end)
