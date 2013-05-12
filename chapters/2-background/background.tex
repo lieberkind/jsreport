@@ -36,7 +36,8 @@
 
 \section{JavaScript and its Unsafe Language Feature} % (fold)
 \label{sec:javascript_and_its_unsafe_language_feature}
-	todo: text
+	
+	JavaScript is an interpreted, dynamically typed scripting language used mainly for making web applications with dynamic user interfaces. JavaScript inherits its syntax from C, and was developed by Netscape in 1995 \cite{bib:wiki_javascript}. Today, JavaScript is used in almost all big web applications, but despite its popularity, it has some language features that can be considered unsafe when correctness is of high priority. The remainder of this section will highlight some of these unsafe language features.
 
 	\subsection{No compile time validation} % (fold)
 	\label{sub:no_compile_time_validation}
@@ -48,7 +49,7 @@
 		JavaScript has a dynamic type system which in some situations make the development process faster but also less safe as some errors will not emerge at all (or maybe emerge at runtime). E.g. it is possible to by mistake add a Number value with a Boolean value without getting any warnings. In other words it is possible to forget enforcing that a variable has a specific type. This problem is increased especially when parsing external input as it is done e.g. in form validation.
 	% subsection dynamic_type_system (end)
 
-	\section{Reuse of identifiers in declarations} % (fold)
+	\subsection{Reuse of identifiers in declarations} % (fold)
 	\label{sec:reuse_of_identifiers_in_declarations}
 		JavaScript allows declaring multiple variables or functions with the same name in the same execution context without any warnings. This makes it possible by mistake to override earlier declared variables or functions. This kind of errors can be difficult and time consuming to discover because of their hidden nature.
 	% section reuse_of_identifiers_in_declarations (end)
