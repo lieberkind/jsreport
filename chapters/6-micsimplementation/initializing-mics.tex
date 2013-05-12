@@ -1,6 +1,47 @@
 \section{Initializing MiCS} % (fold)
 \label{sec:initializing_mics}
 
+In chapter \ref{chap:mics_manual} it was shown how the end user only needs to make use of the \texttt{MiCSPage} class (instead of the \texttt{System.Web.UI.Page}) in order to utilize MiCS. This section describes what \texttt{MiCSPage} is doing behind the scenes in order to initialize MiCS.
+
+The MiCSPage essentially has two jobs; gathering the user's source code and initiating the MiCSManager. It is then the MiCSManagers responsibility to build the Roslyn AST, initialize the necessary ressources required by MiCS and subsequently start the validation and building process.
+
+It does this by hooking up to the \texttt{OnPreRenderComplete} event, which is raised before the page is rendered. To gather the user's source code, basically 
+
+
+
+MiCSPage
+	Gathers user's source code
+	Generates SyntaxTree
+	Initializes MiCSManager
+
+MiCSManager
+	Initializes TypeManagers
+		Builds semantic models
+	Starts validation
+	Starts building process
+
+
+
+
+
+
+
+
+
+
+
+
+% As mentioned in section X, the \texttt{MiCSManager} responsibility is to initialize all the ressources needed by MiCS and subs
+
+% Before the conversion from C\# to JavaScript can begin, the ressources required by MiCS, namely the TypeManager classes, must be initialized. 
+
+
+% In chapter \ref{chap:mics_manual} it was shown how the end user only needs to make use of the \texttt{MiCSPage} class (instead of the \texttt{System.Web.UI.Page}) in order to utilize MiCS. This section describes what \texttt{MiCSPage} is doing behind the scenes in order to initialize MiCS.
+
+% The MiCSPage hooks up to an OnPreRenderComplete
+
+
+
 
 
 % Before the conversion from C# to JavaScript can begin, the TypeManager classes must be initialized, as they are used by essentially all the other classes in MiCS. 
