@@ -3,22 +3,66 @@
 
 In chapter \ref{chap:mics_manual} it was shown how the end user only needs to make use of the \texttt{MiCSPage} class (instead of the \texttt{System.Web.UI.Page}) in order to utilize MiCS. This section describes what \texttt{MiCSPage} is doing behind the scenes in order to initialize MiCS.
 
-The MiCSPage essentially has two jobs; gathering the user's source code and initiating the MiCSManager. It is then the MiCSManagers responsibility to build the Roslyn AST, initialize the necessary ressources required by MiCS and subsequently start the validation and building process.
+The MiCSPage essentially has two jobs; gathering the user's source code and initiating the MiCSManager. It is then the MiCSManagers responsibility to build the Roslyn AST, initialize the necessary ressources required by MiCS (the TypeManagers) and subsequently start the validation and building process.
 
-It does this by hooking up to the \texttt{OnPreRenderComplete} event, which is raised before the page is rendered. To gather the user's source code, basically 
+The \texttt{MiCSPage} class inherits from the \texttt{System.Web.UI.Page} class. When the \texttt{OnPreRenderComplete} event is raised, \texttt{MiCSPage} uses the \texttt{System.IO} API to find all the C\# files in the current project and aggregates the files into a single source string. This source string is then handed to the \texttt{Initiate} method on the MiCSManager as shown in figure \ref{fig:init_mics_gather_source_code}.
+
+\begin{figure}[H]
+\begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={Directory,SearcOption,File,MiCSManager,ScriptManager}]
+foreach (string file in Directory.EnumerateFiles(rootPath, "*.cs", SearchOption.AllDirectories))
+{
+  source += File.ReadAllText(file);
+}
+
+MiCSManager.Initiate(source);
+MiCSManager.BuildScript(ScriptManager.GetCurrent(this), this);
+\end{lstlisting}
+\caption{Gathering all C\# source code from the user's project}
+\label{fig:init_mics_gather_source_code}
+\end{figure}
+
+The MiCSManager now first builds the Roslyn AST by using the \texttt{SyntaxTree.ParseText} method. When this is done, the MiCSManager initiates the TypeManager as shown in figure \ref{fig:init_mics_init_typemanager}
+
+\begin{figure}[H]
+\begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={TypeManager,SyntaxTree}]
+var userTree = SyntaxTree.ParseText(source);
+TypeManager.Initate(userTree);
+\end{lstlisting}
+\caption{Initiaing the TypeManager. Todo: Change this example to fit code}
+\label{fig:init_mics_init_typemanager}
+\end{figure}
+
+The TypeManager now initiates the CSharpTypeManager and the ScriptSharpTypeManager. The CSharpTypeManager holds information about all C\# types that can be used by MiCS, including user types (ClientSide \& MixedSide), DOM Types and supported .NET types. When creating the C\# Semantic Model it is therefore necessary to make sure the all of these types can be recognized when they are looked up. The ClientSide and MixedSide types are already contained in the user SyntaxTree, but the other types need to be added. The DOM types are added simply by creating a new SyntaxTree consisting of the source of the user SyntaxTree combined with the source of the DOM types from Script\#, as shown in figure \ref{fig:init_mics_add_dom_types}
+
+\begin{figure}[H]
+\begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={SyntaxTree}]
+var tree = SyntaxTree.ParseText(userTree.GetText() + ScriptSharp.TextSources.Web.Text);
+\end{lstlisting}
+\caption{Creating a SyntaxTree containing both the user types and the DOM types}
+\label{fig:init_mics_add_dom_types}
+\end{figure}
+
+The supported .NET types are added as references to the Semantic Model when it is created, as shown in figure \ref{fig:init_mics_create_semantic_model}.
 
 
+% When creating the C\# Semantic Model it is therefore necessary to make sure that these supported .NET types can be recognized when they are looked up. This is done by handing the correct assemblies to the semantic model upon creation, as shown in figure \ref{fig:init_mics_create_semantic_model}.
 
-MiCSPage
-	Gathers user's source code
-	Generates SyntaxTree
-	Initializes MiCSManager
+\begin{figure}[H]
+\begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={MetadataFileReference,Regex,String,Compilation}]
+var mscorlib = new MetadataFileReference(typeof(String).Assembly.Location);
+var systemTextRegularExpression = new MetadataFileReference(typeof(System.Text.RegularExpressions.Regex).Assembly.Location);
 
-MiCSManager
-	Initializes TypeManagers
-		Builds semantic models
-	Starts validation
-	Starts building process
+var compilation = Compilation.Create("Compilation", syntaxTrees: new[] { tree }, references: new[] { mscorlib, SystemTextRegularExpression });
+SemanticModel = compilation.GetSemanticModel(tree);
+\end{lstlisting}
+\caption{Creating the C\# Semantic Model}
+\label{fig:init_mics_create_semantic_model}
+\end{figure}
+
+The \texttt{ScriptSharpTypeManager} only holds the types defined in the Script\# mscorlib.dll and therefore when creating the Script\# Semantic Model no other assemblies are needed.
+
+Now that the TypeManagers are initialized, MiCS is ready for use.
+
 
 
 
