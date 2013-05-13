@@ -2,7 +2,7 @@
 
 \section{ASP.NET Web Forms} % (fold)
 \label{sec:asp_net_web_forms}
-	ASP.NET. Web Forms are the User Interface (UI) elements that give your Web applications their look and feel. Web Forms are similar to Windows Forms \cite{msdn01} in that they provide properties, methods, and events for the controls that are placed onto them. However, these UI elements render themselves into Html \cite{msdn02}. When working with Web Forms you can both write markup code and write C\# code from Code Behind when building a web application. 
+	ASP.NET. Web Forms are the User Interface (UI) elements that give your Web applications their look and feel. Web Forms are similar to Windows Forms \cite{msdn01} in that they provide properties, methods, and events for the controls that are placed onto them. However, these UI elements render themselves into Html \cite{msdn02}. When working with Web Forms you can both write markup code and write C\# code from Code Behind (explained in \ref{sub:code_behind}) when building a web application. 
 
 	\begin{figure}[H]
 					\includegraphics[width=8cm]{resources/images/Markup.png}
@@ -34,7 +34,7 @@
 
 % section asp_net_web_forms (end)
 
-\section{JavaScript and its Unsafe Language Feature} % (fold)
+\section{JavaScript and its Unsafe Language Features} % (fold)
 \label{sec:javascript_and_its_unsafe_language_feature}
 	
 	JavaScript is an interpreted, dynamically typed scripting language used mainly for making web applications with dynamic user interfaces. JavaScript inherits its syntax from C, and was developed by Netscape in 1995 \cite{bib:wiki_javascript}. Today, JavaScript is used in almost all big web applications, but despite its popularity, it has some language features that can be considered unsafe when correctness is of high priority. The remainder of this section will highlight some of these unsafe language features.
@@ -59,9 +59,19 @@
 		JavaScript’s syntax comes from C. In all other C-Like languages a block creates scope. This is not the case in JavaScript even though its block syntax suggests that it does (“The Good Parts” p. 102). This can be a source of confusion especially for programmers that are used to block scope. Scope related errors might be difficult to debug as obviously no warnings are given (since there is no block scope) when a variable from an outer block is assigned a value by mistake.
 	% subsection no_block_scope (end)
 
+	\subsection{Implicit Type Conversion} % (fold)
+	\label{sub:implicit_type_conversion}
+	TODO
+	% subsection implicit_type_conversion (end)
+
 	\subsection{Many falsy values} % (fold)
 	\label{sub:many_falsy_values}
 		JavaScript has multiple falsy values which are not interchangeable. This is another source of errors that can be difficult to discover (“The Good Parts” p. 106).
 	% subsection many_falsy_values (end)
 % section javascript_and_its_unsafe_language_feature (end)
+
+\section{Related works} % (fold)
+\label{sec:related_works}
+TODO
+% section related_works (end)
 
