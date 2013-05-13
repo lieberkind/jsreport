@@ -55,11 +55,18 @@
 
 \section{Mapping to ScriptSharp AST} % (fold)
 \label{sec:mapping_to_scriptsharp_ast}
-	When converting the validated Roslyn AST to the ScriptSharp AST we have made a logical division of the process. First the actual mapping from one Roslyn AST node to the equivalent ScriptSharp AST node. Secondly building the ScriptSharp AST from all the mapped nodes. The mapping is discussed in this section. 
+	When converting the validated Roslyn AST to its corresponding ScriptSharp AST, a logical division of the process has been made. 
+
+	\begin{itemize}
+		\item Mapping a Roslyn AST node to its equivalent ScriptSharp AST node
+		\item Building a ScriptSharp AST from all the mapped nodes
+	\end{itemize}
+
+	It is important to realize that the mapping is a sub process of the building process. The mapping is discussed in this section. 
 
 	\subsection{Mapping to ScriptSharp Expressions, Statements and Symbols} % (fold)
 	\label{sub:subsection_mapping_to_scriptsharp_expressions_statements_and_symbols}
-		The mapping of Expressions, Statements and Symbols is implemented in three classes (ExpressionMapper.cs, StatementMapper.cs and SymbolMapper.cs). The three classes are logically divided (and named) after the type of ScriptSharp AST object they map to. 
+		The mapping of Expressions, Statements and Symbols is implemented in three classes (ExpressionMapper.cs, StatementMapper.cs and SymbolMapper.cs). The three classes are logically divided (and named) after the kind of ScriptSharp AST node they map to. 
 
 		\begin{figure}[H]
 			\begin{center}
@@ -69,7 +76,9 @@
 			\label{mapperClasses}
 		\end{figure}
 
-		The mapping of the AST nodes is somewhat straightforward as most of the mappings we have done the Roslyn AST maps one to one with the ScriptSharp AST. So a Roslyn return statement node maps to a ScriptSharp return statement etc. The three classes define Map(...) extension methods to the Roslyn objects they map from (see example figures \ref{returnStatementMap} and \ref{conditionaleExpressionMap}).
+		TODO: Clarify this sentence
+
+		The mapping of the AST nodes is somewhat straightforward as most of the mappings we have done the Roslyn AST maps one to one with the ScriptSharp AST. A Roslyn return statement node maps to a ScriptSharp return statement etc. The three classes define \texttt{Map(...)} extension methods to the Roslyn objects they map from (see example figures \ref{returnStatementMap} and \ref{conditionaleExpressionMap}).
 
 		\begin{figure}[H]
 			\begin{center}
@@ -125,7 +134,7 @@
 		\begin{center}
 			\centerline{\includegraphics[width=16cm]{resources/images/BuilderClasses.png}}
 		\end{center}
-		\caption{Classes that built the Script\# AST by traversing the Roslyn AST and utilizing Map(...) extension methods.}
+		\caption{Classes that build the Script\# AST by traversing the Roslyn AST and utilizing Map(...) extension methods.}
 		\label{builderClasses}
 	\end{figure}
 
@@ -139,15 +148,15 @@
 		\label{visitClassDeclaration}
 	\end{figure}
 
-	The ClassBuilder has an important feature; it ensures that only user defined types will be mapped to the Script\# AST (and generated as script types). DOM (or core) types doesn’t need to be defined in Script\# as these obviously already exists in JavaScript (and thus not need to be generated again).
+	The ClassBuilder has an important feature; it ensures that only user defined types will be mapped to the Script\# AST (and generated as script types). DOM (or core) types doesn't need to be defined in Script\# as these obviously already exists in JavaScript.
 
-	The MethodBuilder class is a little more complex as it needs to build only the methods that are MixedSide or ClientSide methods. Furthermore it needs to handle a method’s return type, arguments and body statements. The StatementBuilder and ExpressionBuilder are however the most complex as building compound statements and expressions are more complicated. Before a compound statement or expression can be built all their child nodes and their associated types (if any) needs to be mapped.
+	The MethodBuilder class is a little more complex as it needs to build only the methods that are MixedSide or ClientSide methods. Furthermore it needs to handle a method’s return type, arguments and body statements. The StatementBuilder and ExpressionBuilder are however the most complex as building compound statements and expressions are more complicated. Before a compound statement or expression can be built all its child nodes and their associated types (if any) needs to be mapped.
 
 	\begin{figure}[H]
 		\begin{center}
 			\centerline{\includegraphics[width=16cm]{resources/images/VisitIfStatement.png}}
 		\end{center}
-		\caption{To built an IfStatement node its child nodes; condition, if-block and else-block (if any) has to be built first.}
+		\caption{To build an if-statement node its child nodes; condition, if-block and else-block (if any) has to be built first.}
 		\label{visitIfStatement}
 	\end{figure}
 

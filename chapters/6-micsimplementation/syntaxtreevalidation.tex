@@ -15,20 +15,12 @@
 		\begin{itemize}
 			\item Object creation; when an instance of a type is created, it is necessary to check the type in question can be mapped.
 			\item When members on type instances are accessed; it is then necessary to check first if the type can be mapped, then if the type has a member corresponding to the one being accessed.
-			\item Invocation of methods on .NET core types; it is then necessary to check if the invocation is done correctly, using the correct arguments and return type. Normally, the C\# compiler complains if an invocation is done using an incorrect signature, but as the interface between .NET core types and Script\# core types does not always match, it is important to make sure that the Script\# core type has a member with the corresponding arguments and return type. An invocation that is perfectly legal on .NET core types might be illegal on Script\# core types.
+			\item Invocation of methods on .NET core types; it is then necessary to check whether the invocation is done correctly, using the correct arguments and return type. Normally, the C\# compiler complains if an invocation is done using an incorrect signature, but as the interface between .NET core types and Script\# core types does not always match, it is important to make sure that the Script\# core type has a member with the corresponding arguments and return type. An invocation that is perfectly legal on .NET core types might be illegal on Script\# core types.
 		\end{itemize}
 
-		The Validator class extends Roslyns SyntaxWalker class and it is thus able to traverse syntax nodes. The Validator takes a CompilationUnit which holds the code to be validated, a string containing an attribute name (''MixedSide'' or ''ClientSide'') that decides what methods to validate, and a structure of types and members that the validated methods are allowed to use. It works by looking for classes in the CompilationUnit that contains methods annotated with the given attribute name and validates the body of these methods against the provided structure of members.
+		The Validator class extends Roslyn's SyntaxWalker class and it is thus able to traverse syntax nodes. The Validator takes a CompilationUnit which holds the code to be validated, a string containing an attribute name (''MixedSide'' or ''ClientSide'') that decides what methods to validate, and a structure of types and members that the validated methods are allowed to use. It works by looking for classes in the CompilationUnit that contains methods annotated with the given attribute name and validates the body of these methods against the provided structure of members.
 
-		The nature of the Validator requires the Syntax Tree to be validated twice. Once validating all the MixedSide methods against a structure containing all MixedSide types and their members, and once validating all the ClientSide methods against a structure containing all ClientSide types and members, MixedSide types and members and ScriptSharp DOM types and members. This is done by creating two instances of the Validator and validating them both, as shown in figure \ref{fig:validatorInitiation}. In the example, the ScriptSharp DOM types are already contained in the clientSideMembers. 
-
-		\begin{figure}[H]
-			\begin{center}
-				\centerline{\includegraphics[width=14cm]{resources/images/validatorInitiation.png}}
-			\end{center}
-			\caption{Initiating the Syntax Tree Validation process}
-			\label{fig:validatorInitiation}
-		\end{figure}
+		The nature of the Validator requires the Syntax Tree to be validated twice. Once validating all the MixedSide methods against a structure containing all MixedSide types and their members, and once validating all the ClientSide methods against a structure containing all ClientSide types and members, MixedSide types and members and ScriptSharp DOM types and members. This is done by creating two instances of the Validator and validating them both.
 
 		The Validation process is best explained by looking at an example. Consider the situation showed in Figure \ref{fig:mixedSideValidationExample}. 
 
@@ -36,11 +28,11 @@
 			\begin{center}
 				\centerline{\includegraphics[width=14cm]{resources/images/MixedSideValidationExample.png}}
 			\end{center}
-			\caption{Initiating the Syntax Tree Validation process}
+			\caption{TODO: Update example so that Validator is not used as example class}
 			\label{fig:mixedSideValidationExample}
 		\end{figure}		
 		
-		The Validator traverses the CompilationUnit depth-first and discovers the Validator class. It then finds all of the Validator class's methods and loops through these to see if they have the MixedSide attribute. When a method annotated with the MixedSide attribute is found, the validator visits it straight away, as shown in Figure \ref{fig:ValidatorVisitClassDeclaration}. 
+		The Validator traverses the CompilationUnit depth-first and discovers the Validator class. It then finds all of the Validator class's methods and checks if they have the MixedSide attribute. When a method annotated with the MixedSide attribute is found, the validator visits it straight away, as shown in Figure \ref{fig:ValidatorVisitClassDeclaration}. 
 
 		\begin{figure}[H]
 			\begin{center}
