@@ -6,7 +6,7 @@
 
 	We have not performed any formal tests on the validity and quality of the Script\# generated scripts. Here we have instead emphasized building a valid Script\# AST and then relied on the existing Script\# infrastructure to work correctly. The reason for this is again the time constraints and the scope of the project.
 % section mics (end)
-\section{User Code Testing} % (fold)
+\section{Case Study Testing} % (fold)
 \label{sec:user_code_testing}
 	Another benefit of being able to reuse server side code on client side is that you also have to write less tests. All the MixedSide code can be tested with the same unit testing framework (i.e. the framework used on server side). Apart from making less tests this might also in some situations make it possible to stay with a single unit testing framework instead of one for server side and another one for client side. Another benefit might be that the quality of the server side unit testing frameworks and tools are better than those made for the client side. Simply because they have been used and developed more than their JavaScript equivalents (todo: FIND BACKING FOR THIS COMMENT!).
 
