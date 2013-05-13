@@ -2,23 +2,25 @@
 	This bachelor project has been produced by Tomas Alan Lieberkind and Asger Schlichtkrull from the 1st February 2013 to the 22nd May 2013 at the IT-University of Copenhagen. The project has been supervised by Peter Sestoft.
 
 \section{Motivation}
-	To improve development of web applications with ASP.NET Web Forms from Code Behind it is beneficial to investigate how JavaScript can be safely represented in order to acheive compile time validation.
+	To improve development of web applications with ASP.NET Web Forms it is beneficial to investigate how JavaScript can be safely represented in order to acheive compile time validation.
 
 	Developing web applications instead of native applications is a strong tendency in software development today. JavaScript contributes to enriching the user experience and sometimes provide functionality which is indispensable for such web applications.
 
-	ASP.NET Web Forms provides the possibility of building HTML documents from Code Behind which improves correctness through compile time validation. Writing JavaScript code from ASP.NET Code Behind is not possible in the same way as with HTML. From Code Behind JavaScript is embedded into the application as hard coded text strings and thus compile time validation is not possible. This increases the possibility of writing faulty code that emits errors which are not discovered before client side runtime. Runtime errors are generally harder to debug and in worst case exposed to the end user while leaving the application in a corrupt state.
+	ASP.NET Web Forms provides the possibility of building HTML documents with C\# which improves correctness through compile time validation. Writing JavaScript code from C\# is not possible in the same way as with HTML. JavaScript is embedded into the application as hard coded text strings and thus compile time validation is not possible. This increases the possibility of writing faulty code that emits errors which are not discovered before client side runtime. Runtime errors are generally harder to debug and in worst case exposed to the end user while leaving the application in a corrupt state.
 
-	Achieving compile time validation of JavaScript is not a ground-breaking thought, and there are several projects out in the open that does exactly this; TypeScript by Microsoft and Dart by Google are just a few.
+	Achieving compile time validation of JavaScript is not a ground-breaking thought, and there are several existing projects that do exactly this; TypeScript by Microsoft and Dart by Google are just a few.
 
 	Depending on the problem at hand one weakness with those solutions could be that the server side code and the client side code (JavaScript) is written as two independent units, and nothing ties them safely together. Essentially server side code and client side code is compiled separately. 
 
 	Another problem is that of reusability. In cases such as form validation it is necessary to write the same piece of code in two different languages in order to validate both on client side and server side.
 
-	This project strides towards finding a solution that incorporates compile time validation, generation of client side code from server side code, and safely tiing client and server side together.
+	This project aims to find a solution that incorporates compile time validation, generation of client side code from server side code, and safely tying client and server side together.
 
 \section{Reading Guide}
 
 	This report is directed to people with interest in how JavaScript can be safely written in ASP.NET WebForms projects. It is assumed that the reader has a general understanding of Abstract Syntax Trees for representing programs source code and a basic understanding of JavaScript. Third party libraries used in the project, namely Roslyn and Script\#, will be introduced and thus knowledge about these is not a prerequisite.
+
+	TODO: NÆVN MICS
 
 	This document consists of six chapters.
 
@@ -33,7 +35,7 @@
 	Chapter five and six evaluates the solution from chapter four, reflects on the design goals set in the problem definition and discusses what direction the project should take from here.
 
 \section{Problem definition}
-	The problem definition has changed since the beginning of this project. In the original problem definition it was stated that we would represent JavaScript as an internal DSL in C\#. Instead we widened our perspective, to include other possible approaches to safe JavaScript development in ASP.NET Web Forms. Below, the revised problem definition is listed.
+	The problem definition has changed since the beginning of this project. Originally we wanted to represent JavaScript as an internal DSL in C\#. Instead we widened our perspective, to include other possible approaches to safe JavaScript development in ASP.NET Web Forms. Below, the revised problem definition is listed.
 	\begin{itemize}
 
 	\item Study JavaScript and describe its unsafe language features.
@@ -52,9 +54,9 @@
 	\subsection{Learning goals}
 		\begin{itemize}
 
-		\item Knowledge of JavaScript in general and the more subtle language features of the language.
-		\item Knowledge of ASP.NET Web Forms.
-	 	\item Knowledge of the difference between C\#/.NET (as a static typed) language and JavaScript (dynamically typed language).
+		\item Better knowledge of JavaScript in general and the more subtle language features of the language.
+		\item Better knowledge of ASP.NET Web Forms.
+	 	\item Better understanding of the difference between C\#/.NET (as a static typed) language and JavaScript (dynamically typed language).
 		\item Better understanding of web development and the communication between client and server side...
 		\item Basic knowledge of cross compilers and abstract syntax trees.
 		\end{itemize}
@@ -72,11 +74,11 @@
 	As a complete mapping from C\# to JavaScript is unrealistic to implement in the given period of time, the project is based on a case study. Only the subset of C\# needed to fulfill the requirements set by the case study will be taken into account.
 
 	\subsection{Case Study}
-		A very common use case of JavaScript is form validation. Users can disable JavaScript in their browser and consequently forms have to be validated on the server side. But as a user experience enriching feature, they are often validated on client side as well, as to avoid the waiting time for an extra page load. Our case study concerns the validation of a registration form. Specifically, we would like to be able to:
+		A very common use case of JavaScript is form validation. As a user experience enriching feature, forms are often validated on client side, as to avoid the waiting time for a page load (e.g.\ JavaScript can be disabled in the browser). However, forms have to be validated on the server side as well as the client side validation is easily bypassed. Our case study concerns the validation of a registration form. Specifically, we would like to be able to:
 
 		\begin{itemize}
 			\item Validate strings using Regular Expressions to check if email addresses, postal addresses and phone numbers are correctly formatted
-			\item Validate the length of strings to check that users do not enter a single letter, or an exceptionally long string, e.g. for their name
+			\item Validate the length of strings to check that users do not enter an exceptionally long string, e.g. for their name
 			\item Validate something based on the choice of something else
 		\end{itemize}
 
@@ -93,7 +95,7 @@
 		\begin{itemize}
 			\item The name has to consist of at least a first name and a last name, cannot be less than 5 characters long and not exceed 128 characters
 			\item At least one delivery method has to be checked. If “Snailmail” is checked, the address and zip code fields have to be filled in. If “E-mail” is checked, the “E-mail” field has to be filled in.
-			\item The address has to follow the format: (streetname) (house number)[, (floor number). (TH|TV|SAL)] where everything within the brackets is optional. For example, the addresses “Amagerbrogade 125, 3.TV” and “Englodden 4” are valid addresses whereas “Griffenfeldsgade” and “Svinget 34, 4” are not.
+			\item The address has to follow the format: \newline\newline \texttt{(streetname) (house number)[, (floor number). (TH|TV|SAL)]}\newline\newline where everything within the brackets is optional. For example, the addresses ``Amagerbrogade 125, 3.TV'' and ``Englodden 4'' are valid addresses whereas ``Griffenfeldsgade'' and ``Svinget 34, 4'' are not.
 			\item The zip code has to consist of four characters (Danish zip code).
 			\item The e-mail has to be a valid e-mail
 			\item The phone number has to consist of 8 numbers, where the first number cannot be “0”.
@@ -102,7 +104,7 @@
 	\subsection{Focus}
 		The project primarily serves as a proof-of-concept and therefore the main focus will be to generate code that actually works, and can fulfill the requirements set by the case study. Performance and the quality of the generated code will not be assessed.
 
-\section{Target Users}
-	The target users are developers who write web applications where correctness is of high priority. The target user wants to display a 100\% working application to his users or nothing at all (or maybe an error message). It is better to show an error message than to display an application which can exist in a corrupt, or partly corrupt, state. The target user develops using ASP.NET Web Forms.
+\section{Target Audience}
+	The target audience are developers who write web applications using ASP.NET Web Forms and C\# where correctness is of high priority. This implies that the developer wants to display a 100\% working application to his end users or nothing at all (or maybe an error message). It is better to show an error message than to display an application which can exist in a corrupt, or partly corrupt, state.
 
 

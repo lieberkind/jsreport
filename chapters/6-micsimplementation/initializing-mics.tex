@@ -3,7 +3,9 @@
 
 In chapter \ref{chap:mics_manual} it was shown how the end user only needs to make use of the \texttt{MiCSPage} class (instead of the \texttt{System.Web.UI.Page}) in order to utilize MiCS. This section describes what \texttt{MiCSPage} is doing behind the scenes in order to initialize MiCS.
 
-The MiCSPage essentially has two jobs; gathering the user's source code and initiating the MiCSManager. It is then the MiCSManagers responsibility to build the Roslyn AST, initialize the necessary ressources required by MiCS (the TypeManagers) and subsequently start the validation and building process.
+The MiCSPage essentially has two jobs; gathering the user's source code and initiating the MiCSManager. It is then the MiCSManagers responsibility to build the Roslyn AST, initialize the necessary ressources required by MiCS and subsequently start the validation and building process.
+
+The ressources necessary for MiCS, are essentially the TypeManagers. The CSharpTypeManager and the ScriptSharpTypeManager each hold a Semantic Model which is used in MiCS to lookup types of identifiers and expressions.
 
 The \texttt{MiCSPage} class inherits from the \texttt{System.Web.UI.Page} class. When the \texttt{OnPreRenderComplete} event is raised, \texttt{MiCSPage} uses the \texttt{System.IO} API to find all the C\# files in the current project and aggregates the files into a single source string. This source string is then handed to the \texttt{Initiate} method on the MiCSManager as shown in figure \ref{fig:init_mics_gather_source_code}.
 
