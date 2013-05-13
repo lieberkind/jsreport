@@ -11,6 +11,8 @@ This section provides a brief overview of how MiCS works. Figure \ref{fig:mics_i
 	\label{fig:mics_internal_workflow}
 \end{figure}
 
+TODO: Update figure
+
 MiCS uses Roslyn to generate a C\# AST representing user's  C\# code. Apart from the C\# AST, a Roslyn Semantic Model is also generated to obtain type information on AST nodes. The Semantic Model includes information on user types and referenced types.
 
 When the Roslyn AST has been obtained it needs to be validated to ensure that the written code complies with the Mixed Side Principle and that core types are only used in a supported manner. Without validation, it would be possible for the user to generate incorrect JavaScript.

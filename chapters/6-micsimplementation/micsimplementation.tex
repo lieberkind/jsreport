@@ -10,7 +10,7 @@
 		\begin{center}
 			\centerline{\includegraphics[width=16cm]{resources/images/TypesOverview.png}}
 		\end{center}
-		\caption{Illustrates the different types used by MiCS.}
+		\caption{The different types used by MiCS.}
 		\label{typesOverview}
 	\end{figure}
 
@@ -18,7 +18,7 @@
 
 	\subsection{Core Types} % (fold)
 	\label{sub:core_types}
-		To build the ScriptSharp AST correctly the ScriptSharp core types are required to be associated to the AST nodes. One reason why the ScriptSharp core types are required is that they define their equivalent script name (in the class attributes) that is used by the ScriptSharp script generator. An example is the System.Char (see figure \ref{char}) type which is converted to the JavaScript String type as no JavaScript Char type exists.
+		To build the ScriptSharp AST correctly the ScriptSharp core types are required to be associated to the AST nodes. One reason the ScriptSharp core types are required is that they define their equivalent script name (in the class attributes) that is used by the ScriptSharp script generator. An example is the System.Char (see figure \ref{char}) type which is converted to the JavaScript String type as no JavaScript Char type exists.
 
 	\begin{figure}[H]
 			\includegraphics[width=13cm]{resources/images/Char.png}
@@ -26,14 +26,14 @@
 		\label{char}
 	\end{figure}
 
-		MiCS utilizes the regular .NET core types when a user is writing MiCS code but when generating the client side script the Script\# defined core types are used. This implies that some kind of mapping between the two kinds of core types are required. This mapping of core types is explained in section \ref{sub:type_mapping}.
+		MiCS uses the regular .NET core types when a developer is writing MiCS code but when generating the client side script the Script\# defined core types are used. This implies that some kind of mapping between the two kinds of core types are required. This mapping of core types is explained in section \ref{sub:type_mapping}.
 	% subsection core_types (end)
 
 	\subsection{User Types} % (fold)
 	\label{sub:user_types}
-		User types are the types that are defined by the MiCS end user. The user types considered here are either MixedSide types or ClientSide types (i.e. types that have method members that have the either the MixedSide attribute or the ClientSide on them). User type definitions is what the generated client side script eventually will consist of. 
+		User types are the types that are defined by the developer. The user types considered here are either MixedSide types or ClientSide types (i.e. types that have method members that have the either the MixedSide attribute or the ClientSide on them). User type definitions is what the generated client side script eventually will consist of. 
 
-		Pure server side types are obviously also user types but they are not that relevant in a MiCS context and therefore not discussed here.
+		Pure server side types are obviously also user types but they are not relevant in a MiCS context as JavaScript will not be generated from them.
 	% subsection user_types (end)
 
 	\subsection{DOM Types} % (fold)
