@@ -18,21 +18,30 @@
 
 \section{Reading Guide}
 
-	This report is directed to people with interest in how JavaScript can be safely written in ASP.NET WebForms projects. It is assumed that the reader has a general understanding of Abstract Syntax Trees for representing programs source code and a basic understanding of JavaScript. Third party libraries used in the project, namely Roslyn and Script\#, will be introduced and thus knowledge about these is not a prerequisite.
+	This report is directed to people with interest in how JavaScript can be safely written in Microsoft ASP.NET web applications. It is assumed that the reader has a general understanding of Abstract Syntax Trees and a basic understanding of JavaScript. Third party libraries used in the project, namely Roslyn and Script\#, will be introduced and thus knowledge about these is not a prerequisite.
 
-	TODO: NÆVN MICS
+	This report proposes a solution where JavaScript is written safely by translating C\# to JavaScript. This approach makes it possible to execute the same code both on server and client side and is therefore called Mixed Side C Sharp (MiCS).
 
-	This document consists of six chapters.
+	This document consists of nine chapters.
 
 	Chapter one introduces the project, the motivation behind it and its scope. Additionally it introduces the case study upon which it is based.
 
-	Chapter two briefly introduces ASP.NET Web Forms and the usage of Code Behind to develop web applications. Furthermore it explains why JavaScript can be considered an unsafe language.
+	Chapter two briefly introduces Microsoft ASP.NET Web Forms and the usage of Code Behind to develop web applications. Furthermore it explains why JavaScript can be considered an unsafe language.
 
-	Chapter three introduces various technologies that can be useful to the project and describes how they can be used in combination to approach the project in different ways. Furthermore an analysis is conducted in order to investigate which approach is most convenient to implement.
+	Chapter three introduces various technologies that can be useful to the project and describes how they can be used in combination to approach the problem definition in different ways. Furthermore an analysis is conducted in order to investigate which approach is most convenient to implement. The chosen solution is called MiCS.
 
-	The MiCS project is an implementation of the approach chosen in chapter three. Chapter four describes the MiCS project in details, starting with the overall flow needed to convert C\# to JavaScript, the architecture of the project, the implementation of the stages described in the flow and correctness testing of the project.
+	Chapter four is a short manual that describes how MiCS is used.
 
-	Chapter five and six evaluates the solution from chapter four, reflects on the design goals set in the problem definition and discusses what direction the project should take from here.
+	Chapter five describes the MiCS project main workflow, architecture and other design decisions.
+
+	Chapter six describes the implementation of MiCS; how types are handled and mapped, validation of mixed and client side code, mapping of ASTs and script generation.
+
+	Chapter seven shortly describes the testing done in the MiCS project.
+	
+	Chapter eight evaluates the MiCS solution, reflects on the design goals set in the problem definition and discusses what future directions the project could take from here.
+
+	Chapter nine is the report conclusion.
+	% Todo: Update reading guide as one the last things...
 
 \section{Problem definition}
 	The problem definition has changed since the beginning of this project. Originally we wanted to represent JavaScript as an internal DSL in C\#. Instead we widened our perspective, to include other possible approaches to safe JavaScript development in ASP.NET Web Forms. Below, the revised problem definition is listed.
@@ -71,7 +80,7 @@
 	\end{itemize}
 
 \section{Scope}
-	As a complete mapping from C\# to JavaScript is unrealistic to implement in the given period of time, the project is based on a case study. Only the subset of C\# needed to fulfill the requirements set by the case study will be taken into account.
+	Mapping the entire C\# language to JavaScript is unrealistic given the time constraints on this project. Only the subset of C\# needed to fulfill the requirements set by the case study will be taken into account.
 
 	\subsection{Case Study}
 		A very common use case of JavaScript is form validation. As a user experience enriching feature, forms are often validated on client side, as to avoid the waiting time for a page load (e.g.\ JavaScript can be disabled in the browser). However, forms have to be validated on the server side as well as the client side validation is easily bypassed. Our case study concerns the validation of a registration form. Specifically, we would like to be able to:
