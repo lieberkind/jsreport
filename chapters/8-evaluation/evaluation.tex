@@ -19,23 +19,32 @@
 % section ease_of_use (end)
 
 \input{chapters/8-evaluation/evaluation-on-implementation}
-\section{Reflection on Design} % (fold)
-\label{sec:reflection_on_design_goals}
-	\begin{itemize}
-		\item Mixed Side Code limited to JavaScript enabled features (?)
-		\item Runtime vs. Compile Time Errors
-		\item Existing code to JavaScript (and testing)
-	\end{itemize}
 
-% section reflection_on_design_goals (end)
+\section{Reflection on Server Client Consistency} % (fold)
+\label{sec:reflection_on_server_client_consistency}
 
-\section{When to use MiCS} % (fold)
+% section reflection_on_server_client_consistency (end)
+
+\section{Runtime vs Compile Time Errors} % (fold)
+\label{sec:runtime_vs_compile_time_errors}
+
+% section runtime_vs_compile_time_errors (end)
+
+\section{Reflection on Mixed Side Code} % (fold)
+\label{sec:reflection_on_mixed_side_code}
+	Benefits to mixed side code are that existing server side code can easily be used for client side as well. So if you already have server side validation code it will work for client side as well which is obviously a great benefit as it can potentially safe you lots of time. Additionally when writing new code you will only have to write e.g. validation code once and therefore also only write tests once, which can obviously also safe you lots of time. This way Unit testing frameworks for server side will essentially be testing some of your client side code (i.e. mixed side code).
+
+	One cost of mixed side code is that some compile time errors will become (server side) runtime errors as discussed in section \ref{sec:runtime_vs_compile_time_errors}. Another cost of mixed side code is that it can only contain C\# constructs that can be mapped to JavaScript. However this might not be that big a problem as most C\# constructs can be mapped to JavaScript. It might though in rare occasions limit the reuse of existing code or new mixed side code. However in most situations (see section \ref{sec:when_to_use_mics}) we find that the benefits outweighs the cost.
+
+% section reflection_on_mixed_side_code (end)
+
+\section{When to Use MiCS} % (fold)
 \label{sec:when_to_use_mics}
 	When choosing to use MiCS or a different safe JavaScript approach it’s beneficial to consider if one’s application is client side heavy, server side heavy or both. Using Script\# in the original manner would be a good approach to a client side heavy application as it will reveal the most errors at compile time. 
 
 	If you have an application that is both client side heavy and server side heavy using MiCS might be a good choice as it gives you the additional benefits of ‘server client portability’ and ‘server client consistency’. The cost is that some of your compile time errors will become runtime errors (on server side) but this doesn’t necessary outweigh the other benefits. 
 
-	If you have a web application that is server side heavy you might not use any framework for safe JavaScript development or you could use MiCS as the over head would be low and it would give some additional guarantee of correctness.
+	If you have a web application that is server side heavy you might not use any framework for safe JavaScript development or you could use MiCS as the over head would be low and it would give some additional guarantees of correctness.
 
 % section when_to_use_mics (end)
 
