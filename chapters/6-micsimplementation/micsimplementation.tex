@@ -129,28 +129,30 @@
 
 \section{Building the ScriptSharp AST} % (fold)
 \label{sec:building_the_scriptsharp_ast}
-	Building the Script\# AST consists of taking the mapped (Script\#) AST nodes and putting them together to form the Script\# AST. The builder classes utilize the Roslyn infrastructure by extending the SyntaxWalker class which makes them capable of traversing the Roslyn AST.
+	Building the Script\# AST consists of taking the mapped (Script\#) AST nodes and putting them together to form the Script\# AST. The builder classes uses the Roslyn infrastructure by extending the \texttt{SyntaxWalker} class which makes them capable of traversing the Roslyn AST.
 	\begin{figure}[H]
 		\begin{center}
 			\centerline{\includegraphics[width=16cm]{resources/images/BuilderClasses.png}}
 		\end{center}
-		\caption{Classes that build the Script\# AST by traversing the Roslyn AST and utilizing Map(...) extension methods.}
+		\caption{Classes that build the Script\# AST by traversing the Roslyn AST and using the Map(...) extension methods.}
 		\label{builderClasses}
 	\end{figure}
 
-	The NamespaceBuilder class is responsible for building all of its defined types. This is done by instantiating a ClassBuilder which in turn is responsible for building all of its member methods (which is done by instantiating a MethodBuilder). This implies that the building of the Script\# AST is done in a depth first manner. The NamespaceBuilder and ClassBuilder classes are somewhat trivial. 
+	The \texttt{NamespaceBuilder} class is responsible for building all of the types contained in a namespace. This is done by instantiating a \texttt{ClassBuilder} which in turn is responsible for building all of the member methods in a class (which is done using a \texttt{MethodBuilder}). This implies that the building of the Script\# AST is done in a depth first manner (the same way the Roslyn AST is traversed).  
 
 	\begin{figure}[H]
 		\begin{center}
 			\centerline{\includegraphics[width=16cm]{resources/images/VisitClassDeclaration.png}}
 		\end{center}
-		\caption{Empty Script\# class is created and then built by using a MethodBuilder to retrieve all its member methods. The ssClasses property on the class builder holds all the classes that will be returned to the NamespaceBuilder who created it.}
+		\caption{Empty Script\# class is created and then built by using a \texttt{MethodBuilder} to retrieve all its member methods. The \texttt{ssClasses} property on the class builder holds all the classes that will be returned to the \texttt{NamespaceBuilder} who created it.}
 		\label{visitClassDeclaration}
 	\end{figure}
 
-	The ClassBuilder has an important feature; it ensures that only user defined types will be mapped to the Script\# AST (and generated as script types). DOM (or core) types doesn't need to be defined in Script\# as these obviously already exists in JavaScript.
+	The \texttt{NamespaceBuilder} and \texttt{ClassBuilder} classes are somewhat trivial. The \texttt{ClassBuilder} however ensures that DOM or core types are not be mapped to the Script\# as these types obviously already exists in JavaScript.
 
-	The MethodBuilder class is a little more complex as it needs to build only the methods that are MixedSide or ClientSide methods. Furthermore it needs to handle a method’s return type, arguments and body statements. The StatementBuilder and ExpressionBuilder are however the most complex as building compound statements and expressions are more complicated. Before a compound statement or expression can be built all its child nodes and their associated types (if any) needs to be mapped.
+	The \texttt{MethodBuilder} class is a little more complex. It needs to build only the methods that are mixed side or client side methods. Furthermore it needs to handle a method’s return type, arguments and body statements. 
+
+	Likewise the \texttt{StatementBuilder} and \texttt{ExpressionBuilder} are somewhat complex as building compound statements and expressions also bares some complexity. Before a compound statement or expression can be built all its child nodes and their associated types (if any) needs to be mapped.
 
 	\begin{figure}[H]
 		\begin{center}
@@ -160,12 +162,12 @@
 		\label{visitIfStatement}
 	\end{figure}
 
-	When a builder class is done building the node(s) are returned to the parent builder class. Once all the namespaces has been built these constitute the Script\# AST which is then passed on in the overall workflow (for script generation).
+	When a builder class is done building the node(s) are returned to the parent builder class. Once all the namespaces has been built these constitute the Script\# AST which is then passed on in the overall workflow (to script generation).
 % section building_the_scriptsharp_ast (end)
 
 \section{Script Generation} % (fold)
 \label{sec:script_generation}
-	Script generation is done using the ScriptSharp infrastructure only. Specifically the TypeGenerator class located in the ScriptSharp.Generator namespace is utilized for this. The MiCSManager is responsible for instantiating the TypeGenerator and providing it with the ScriptSharp JavaScript AST type nodes (this happens in the MiCSManager.GenerateScriptText method). The ScriptSharp JavaScript AST consists only of the user defined script types.
+	Script generation is done using the Script\# infrastructure only. Specifically the \texttt{TypeGenerator} class located in the \texttt{ScriptSharp.Generator} namespace is used for this. The \texttt{MiCSManager} is responsible for instantiating the \texttt{TypeGenerator} and providing it with types from the Script\# AST. This happens in the \texttt{MiCSManager.GenerateScriptText} method.
 % section script_generation (end)
 
 \section{Integration with Web Forms} % (fold)
