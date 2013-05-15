@@ -25,15 +25,24 @@
 		\item Mixed Side Code limited to JavaScript enabled features (?)
 		\item Runtime vs. Compile Time Errors
 		\item Existing code to JavaScript (and testing)
-		\item Necissity of MiCS (e.g. JavaScript games would probably use ScriptSharp)
 	\end{itemize}
 
 % section reflection_on_design_goals (end)
 
+\section{When to use MiCS} % (fold)
+\label{sec:when_to_use_mics}
+	When choosing to use MiCS or a different safe JavaScript approach it’s beneficial to consider if one’s application is client side heavy, server side heavy or both. Using Script\# in the original manner would be a good approach to a client side heavy application as it will reveal the most errors at compile time. 
+
+	If you have an application that is both client side heavy and server side heavy using MiCS might be a good choice as it gives you the additional benefits of ‘server client portability’ and ‘server client consistency’. The cost is that some of your compile time errors will become runtime errors (on server side) but this doesn’t necessary outweigh the other benefits. 
+
+	If you have a web application that is server side heavy you might not use any framework for safe JavaScript development or you could use MiCS as the over head would be low and it would give some additional guarantee of correctness.
+
+% section when_to_use_mics (end)
+
 
 \section{Safety Benefits vs. Convenience} % (fold)
 \label{sec:safety_benefits_vs_conveniente}
-
+	Safety in development is the main target of this project however safety always comes at a cost. Unsafe JavaScript development can be done very fast and even though we think we have a solution to safe JavaScript development with very little over head unsafe JavaScript can be the right choice for some projects. However if a project reach a certain size or complexity (and if correctness matters) it will eventually be beneficial to use JavaScript in safe manner.
 
 % section safety_benefits_vs_conveniente (end)
 \section{Future Work}
