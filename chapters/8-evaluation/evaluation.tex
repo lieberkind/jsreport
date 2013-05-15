@@ -22,7 +22,7 @@
 
 \section{Reflection on Server Client Consistency} % (fold)
 \label{sec:reflection_on_server_client_consistency}
-
+	Server client consistency is especially relevant when embedding JavaScript as text strings in ASP.NET Web Forms as this gives no guarantees if the function you are calling exists. When using a regular JavaScript editor such a problem will usually highlighted for you however nothing usually prevents you from trying to run your broken JavaScript. This is not possible with MiCS. If there is not consistency between server and client side an exception will be thrown. This is obviously a benefit especially if correctness of the web application is critical.
 % section reflection_on_server_client_consistency (end)
 
 \section{Runtime vs Compile Time Errors} % (fold)
