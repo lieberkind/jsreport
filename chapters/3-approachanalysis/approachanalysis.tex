@@ -34,12 +34,19 @@
 
 	\subsection{Code Quotations} % (fold)
 	\label{ssub:code_quotations}
-		todo
+		Code Quotations is a built-in feature in the F\# language which lets a developer generate an abstract syntax tree that represents the corresponding F\# code. Code Quotations cover the entire F\# language, meaning that theoretically all F\# constructs can be mapped to a corresponding JavaScript construct.
+
 	% subsection code_quotations (end)
 
 	\subsection{Expression Trees} % (fold)
 	\label{ssub:expression_trees}
-		todo
+			Expression Trees is a built-in feature in the C\# (and Visual Basic) language that “represents code in a tree-like data structure, where each node is an expression, for example, a method call or a binary operation” (REF MSDN). Expression Trees are often used with LINQ to build dynamic queries, which can be useful when fetching data from a database with filters specified by the user (these filters may be provided through a user interface). Expression Trees can be generated from lambda expressions, and thus it is possible to retrieve a representation of simple pieces of code, such as the following:
+
+			\begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={Func}]
+				Func<int, int, bool> function = (a, b) => a > b
+			\end{lstlisting}
+
+			or more sophisticated ones such as LINQ queries. 
 	% subsection expression_trees (end)
 
 	\subsection{Internal DSL} % (fold)
@@ -108,7 +115,6 @@
 
 		\subsubsection{F\# DSL} % (fold)
 		\label{sub:fs_dsl}
-
 			The problem with not being able to overload the assignment operator (illustrated in figure todo: REF) would not be an issue in F\# as the assignment operator could be overloaded. Furthermore it is even possible to implement new operators consisting of one or more characters from a given set of characters, consequently making it possible to implement some special JavaScript operators such as strict equal (===).
 
 			One problem though with the F\# DSL approach is the fact that the F\# native syntax and programming paradigm (e.g. the use of immutable types) is radically different from that of JavaScript (and C\# for that matter). This would imply a steep learning curve according to our target user as one would have to learn the F\# syntax and programming paradigm together with the DSL. Even if F\# was the language of choice there would be other powerful language features (i.e.\ Code Quotations) that might bias one toward a different approach (see section \ref{sub:using_fs_code_quotations}).
@@ -137,19 +143,12 @@
 
 		\subsection{Using F\# Code Quotations} % (fold)
 		\label{sub:using_fs_code_quotations}
-		
-			Code Quotations is a built-in feature in the F\# language which lets a developer generate an abstract syntax tree that represents the corresponding F\# code. Code Quotations cover the entire F\# language, meaning that theoretically all F\# constructs can be mapped to a corresponding JavaScript construct.
-
 			The main disadvantage of using Code Quotations is that they require the end user to know a different language from the one in which ASP.NET WebForms Applications are typically written (C\#). This would probably not be a very great barrier if the syntax of the language didn't vary as much as F\# does from C\#. Also, C\# and JavaScript are somewhat similar in syntax, whereas F\#'s and JavaScripts syntaxes are beyond comparison.
 		% subsection using_f#_code_quotations (end)
 
 		\subsection{Using C\# Expression Trees} % (fold)
 		\label{sub:using_cs_expression_trees}
-			Expression Trees is a built-in feature in the C\# (and Visual Basic) language that “represents code in a tree-like data structure, where each node is an expression, for example, a method call or a binary operation” (REF MSDN). Expression Trees are often used with LINQ to build dynamic queries, which can be useful when fetching data from a database with filters specified by the user (these filters may be provided through a user interface). Expression Trees can be generated from lambda expressions, and thus it is possible to retrieve a representation of simple pieces of code, such as the following:
-
-			todo: code example: Func<int, int, bool> function = (a, b) => a > b
-
-			or more sophisticated ones such as LINQ queries.  A major pitfall using Expression Trees is that they cannot be generated from lambda statements, which prevents the possibility of generating AST’s from blocks of code.
+			A major pitfall using Expression Trees is that they cannot be generated from lambda statements, which prevents the possibility of generating AST’s from blocks of code.
 		% subsection using_C\#_expression_trees (end)
 
 		\subsection{Using Roslyn} % (fold)
