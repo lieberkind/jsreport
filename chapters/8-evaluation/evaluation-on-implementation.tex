@@ -16,7 +16,7 @@ Todo
 
 \subsection{Initializing MiCS} % (fold)
 \label{ssub:collecting_source_code}
-Todo
+When MiCS is initialized, all the developer's source code files are iterated and concatenated into a single string from which the Roslyn AST is built. Roslyn interprets this string as a single source file and builds the AST accordingly which is not optimal as \texttt{using} statements should always be the first statements of a C\# source file. Consequently, only the \texttt{using} statements from the first file will be registered as being valid and all others are simply ignored. To overcome this, the necessary \texttt{using} statements for our case study are at the moment hardcoded into the beginning of the Roslyn AST. The solution to this problem is simply to generate a Roslyn AST for each of the developer's source files. This, of course, would require MiCS to validate all of these syntax trees, map them all to Script\#. Apart from correctness, a benefit of having multiple ASTs would allow for. the validation and mapping to Script\# to happen in parallell, e.g. one thread per AST.
 % subsection collecting_source_code (end)
 
 \subsection{Extendability} % (fold)
