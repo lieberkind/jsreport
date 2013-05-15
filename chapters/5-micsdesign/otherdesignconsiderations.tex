@@ -1,6 +1,20 @@
 \section{Other Design Considerations}
-\begin{itemize}
-	\item Error messages
-	\item MixedSide/ClientSide attributes
-	\item MiCSPage
-\end{itemize}
+This section focuses on design considerations conserning usability for the developer. The design considerations mentioned here are mainly nice-to-haves and will not be discussed in the implementation chapter. However, we will reflect upon these considerations in the evaluation.
+
+\subsection{What to generate JavaScript from?} % (fold)
+\label{sub:what_to_generate_javascript_from}
+	To easily distinguish client side code, mixed side code and server side code from one another, the \texttt{MixedSide} and \texttt{ClientSide} attributes have been implemented. They serve as an easy way for the developer to express which methods that should be used on client side, server side and mixed side respectively. At the same time, they make it easy for MiCS to understand which parts of the developers code to generate JavaScript from.
+
+% subsection what_to_generate_javascript_from (end)
+
+\subsection{Error messages} % (fold)
+\label{sub:design_error_messages}
+	As stated in the introduction, it is not our intent to make a complete mapping from C\# to JavaScript. Therefore, when developers use a C\# construct or type that we are unable to map, it is important to fail with an error message that makes sense to the developer. It should not be left to the developer to interpret and debug errors thrown directly from Roslyn. For this reason, different exceptions are implemented. An example of such an exception is the \texttt{MixedSidePrincipleViolatedException} which is thrown, e.g. when code annotated with the \texttt{MixedSide} attribute calls either client or server side code.
+	TODO: Implement custom exceptions for when unsupported C\# statements or expressions are used
+
+	% subsection error_messages (end)
+
+\subsection{Initializng MiCS} % (fold)
+\label{sub:initializng_mics}
+	There should not be a huge overhead on developers when they want to use MiCS in their projects. In order to acheive this, the process of initializing MiCS has been implemented in the \texttt{MiCSPage} class. When using MiCS, as explained in the user manual (chapter \ref{chap:mics_manual}), the \texttt{MiCSPage} class should be used instead of ASP.NET's \texttt{System.Web.UI.Page} class.
+% subsection initializng_mics (end)
