@@ -172,5 +172,10 @@
 
 \section{Integration with Web Forms} % (fold)
 \label{sec:integration_with_web_forms}
-	sdsadq qdqw qwd qwd qw 
+	Because of the time constraint on this project Integration with Web Forms has only received a minimum amount of time. We have ensured that we could implement our case study however there should be made substantial improvements to the Web Forms Integration code which we will discuss in section TODO: REF.
+
+	However integration with Web Forms is currently done using the \texttt{MiCSPage} class. The \texttt{MiCSPage} class inherits from the \texttt{System.Web.UI.Page} class so that it’s possible to inherit from the \texttt{MiCSPage} class in one’s Code Behind file.  The \texttt{MiCSPage} class searches the specific project’s file structure for C\# files, reads their content and passes this content to the \texttt{MiCSManager} who then starts the entire MiCS workflow so that the client side script will be generated. The generated script is then registered with a \texttt{ScriptManager} which is how scripts are embedded into a page from Code Behind.
+
+	Another important aspect of integration with Web Forms is how the generated client side scripts are initially called. Client side scripts are usually initiated through DOM events such as \texttt{onload} and \texttt{onclick} which are triggered when a web page is loaded and when a button is clicked respectively. MiCS currently only supports registering a client side method on a buttons click event using our extension method \texttt{OnClientClick(…)}.
+
 % section integration_with_web_forms (end)
