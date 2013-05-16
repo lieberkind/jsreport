@@ -22,11 +22,14 @@
 
 \section{Reflection on Server Client Consistency} % (fold)
 \label{sec:reflection_on_server_client_consistency}
-	Server client consistency is especially relevant when embedding JavaScript as text strings in ASP.NET Web Forms as this gives no guarantees if the function you are calling exists. When using a regular JavaScript editor such a problem will usually highlighted for you however nothing usually prevents you from trying to run your broken JavaScript. This is not possible with MiCS. If there is not consistency between server and client side an exception will be thrown. This is obviously a benefit especially if correctness of the web application is critical.
+	Server client side consistency is especially relevant when embedding JavaScript from Code Behind (section \ref{sub:client_side_scripts_code_behind}) as this gives no guarantees if the function you are calling exists. When using a regular JavaScript editor such a problem will usually be highlighted for you however nothing prevents you from trying to run broken scripts. Running broken scripts by mistake is less likely with MiCS. If there is not consistency between server and client side an exception will be thrown. This is obviously a benefit if correctness of the web application is critical.
 % section reflection_on_server_client_consistency (end)
 
 \section{Runtime vs Compile Time Errors} % (fold)
 \label{sec:runtime_vs_compile_time_errors}
+	Compile time errors are usually preferred over runtime errors as they are easier to resolve and hence less time consuming. Furthermore runtime errors are potentially exposed to the end user.  When using Script\# as originally intended one gets the benefit of having your code compile time validated in the same manner as when using C\#. This is an important reason for choosing a Script\# only solution for some projects (see section \ref{sec:when_to_use_mics}).
+
+	Code will also be compile time validated when using MiCS there are however some errors that can now occur as runtime errors on server side. This can e.g. happen when unsupported C\# constructs are used (TODO: REF) or when the Mixed Side Principle (section \ref{sub:the_mixedside_principle}) is violated. This is as disadvantage of using MiCS when compared to a Script\# only solution. However this disadvantage is not critical as it is isolated to server side which implies that the end user can be exempt from being exposed to these errors. Furthermore the server side runtime errors will still prevent a web application from running in a corrupt state (section \ref{ssub:server_client_consistency}). 
 
 % section runtime_vs_compile_time_errors (end)
 
