@@ -60,24 +60,6 @@
 
 	\end{itemize}
 
-\subsection{Safety Considerations} % (fold)
-\label{sub:safety_considerations}
-	There are some fundamental aspects of safe development that we will like to target in this project and which we will describe here. 
-
-\subsubsection{Compile Time Errors vs Runtime Errors} % (fold)
-\label{ssub:compile_time_errors_vs_runtime_errors}
-	Compile time errors are easier to debug than runtime errors and therefore also less time consuming. When considering web applications errors can occur both on server and client side. Client side runtime errors will be exposed to web application end users which is undesirable in most situations and therefore another reason for preventing client side runtime errors. Because of this one of the fundamental purposes of our safe JavaScript project is to try and move errors from client side runtime to server side (runtime or compile time) as illustrated in Figure TODO: REF.
-
-	TODO: FIGURE
-% subsubsection compile_time_errors_vs_runtime_errors (end)
-
-\subsubsection{Server Client Side Consistency} % (fold)
-\label{ssub:server_client_consistency}
-	When generating web application scripts dynamically from server side (Figure \ref{buttonScript}) a consistency problem exists. E.g. when generating a script function that calls another function there is no guarantee that this specific call is actually valid. One could have misspelled the function name or passed too few arguments. Guaranteed consistency between such calls (Server Client Side Consistency) would improve correctness and is therefore a safety consideration we have included in this project.
-% subsubsection server_client_consistency (end)
-
-% subsection safety_considerations (end)
-
 	\subsection{Learning goals}
 		\begin{itemize}
 
@@ -127,6 +109,30 @@
 			\item The e-mail has to be a valid e-mail
 			\item The phone number has to consist of 8 numbers, where the first number cannot be “0”.
 		\end{itemize}
+
+
+	\subsection{Safety Considerations} % (fold)
+	\label{sub:safety_considerations}
+		This section will address some fundamental aspects of safe development that we would like to target in this project.
+		% There are some fundamental aspects of safe development that we will like to target in this project and which we will describe here. 
+
+		\subsubsection{Compile Time Errors vs. Runtime Errors} % (fold)
+		\label{ssub:compile_time_errors_vs_runtime_errors}
+			
+			When considering web applications, errors can occur both on server side and client side. On server side, errors can occur on either compile time or run time. On client side, compile time does not exist, and consequently errors can only occur on run time.
+			Compile time errors are generally easier to debug than runtime errors and thus fixing them is often less time consuming. Client side runtime errors will be exposed to web application's end users which is highly undesirable. Because of this, one of the fundamental goals of MiCS is to move errors from client side run time to server side (run time or compile time) as to guarantee that the end user never sees the application in a corrupt state. This is illustrated in Figure TODO: REF. TODO: FIGURE
+		% subsubsection compile_time_errors_vs_runtime_errors (end)
+
+		\subsubsection{Server Client Side Consistency} % (fold)
+		\label{ssub:server_client_consistency}
+			When generating web application scripts dynamically from server side (Figure \ref{buttonScript}) a consistency problem exists. E.g. when generating a script function that calls another function there is no guarantee that this specific call is actually valid. One could have misspelled the function name or passed too few arguments. Guaranteed consistency between such calls (Server Client Side Consistency) would improve correctness and is therefore a safety consideration we have included in this project.
+		% subsubsection server_client_consistency (end)
+
+	% subsection safety_considerations (end)
+
+
+
+
 
 	\subsection{Focus}
 		The project primarily serves as a proof-of-concept and therefore the main focus will be to generate code that actually works, and can fulfill the requirements set by the case study. Performance and the quality of the generated code will not be assessed. 
