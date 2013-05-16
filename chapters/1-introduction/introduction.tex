@@ -80,6 +80,7 @@
 	\end{itemize}
 
 \section{Scope}
+	% Todo: Do we say something about the use of DOM types is down prioritized?
 	Mapping the entire C\# language to JavaScript is unrealistic given the time constraints on this project. Only the subset of C\# needed to fulfill the requirements set by the case study will be taken into account.
 
 	\subsection{Case Study}
@@ -119,13 +120,13 @@
 		\subsubsection{Compile Time Errors vs. Runtime Errors} % (fold)
 		\label{ssub:compile_time_errors_vs_runtime_errors}
 			
-			When considering web applications, errors can occur both on server side and client side. On server side, errors can occur on either compile time or run time. On client side, compile time does not exist, and consequently errors can only occur on run time.
-			Compile time errors are generally easier to debug than runtime errors and thus fixing them is often less time consuming. Client side runtime errors will be exposed to web application's end users which is highly undesirable. Because of this, one of the fundamental goals of MiCS is to move errors from client side run time to server side (run time or compile time) as to guarantee that the end user never sees the application in a corrupt state. This is illustrated in Figure TODO: REF. TODO: FIGURE
+			When considering web applications, errors can occur both on server side and client side. On server side, errors can occur on either compile time or runtime. On client side, compile time does not exist, and consequently errors can only occur on runtime.
+			Compile time errors are generally easier to debug than runtime errors and thus fixing them is often less time consuming. Client side runtime errors will be exposed to web application's end users which is highly undesirable. Because of this, one of the fundamental goals of MiCS is to move errors from client side runtime to server side (runtime or compile time) as to guarantee that the end user never sees the application in a corrupt state. This is illustrated in Figure TODO: REF. TODO: FIGURE
 		% subsubsection compile_time_errors_vs_runtime_errors (end)
 
 		\subsubsection{Server Client Side Consistency} % (fold)
 		\label{ssub:server_client_consistency}
-			When generating web application scripts dynamically from server side (Figure \ref{buttonScript}) a consistency problem exists. E.g. when generating a script function that calls another function there is no guarantee that this specific call is actually valid. One could have misspelled the function name or passed too few arguments. Guaranteed consistency between such calls (Server Client Side Consistency) would improve correctness and is therefore a safety consideration we have included in this project.
+			When writing scripts from server side (Figure \ref{buttonScript}) a consistency problem can occur. Script code that calls a function has no guarantee that this specific call is actually valid. One could have misspelled the function name or passed too few arguments. Guaranteed consistency between such calls (Server Client Side Consistency) would improve correctness and is therefore a safety consideration we have included in this project.
 		% subsubsection server_client_consistency (end)
 
 	% subsection safety_considerations (end)

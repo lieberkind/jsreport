@@ -9,7 +9,12 @@ As explained in section \ref{sec:syntax_tree_validation}, when validating the Ro
 
 \subsection{Integration with Web Forms} % (fold)
 \label{ssub:integration_with_web_forms}
-Todo
+	Integration with ASP.NET Web Forms happens through the use of \texttt{MiCSPage} in one's Code Behind file. This is a rather simple and easy approach in our opinion. 
+
+	Currently all C\# source files are however read into MiCS which might be unnecessary and for big projects it could possibly lead to some nontrivial overhead. Therefore giving the developer the possibility of specifying which files should be fed to MiCS could help this problem.
+
+	Furthermore integration with Web Forms happens when registering code with client side events. In the case of MiCS when using the \texttt{OnClientClick} extension method for Buttons. This works but the implementation of this needs some more work and considerations. Furthermore most developers would also require access to all the DOM events for script registration and not only the button click event.
+
 % subsection integration_with_web_forms (end)
 
 \subsection{Initializing MiCS} % (fold)
@@ -19,6 +24,7 @@ When MiCS is initialized, all the developer's source code files are iterated and
 
 \subsection{Extendability} % (fold)
 \label{sub:extendability}
+% Todo: Should this section be in ease of use?
 At the moment, MiCS is implemented with our case study in mind. Only the C\# constructs and types needed to fulfill the requirements set by the case study are supported. However, MiCS is easily extended to support additional statements, expressions or other constructs. For example, if a \texttt{while}-statement was to be supported, only two classes would have to be extended; the \texttt{StatementBuilder} and \texttt{StatementMapper} classes. In the \texttt{StatementMapper} class, an extension method to Roslyn's \texttt{WhileStatementSyntax} would have to be implemented in order to map the Roslyn while-statement to a Script\# while-statement. In the \texttt{StatementBuilder} class, the \texttt{VisitWhileStatement} method (inherited from Roslyn's \texttt{SyntaxWalker} class) would have to be overwritten in order to start the mapping, and add the while-statement to the Script\# AST.
 
 To add support for a new C\# core type, e.g. the \texttt{Date} type, all that is needed is to add a new entry in the \texttt{MiCSCoreMapping}-specification, as explained in section \ref{subsub:core:type_mapping}
