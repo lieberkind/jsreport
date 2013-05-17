@@ -50,7 +50,9 @@
 
 	In the report we use the terms developer and end user. The developer is a person that uses MiCS to write mixed side and client side code. The end user is the person that use the web application created by the developer.
 	% Todo: Update reading guide as one the last things...
-	% Todo: The read should have knowledge of DSL, JavaScript (script), client server side
+	% Todo: Introduce DOM, Safety vs security, when we say JavaScript we JavaScript in the browser
+	% Todo: The read should have knowledge of DSL, JavaScript (script), client server side, DOM
+
 
 \section{Problem definition}
 	The problem definition has changed since the beginning of this project. Originally we wanted to represent JavaScript as an internal DSL in C\#. Instead we widened our perspective, to include other possible approaches to safe JavaScript development in ASP.NET Web Forms. Below, the revised problem definition is listed.
@@ -88,6 +90,7 @@
 
 \section{Scope}
 	% Todo: Do we say something about the use of DOM types is down prioritized?
+	% Todo: Only JavaScript in the browser.
 	Mapping the entire C\# language to JavaScript is unrealistic given the time constraints on this project. Only the subset of C\# needed to fulfill the requirements set by the case study will be taken into account.
 
 	\subsection{Case Study}
@@ -139,9 +142,14 @@
 			\end{figure}
 		% subsubsection compile_time_errors_vs_runtime_errors (end)
 
-		\subsubsection{Server Client Side Consistency} % (fold)
-		\label{ssub:server_client_consistency}
-			When writing scripts from server side (Figure \ref{buttonScript}) a consistency problem can occur. Script code that calls a function has no guarantee that this specific call is actually valid. One could have misspelled the function name or passed too few arguments. Guaranteed consistency between such calls (Server Client Side Consistency) would improve correctness and is therefore a safety consideration we have included in this project.
+		\subsubsection{JavaScript DOM Consistency} % (fold)
+		\label{ssub:javascript_dom_consistency}
+			When building a web page a typical setup is that you have a document consisting of Html elements (DOM elements) and you have some client side JavaScript. The client side scripts then modifies the Html elements as a response or feedback to user interactions.
+
+			There are however no guarantee that the interaction between JavaScript and Html elements happens correctly. The script could be trying to modify an Html element (identified by ID) that is not present on the page either because it just isn’t or because the ID was misspelled in the script.
+
+			In the context of safe JavaScript development in the browser this can be considered a somewhat critical issue. Therefore a compile time guarantee of the consistency between JavaScript and DOM elements would be substantial safety improvement.
+
 		% subsubsection server_client_consistency (end)
 
 	% subsection safety_considerations (end)
