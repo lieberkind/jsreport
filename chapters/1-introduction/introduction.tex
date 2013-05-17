@@ -144,18 +144,13 @@
 
 		\subsubsection{JavaScript DOM Consistency} % (fold)
 		\label{ssub:javascript_dom_consistency}
-			When building a web page a typical setup is that you have a document consisting of Html elements (DOM elements) and you have some client side JavaScript. The client side scripts then modifies the Html elements as a response or feedback to user interactions.
-
-			There are however no guarantee that the interaction between JavaScript and Html elements happens correctly. The script could be trying to modify an Html element (identified by ID) that is not present on the page either because it just isn’t or because the ID was misspelled in the script.
+			When building a web page a typical setup is a document consisting of Html elements (DOM elements) and some client side JavaScript. The client side scripts then modifies the Html elements as response or feedback to user interactions. There are however no guarantee of correct interaction between the JavaScript and the Html elements.
 
 			In the context of safe JavaScript development in the browser this can be considered a somewhat critical issue. Therefore a compile time guarantee of the consistency between JavaScript and DOM elements would be substantial safety improvement.
 
 		% subsubsection server_client_consistency (end)
 
 	% subsection safety_considerations (end)
-
-
-
 
 
 	\subsection{Focus}
