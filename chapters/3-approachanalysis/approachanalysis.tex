@@ -57,9 +57,9 @@
 		There are different approaches to writing a Domain Specific Languages (DSL) with Internal DSLs you work in your regular language and is therefore also constraint by this language and its features \cite{domain_specific_languages}. Another term for Internal DSL is fluent interface who's central pattern is that of method chaining which is the pattern we somewhat investigated for the use of safe JavaScript representation. In our case we aimed for a Internal DSL that would somewhat the C-like syntax of JavaScript.
 	% subsection internal_dsl (end)
 
-\section{Stages when going from .NET Language to JavaScript} % (fold)
+\section{Stages When Going From .NET Language to JavaScript} % (fold)
 \label{sec:stages_when_going_from_net_language_to_javascript}
-	Before discussing different approaches it make sense to clarify the possible stages in the process of ``going'' from a .NET language to the target language. The process (displayed in figure \ref{stages}) moves from left to right and possibly skips stages on the way.
+	Before discussing different approaches it makes sense to clarify the possible stages in the process of going from a .NET language to JavaScript. The process (displayed in figure \ref{stages}) moves from left to right. Different approaches use different stages.
 
 				\begin{figure}[H]
 			\begin{center}
@@ -69,7 +69,7 @@
 			\label{stages}
 		\end{figure}
 
-	The .NET concrete syntax is what the developer will be utilizing when writing code. From this concrete syntax a .NET abstract syntax tree (hereinafter AST) can be generated. This AST can be traversed in order to map the .NET AST to a JavaScript representation (typically also an AST) in the .NET language. Finally, JavaScript can be generated from the JavaScript AST.
+	 From concrete syntax a C\# or F\# abstract syntax tree (AST) can be generated. This AST can be traversed in order to map it to a JavaScript AST. Finally, JavaScript can be generated from the JavaScript AST.
 % section stages_when_going_from_net_language_to_javascript (end)
 
 \section{TODO: Possible Approaches} % (fold)
