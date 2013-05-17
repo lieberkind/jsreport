@@ -1,14 +1,18 @@
 \chapter{Approach Analysis}
-	As mentioned in the Problem Definition, it was decided to conduct an analysis in order to find out which approach would best fit this project. This chapter will give an overview of different technologies we have considered to use and describe how they can be used in combination to approach the project in different ways. Lastly, a comparison of the approaches will be made, in order to decide on which approach to implement.
+	As mentioned in the problem definition, it was decided to conduct an analysis in order to find out which approach would best fit this project. This chapter will give an overview of different technologies we have considered to use and describe how they can be used in combination to approach the project in different ways. Lastly, a comparison of the approaches will be made, in order to decide on which approach to implement.
 
 \section{Useful Technologies}
 	This section introduces the different technologies considered useful to this project. Script\# and Microsoft Roslyn will be described in detail, as they were eventually chosen for the implementation of MiCS.
 
+	\input{chapters/3-approachanalysis/technologies-roslyn}
+
 	\subsection{Script\#} % (fold)
 	\label{sub:subsection_name}
-		Script\# \cite{scriptsharp} is a cross-compiler from C\# to JavaScript that is maintained by Nikhil Kothari \cite{nikhilk} from Microsoft. ScriptSharp works by compiling an entire C\# project JavaScript.
+		Script\# \cite{scriptsharp} is a cross-compiler from C\# to JavaScript that is maintained by Nikhil Kothari \cite{nikhilk} from Microsoft. Script\# works by compiling an entire C\# project JavaScript and it is interesting for two specific reasons; it contais an AST-representation of JavaScript in C\# and a way to generate JavaScript source code from this AST. Furthermore, it contains a C\# representation of the DOM.
 
-		The main assembly, ScriptSharp.dll, is shown in figure \ref{simplifiedOverview} as a simplified dependency diagram with the most relevant assemblies related to our project. When Script\# is used in a regular manner, an AST is built from C\# source code using classes from the Parser and CodeModel namespaces. The ScriptModel namespace contains classes for building the JavaScript AST before the actual script is generated using classes in the Generator namespace.
+		The main assembly, ScriptSharp.dll, is shown in figure \ref{simplifiedOverview} as a simplified dependency diagram. When Script\# is used in a regular manner, an AST representing C\# source code is built using classes from the Parser and CodeModel namespaces. The ScriptModel namespace contains classes for building the JavaScript AST before the actual JavaScript source is generated using classes in the Generator namespace.
+
+		% The main assembly, ScriptSharp.dll, is shown in figure \ref{simplifiedOverview} as a simplified dependency diagram with the most relevant assemblies related to our project. When Script\# is used in a regular manner, an AST is built from C\# source code using classes from the Parser and CodeModel namespaces. The ScriptModel namespace contains classes for building the JavaScript AST before the actual script is generated using classes in the Generator namespace.
 
 		\begin{figure}[H]
 			\begin{center}
@@ -20,12 +24,11 @@
 
 		Another important assembly is the Script.Web.dll. This assembly contains classes for Document Object Model (DOM) representation.
 
-		Script\# defines a modified version of the .NET mscorlib.dll so that the (modified) .NET core type interfaces resembles the equivalent JavaScript objects. E.g.\ the Script\# defined System.String type has a CharAt(int index) function that doesn't exist on the original .NET System.String type but that does exist on a JavaScript string object. One benefit of the modified mscorlib.dll is that it makes the C\# compiler able to validate the C\# code that represents JavaScript code entirely (todo: REF to explanation). 
+		A thing unique to Script\# is that it defines a modified version of the .NET mscorlib.dll that modifies the .NET core type interfaces to resembles their equivalent JavaScript objects. E.g. the Script\# defined System.String type has a \texttt{CharAt(int index)} function that doesn't exist on the original .NET System.String type but that does exist on the JavaScript string object. One benefit of the modified mscorlib.dll is that it makes the C\# compiler able to validate the C\# code that represents JavaScript code entirely (todo: REF to explanation). 
 
 		The modified mscorlib.dll file is referenced in one's Visual Studio project (instead of the original one) when a new ScriptSharp project is created. When a ScriptSharp project is compiled a JavaScript file will be generated. This JavaScript file can then be used in other projects (E.g. a Web Forms web application).
 	% subsection subsection_name (end)
 
-	\input{chapters/3-approachanalysis/technologies-roslyn}
 
 	% \subsection{Microsoft Roslyn} % (fold)
 	% \label{ssub:microsoft_roslyn}
