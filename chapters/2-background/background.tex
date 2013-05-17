@@ -3,7 +3,7 @@
 \section{ASP.NET Web Forms} % (fold)
 \label{sec:asp_net_web_forms}
 	% Todo: explain Active Server Pages
-	ASP.NET Web Forms are the User Interface (UI) elements that give your Web applications their look and feel. Web Forms are similar to Windows Forms \cite{msdn01} in that they provide properties, methods, and events for the controls that are placed onto them. However, these UI elements render themselves into Html \cite{msdn02}. When working with Web Forms you can both write markup code and write C\# code when building a web page. 
+	ASP.NET Web Forms are the User Interface (UI) elements that give your web applications their look and feel. Web Forms are similar to Windows Forms \cite{msdn01} in that they provide properties, methods, and events for the controls that are placed onto them. However, these UI elements render themselves into Html \cite{msdn02}. When working with Web Forms you can both write markup code and write C\# code when building a web page. 
 
 	\begin{figure}[H]
 					\includegraphics[width=12cm]{resources/images/Markup.png}
@@ -13,9 +13,9 @@
 
 	\subsection{Code Behind} % (fold)
 	\label{sub:code_behind}
-		The web page \texttt{Default.aspx} is associated to a C\# file; \texttt{Default.aspx.cs}. This is \texttt{Default.aspx}'s \emph{Code Behind} file. 
+		The web page \texttt{Default.aspx} is associated to the C\# file \texttt{Default.aspx.cs}. This is the \texttt{Default.aspx} page's \emph{Code Behind} file. 
 
-		Web Pages have different server side events that can be accessed from Code Behind. In figure \ref{codeBehind} a button control is added to the form \texttt{form1} (defined in markup in figure \ref{markup}) via the page’s Load event. This is opposed to adding the button in markup code.
+		Web pages in ASP.NET Web Forms have different server side events that can be accessed from Code Behind. In figure \ref{codeBehind} the page load event is used to a button control to the form \texttt{form1} (\texttt{form1} was defined in the markup in figure \ref{markup}). This is how HTML elements are added from Code Behind which is opposed to adding them in markup code.
 
 
 				\begin{figure}[H]
@@ -24,19 +24,19 @@
 				\label{codeBehind}
 			\end{figure}
 		
-		Pages' server side events are triggered on every request to the specific page. In this case the resulting web page and source will be as shown in figure \ref{html} (with Chrome Development Tools).
+		A page's server side events are triggered on every request to the page's URL. In this case the resulting web page and source is as shown in figure \ref{html}.
 
 				\begin{figure}[H]
 					\includegraphics[width=12cm]{resources/images/Html.png}
-				\caption{Resulting web page and source code of the Default.aspx page.}
+				\caption{Resulting web page and source code of the Default.aspx page (shown with Chrome Development Tools).}
 				\label{html}
 			\end{figure}
 
-		There are built-in control classes equivalent to most DOM elements so in this manner one can build an entire web application from Code Behind.
+		In ASP.NET Web Forms there are built-in control classes equivalent to most HTML elements, so in this manner one can build an entire web application from Code Behind.
 
 		\subsection{Client Side Scripts \& Code Behind} % (fold)
 		\label{sub:client_side_scripts_code_behind}
-			When working from Code Behind client side scripts can be added to the button client side click event by setting the button's \texttt{OnClientClick} property (see Figure \ref{buttonScript}) or one can register a script with a \texttt{ScriptManager} object (that is added to one's page).
+			When working from Code Behind client side scripts can e.g. be added to a button's client side click event by setting the button's \texttt{OnClientClick} property (see Figure \ref{buttonScript}). Another approach would be to register a script with the \texttt{ScriptManager} object that should be associated to the specific page.
 
 		\begin{figure}[H]
 			\includegraphics[width=9cm]{resources/images/ButtonScript.png}
@@ -44,7 +44,7 @@
 			\label{buttonScript}
 		\end{figure}
 
-		Common for both approaches is that JavaScript is added as strings which can be considered somewhat unsafe.
+		Common for both approaches is that JavaScript is added as text strings which can be considered somewhat unsafe.
 		% subsubsection subsubsection_name (end)
 
 	% subsection code_behind (end)

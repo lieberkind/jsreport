@@ -5,7 +5,7 @@
 
 	\section{Motivation} % (fold)
 \label{sec:motivation}
-	We would like to improve development of web applications with ASP.NET Web Forms and therefore it is beneficial to investigate how JavaScript can be safely represented in order to achieve compile time validation. % Todo: synes denne første del er lidt underlig...
+	We would like to improve development of web applications with ASP.NET Web Forms and therefore it is beneficial to investigate how JavaScript can be from a .NET language such as C\# or F\# in order to achieve compile time validation. % Todo: synes denne første del er lidt underlig...
 
 	Developing web applications instead of native applications is a strong tendency in software development today. JavaScript contributes to enriching the user experience and sometimes provide functionality which is indispensable for such web applications.
 
@@ -60,7 +60,8 @@
 
 	\item Study JavaScript and describe its unsafe language features.
 
-	\item Investigate how JavaScript can be safely represented within ASP.NET Web Forms. This includes compile time validation and how to activate the generated JavaScript in a safe manner (client-server side consistency).
+	\item Investigate how JavaScript can be generated from C\# or F\#.
+	\item Investigate how correct interaction between JavaScript and Html elements can be guaranteed.
 
 	\item Investigate how to implement a solution that generates JavaScript from server side code (client-server side portability).
 
@@ -98,8 +99,8 @@
 
 		\begin{itemize}
 			\item Validate strings using Regular Expressions to check if email addresses, postal addresses and phone numbers are correctly formatted
-			\item Validate the length of strings to check that users do not enter an exceptionally long string, e.g. for their name
-			\item Validate something based on the choice of something else
+			\item Validate the length of strings to check that users do not enter an exceptionally long string, e.g. as their name
+			\item Validate dependencies between input (conditional logic). E.g. validation of a text field depends on whether or not a check box is checked.
 		\end{itemize}
 
 		Figure~\ref{registrationForm} shows the registration form, and below, the validation criteria are explained.
@@ -116,7 +117,7 @@
 			\item The name has to consist of at least a first name and a last name, cannot be less than 5 characters long and not exceed 128 characters
 			\item At least one delivery method has to be checked. If “Snailmail” is checked, the address and zip code fields have to be filled in. If “E-mail” is checked, the “E-mail” field has to be filled in.
 			\item The address has to follow the format: \newline\newline \texttt{(streetname) (house number)[, (floor number). (TH|TV|SAL)]}\newline\newline where everything within the brackets is optional. For example, the addresses ``Amagerbrogade 125, 3.TV'' and ``Englodden 4'' are valid addresses whereas ``Griffenfeldsgade'' and ``Svinget 34, 4'' are not.
-			\item The zip code has to consist of four characters (Danish zip code).
+			\item The zip code has to consist of four integer characters (Danish zip code).
 			\item The e-mail has to be a valid e-mail
 			\item The phone number has to consist of 8 numbers, where the first number cannot be “0”.
 		\end{itemize}
@@ -131,35 +132,44 @@
 		\label{ssub:compile_time_errors_vs_runtime_errors}
 			
 			When considering web applications, errors can occur both on server side and client side. On server side, errors can occur on either compile time or runtime. On client side, compile time does not exist, and consequently errors can only occur on runtime.
-			Compile time errors are generally easier to debug than runtime errors and thus fixing them is often less time consuming. Client side runtime errors will be exposed to web application's end users which is highly undesirable. Because of this, one of the fundamental goals of MiCS is to move errors from client side runtime to server side (runtime or compile time, see Figure \ref{movingErrors}) as to guarantee that the end user never sees the application in a corrupt state.
+			Compile time errors are generally easier to debug than runtime errors and thus fixing them is often less time consuming. Client side runtime errors will be exposed to web application's end users which is highly undesirable. Because of this, one of the fundamental goals of MiCS is to move errors from client side runtime to server side (runtime or compile time, see Figure \ref{movingErrors}).
 
 			\begin{figure}
 				\begin{center}
 					\centerline{\includegraphics[width=11cm]{resources/images/MovingErrors.eps}}
 				\end{center}
-				\caption{Improving safe development by trying to move errors to client side to server side.}
+				\caption{Improving safe development by trying to move errors from client side to server side.}
 				\label{movingErrors}
 			\end{figure}
 		% subsubsection compile_time_errors_vs_runtime_errors (end)
 
 		\subsubsection{JavaScript DOM Consistency} % (fold)
 		\label{ssub:javascript_dom_consistency}
-			When building a web page a typical setup is a document consisting of Html elements (DOM elements) and some client side JavaScript. The client side scripts then modifies the Html elements as response or feedback to user interactions. There are however no guarantee of correct interaction between the JavaScript and the Html elements.
+			When building a web page a typical setup is a document consisting of Html elements (DOM elements) and some client side JavaScript. The client side scripts then modifies the Html elements in response to user interactions. There are however no guarantee of correct interaction between the JavaScript and the Html elements. E.g. when calling a JavaScript function from a button \texttt{onclick} event it is possible to have misspelled the function name which would cause a client side error.
 
-			In the context of safe JavaScript development in the browser this can be considered a somewhat critical issue. Therefore a compile time guarantee of the consistency between JavaScript and DOM elements would be substantial safety improvement.
+			In the context of safe JavaScript development in the browser this can be considered a somewhat critical issue. Therefore a compile time guarantee of the consistency between JavaScript code and DOM elements (or vice versa) would be an improvement.
 
 		% subsubsection server_client_consistency (end)
 
 	% subsection safety_considerations (end)
 
+	\subsection{Focus} % (fold)
+	\label{sub:focus}
+		This project primarily serves as a proof-of-concept and therefore the main focus will be to generate code that actually works, and can fulfill the requirements set by the case study. 
 
-	\subsection{Focus}
-		The project primarily serves as a proof-of-concept and therefore the main focus will be to generate code that actually works, and can fulfill the requirements set by the case study. Performance and the quality of the generated code will not be assessed. 
+		This project will only be considering solutions that can be use with Microsoft’s ASP.NET Web Forms. Furthermore the solution has to be utilized using C\#.
 
-		TODO: Nævn at fokus er på ASP.NET platformen og ikke andre.
+		The quality of the generated JavaScript will not be assessed. The primary reason for this is that the JavaScript will be generated by reusing parts of the Script\# framework in the solution we suggest in this project.
 
-\section{Target Audience}
-	The target audience are developers who write web applications using ASP.NET Web Forms and C\# where correctness is of high priority. This implies that the developer wants to display a 100\% working application to his end users or nothing at all (or maybe an error message). It is better to show an error message than to display an application which can exist in a corrupt, or partly corrupt, state.
+		Likewise overall performance will not be analyzed because of time constraints on the project.
+	% subsection focus (end)
+
+
+\section{Target Audience} % (fold)
+\label{sec:section_name}
+	The target audience is developers who create web applications using ASP.NET Web Forms with C\# where correctness is of high priority. This implies that the developer aims at displaying a 100\% working web application or nothing at all. An error message is preferred over an application in a corrupt, or partly corrupt, state.
+% section section_name (end)
+
 
 % chapter introduction (end)
 
