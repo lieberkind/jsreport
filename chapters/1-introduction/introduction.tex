@@ -143,9 +143,17 @@
 			\end{figure}
 		% subsubsection compile_time_errors_vs_runtime_errors (end)
 
-		\subsubsection{JavaScript DOM Consistency} % (fold)
-		\label{ssub:javascript_dom_consistency}
-			When building a web page a typical setup is a document consisting of Html elements (DOM elements) and some client side JavaScript. The client side scripts then modifies the Html elements in response to user interactions. There are however no guarantee of correct interaction between the JavaScript and the Html elements. E.g. when calling a JavaScript function from a button \texttt{onclick} event it is possible to have misspelled the function name which would cause a client side error.
+		\subsubsection{JavaScript-HTML Consistency} % (fold)
+		\label{ssub:javascript_html_consistency}
+			When building a web page a typical setup is a document consisting of HTML elements (DOM elements) and some client side JavaScript. The client side scripts then modifies the HTML elements in response to user interactions. There are however no guarantee of correct interaction between the JavaScript and the HTML elements. E.g. when calling a JavaScript function from a button \texttt{onclick} event it is possible to have misspelled the function name which would cause a client side error.
+
+			\begin{figure}
+				\begin{center}
+					\centerline{\includegraphics[width=11cm]{resources/images/javascript-html-consistency.eps}}
+				\end{center}
+				\caption{TODO: Figure text}
+				\label{fig:javascript_html_consistency}
+			\end{figure}
 
 			In the context of safe JavaScript development in the browser this can be considered a somewhat critical issue. Therefore a compile time guarantee of the consistency between JavaScript code and DOM elements (or vice versa) would be an improvement.
 
