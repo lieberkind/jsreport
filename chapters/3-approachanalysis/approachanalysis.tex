@@ -10,7 +10,7 @@
 	\label{sub:subsection_scriptsharp}
 		Script\# \cite{scriptsharp} is a cross-compiler from C\# to JavaScript that is maintained by Nikhil Kothari \cite{nikhilk} from Microsoft. Script\# works by compiling an entire C\# project to JavaScript. Script\# is interesting for several reasons; it contains an AST-representation of JavaScript in C\# and a way to generate JavaScript source code from this AST. Furthermore, it contains a C\# representation of the DOM (Document Object Model).
 
-		The main assembly, ScriptSharp.dll, is shown in figure \ref{simplifiedOverview} a simplified Script\# dependency diagram. When Script\# is used in a regular manner, an AST representing C\# source code is built using classes from the Parser and CodeModel namespaces. The ScriptModel namespace contains classes which represent the different nodes in the JavaScript AST. The actual JavaScript source is generated using classes in the Generator namespace. Another important assembly is the Script.Web.dll which contains classes for DOM representation.
+		The main assembly, ScriptSharp.dll, is shown in figure \ref{simplifiedOverview} as a simplified dependency diagram. When Script\# is used in a regular manner, an AST representing C\# source code is built using classes from the Parser and CodeModel namespaces. The ScriptModel namespace contains classes which represent the different nodes in the JavaScript AST. The actual JavaScript source is generated using classes in the Generator namespace. Another important assembly is the Script.Web.dll which contains classes for DOM representation.
 
 		\begin{figure}[H]
 			\begin{center}
