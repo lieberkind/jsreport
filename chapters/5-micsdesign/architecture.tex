@@ -12,7 +12,7 @@ This section will describe the different parts, how they relate to one another a
 \end{figure}
 
 
-The TypeManagers (\texttt{TypeManager}, \texttt{CSharpTypeManager} and\newline \texttt{ScriptSharpTypeManager}) provide information about types used throughout MiCS. For example, the TypeManagers are able to lookup the resultant type of an expression or the type of an identifier (using the Semantic Model described in section \ref{sub:microsoft_roslyn}). Furthermore, they can determine whether a given type is one that the user has defined, or if it is a built-in .NET-type.
+The type managers (\texttt{TypeManager}, \texttt{CSharpTypeManager} and\newline \texttt{ScriptSharpTypeManager}) provide information about types used throughout MiCS. The \texttt{CSharpTypeManager} holds information about all C\# types that can be used by the developer, including developer defined types, DOM Types and supported .NET core types. The \texttt{ScriptSharpTypeManager} only holds information about the types defined in the Script\# mscorlib.dll. The \texttt{CSharpTypeManager} and the \texttt{ScriptSharpTypeManager} each hold a semantic model which is able to look up types of identifiers and expressions. By using the semantic models, the type managers are able to lookup the resultant type of an expression or the type of an identifier. The type managers are also able to determine whether a given type is one the developer has defined, a DOM type or a .NET core type.
 
 The \texttt{Validator} class is responsible for validating the user's code in order to ensure correct type usage before the conversion to Script\# AST begins. The \texttt{Validator} is initiated by the MiCSManager and is dependent on the type managers.
 
