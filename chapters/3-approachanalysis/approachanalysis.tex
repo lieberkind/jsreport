@@ -8,9 +8,11 @@
 
 	\subsection{Script\#} % (fold)
 	\label{sub:subsection_name}
-		Script\# \cite{scriptsharp} is a cross-compiler from C\# to JavaScript that is maintained by Nikhil Kothari \cite{nikhilk} from Microsoft. Script\# works by compiling an entire C\# project JavaScript and it is interesting for two specific reasons; it contais an AST-representation of JavaScript in C\# and a way to generate JavaScript source code from this AST. Furthermore, it contains a C\# representation of the DOM.
+		Script\# \cite{scriptsharp} is a cross-compiler from C\# to JavaScript that is maintained by Nikhil Kothari \cite{nikhilk} from Microsoft. Script\# works by compiling an entire C\# project to JavaScript and it is interesting for several reasons; it contais an AST-representation of JavaScript in C\# and a way to generate JavaScript source code from this AST. Furthermore, it contains a C\# representation of the DOM (Document Object Model).
 
-		The main assembly, ScriptSharp.dll, is shown in figure \ref{simplifiedOverview} as a simplified dependency diagram. When Script\# is used in a regular manner, an AST representing C\# source code is built using classes from the Parser and CodeModel namespaces. The ScriptModel namespace contains classes for building the JavaScript AST before the actual JavaScript source is generated using classes in the Generator namespace.
+		The main assembly, ScriptSharp.dll, is shown in figure \ref{simplifiedOverview} as a simplified dependency diagram. When Script\# is used in a regular manner, an AST representing C\# source code is built using classes from the Parser and CodeModel namespaces. The ScriptModel namespace contains classes which represent different nodes in the JavaScript AST, and the actual JavaScript source is generated using classes in the Generator namespace. Another important assembly is the Script.Web.dll which contains classes for DOM representation.
+
+		% Another important assembly is the Script.Web.dll which contains classes for Document Object Model (DOM) representation.
 
 		% The main assembly, ScriptSharp.dll, is shown in figure \ref{simplifiedOverview} as a simplified dependency diagram with the most relevant assemblies related to our project. When Script\# is used in a regular manner, an AST is built from C\# source code using classes from the Parser and CodeModel namespaces. The ScriptModel namespace contains classes for building the JavaScript AST before the actual script is generated using classes in the Generator namespace.
 
@@ -22,11 +24,53 @@
 			\label{simplifiedOverview}
 		\end{figure}
 
-		Another important assembly is the Script.Web.dll. This assembly contains classes for Document Object Model (DOM) representation.
 
-		A thing unique to Script\# is that it defines a modified version of the .NET mscorlib.dll that modifies the .NET core type interfaces to resembles their equivalent JavaScript objects. E.g. the Script\# defined System.String type has a \texttt{CharAt(int index)} function that doesn't exist on the original .NET System.String type but that does exist on the JavaScript string object. One benefit of the modified mscorlib.dll is that it makes the C\# compiler able to validate the C\# code that represents JavaScript code entirely (todo: REF to explanation). 
+		A thing unique to Script\# is that it defines a modified version of the .NET mscorlib.dll (also shown in figure \ref{simplifiedOverview}) that modifies the .NET core type interfaces to resembles their equivalent JavaScript objects. E.g. the Script\# defined System.String type has a \texttt{CharAt(int index)} function that doesn't exist on the original .NET System.String type but \emph{does} exist on the JavaScript String object. One benefit of the modified mscorlib.dll is that it makes the C\# compiler able to validate the C\# code that represents JavaScript code entirely (todo: REF to explanation). However, \emph{evaluating} C\# code that uses these modified .NET types will never make sense, as all of the methods and fields on them either returns null, 0, or false, as shown in figure \ref{fig:scriptsharp_net_types}
 
-		The modified mscorlib.dll file is referenced in one's Visual Studio project (instead of the original one) when a new ScriptSharp project is created. When a ScriptSharp project is compiled a JavaScript file will be generated. This JavaScript file can then be used in other projects (E.g. a Web Forms web application).
+		\begin{figure}
+		\label{fig:scriptsharp_net_types}
+			\begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={String}]
+namespace System {
+
+  /// <summary>
+  /// Equivalent to the String type in Javascript.
+  /// </summary>
+  [ScriptIgnoreNamespace]
+  [ScriptImport]
+  public sealed class String {
+
+    ...
+
+    /// <summary>
+    /// The number of characters in the string.
+    /// </summary>
+    [ScriptField]
+    public int Length {
+      get {
+        return 0;
+      }
+    }
+
+    ...
+
+    /// <summary>
+    /// Encodes a single part or component of a URI.
+    /// </summary>
+    /// <returns>The encoded string.</returns>
+    [ScriptAlias("encodeURIComponent")]
+    public string EncodeUriComponent() {
+      return null;
+    }
+
+    ...
+  }
+}
+
+			\end{lstlisting}
+			\caption{Properties and methods on Script\#'s String type}
+		\end{figure}
+
+		The modified mscorlib.dll file is referenced in one's Visual Studio project (instead of the original one) when a new ScriptSharp project is created. When a ScriptSharp project is compiled a JavaScript file will be generated. This JavaScript file can then be used in other projects (E.g. a Web Forms web application). The C\# source code will not be evaluated.
 	% subsection subsection_name (end)
 
 
