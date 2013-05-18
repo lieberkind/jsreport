@@ -4,10 +4,58 @@
 
 	First of all, with Roslyn it is easy to generate an AST from C\# source code. This is done by using either the \texttt{ParseText} or the \texttt{ParseFile} method on Roslyn's \texttt{SyntaxTree} class. The generated AST consists of nodes of type \texttt{SyntaxNode}, which represent C\# constructs such as declarations, statements and expressions. E.g. an \texttt{if}-statement is represented by an \texttt{IfStatementSyntax} node and a binary expression, such as \texttt{1 + 2}, is represented by a \texttt{BinaryExpressionSyntax} node.
 
-	Secondly, the generated AST can be traversed easily thanks to the fact that Roslyn's internal structure is based on the Visitor Pattern \cite{bib:visitorpattern}. By inheriting from Roslyn's \texttt{SyntaxWalker} class, all \texttt{SyntaxNode}s in a given \texttt{SyntaxTree} can be visited and processed as desired. This is done by overwriting the \texttt{SyntaxWalker}'s default \texttt{Visit}-methods. E.g. to visit an \texttt{IfStatementSyntax} node, the \texttt{SyntaxWalker}'s \texttt{VisitIfStatement}-method has to be overwritten.
-	TODO: Maybe the last sentence should be moved to implementation section.
+	Secondly, the generated AST can be traversed depth-first ealisy thanks to the fact that Roslyn's internal structure is based on the Visitor Pattern \cite{bib:visitorpattern}. By inheriting from Roslyn's \texttt{SyntaxWalker} class, all \texttt{SyntaxNode}s in a given \texttt{SyntaxTree} can be visited and processed as desired. This is done by overwriting the \texttt{SyntaxWalker}'s default \texttt{Visit}-methods. E.g. to visit an \texttt{IfStatementSyntax} node, the \texttt{SyntaxWalker}'s \texttt{VisitIfStatement}-method has to be overwritten. Figure \ref{fig:roslyn_walker_example} shows an example of a simlpe custom SyntaxWalker which prints the names of the namespaces and classes it visits.
+
+	\begin{figure}
+		\begin{center}
+			
+		\begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={Program,SyntaxTree,TestWalker,Console,SyntaxWalker,NamespaceDeclarationSyntax,ClassDeclarationSyntax}]
+namespace RoslynTest
+{
+  class Program
+  {
+    static void Main(string[] args)
+    {
+      var smallProgram = @"
+        namespace TestNamespace 
+        {
+          class TestClass { }
+        }
+      ";
+
+      var syntaxTree = SyntaxTree.ParseText(smallProgram);
+      var testWalker = new TestWalker();
+
+      testWalker.Visit(syntaxTree.GetRoot());
+      Console.Read();
+    }
+  }
+
+  class TestWalker : SyntaxWalker
+  {
+    public override void VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
+    {
+      Console.WriteLine("Hello, this is namespace {0}!", node.Name.ToString());
+      base.VisitNamespaceDeclaration(node);
+    }
+
+    public override void VisitClassDeclaration(ClassDeclarationSyntax node)
+    {
+      Console.WriteLine("Hello, this is class {0}!", node.Identifier.ValueText);
+      base.VisitClassDeclaration(node);
+    }
+  }
+}
+
+
+
+		\end{lstlisting}
+		\end{center}
+		\caption{Example of a custom SyntaxWalker}
+		\label{fig:roslyn_walker_example}
+	\end{figure}
 
 	Lastly, Roslyn can create a Semantic Model for any Syntax Tree. The Semantic Model functions as a refence table that contains information about the syntax nodes in the syntax tree. For example, given an expression, the Semantic Model can determine its resultant type. Given an identifier, the Semantic Model can determine its type. This can be very useful, e.g. as many local variables across the source code can have the same name, but different types. So while the SyntaxTree defines the programs syntactic structure, the Semantic Model helps identifying what is being referenced. The Semantic Model is not limited to looking up types defined within the Syntax Tree. If external assemblies (such as mscorlib.dll) is handed to the Semantic Model upon creation, references to types within these assemblies can also be resolved.
 
-
+\FloatBarrier
 % subsection microsoft_roslyn (end)
