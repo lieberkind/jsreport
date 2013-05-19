@@ -3,14 +3,13 @@ This section focuses on design considerations conserning usability for the devel
 
 \subsection{What to generate JavaScript from?} % (fold)
 \label{sub:what_to_generate_javascript_from}
-	To easily distinguish client side code, mixed side code and server side code from one another, the \texttt{MixedSide} and \texttt{ClientSide} attributes have been implemented. They serve as an easy way for the developer to express which methods that should be used on client side, server side and mixed side respectively. At the same time, they make it easy for MiCS to understand which parts of the developers code to generate JavaScript from.
+	To easily distinguish client side code, mixed side code and server side code from one another, the \texttt{MixedSide} and \texttt{ClientSide} attributes have been introduced. They serve as an easy way for the developer to express which methods that should be used on client side, server side and mixed side respectively. At the same time, they make it easy for MiCS to understand which parts of the developers code to generate JavaScript from. The attributes needs to be used explicit to help ensure that only code intended for client side is actually generated as JavaScript.
 
 % subsection what_to_generate_javascript_from (end)
 
 \subsection{Error messages} % (fold)
 \label{sub:design_error_messages}
 	As stated in the introduction, it is not our intent to make a complete mapping from C\# to JavaScript. Therefore, when developers use a C\# construct or type that we are unable to map, it is important to fail with an error message that makes sense to the developer. It should not be left to the developer to interpret and debug errors thrown directly from Roslyn. For this reason, different exceptions are implemented. An example of such an exception is the \texttt{MixedSidePrincipleViolatedException} which is thrown, e.g. when code annotated with the \texttt{MixedSide} attribute calls either client or server side code.
-	TODO: Implement custom exceptions for when unsupported C\# statements or expressions are used
 
 	% subsection error_messages (end)
 
