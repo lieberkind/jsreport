@@ -163,10 +163,58 @@ void button_Click(object sender, EventArgs e)
 
 % subsubsection 3_register_click_events (end)
 
-
 Now the example web application can be run. If the client side validation passes, the form is submitted and validated on server side as well.
 
 If the user does not enter a valid e-mail address or doesn't accept the terms, he will be alerted with an error message and the form will not submit. Should the user bypass the client side validation, the server side validation will step in, and the user will be met with an error message generated from server side instead.
+
+The resulting HTML and JavaScript source code is shown in Figure \ref{fig:manualHtmlSource}.
+
+\begin{figure}[H]
+\begin{lstlisting}[language=html]
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title></title></head>
+<body>
+    <form method="post" action="./" id="form1">
+    ...
+    <script type="text/javascript">
+    //<![CDATA[
+    function MiCSManual$Default() {
+    }
+    MiCSManual$Default.prototype = {
+      button_ClientClick: function() {
+        var emailField = document.getElementById('EmailBox');
+        var termsCheckBox = document.getElementById('CheckBox');
+        if (!this.isEmailValid(emailField.value)) {
+          window.alert('Invalid E-mail!');
+          return false;
+        }
+        if (!termsCheckBox.checked) {
+          window.alert('Accepting terms are required!');
+          return false;
+        }
+        return true;
+      },
+      isEmailValid: function(email) {
+        var emailRegex = new RegExp('^[A-z0-9._%+-]+@[A-z0-9.-]+.[A-z]{2,4}$');
+        return emailRegex.test(email);
+      }
+    };
+    //]]>
+    </script>
+    ...
+    <input name="EmailBox" type="text" value="E-mail" id="EmailBox" />
+    <input id="CheckBox" type="checkbox" name="CheckBox" />
+    <label for="CheckBox">I accept the terms.</label>
+    <input type="submit" name="ctl03" value="Submit" 
+     onclick="var obj = new MiCSManual$Default(); return obj.button_ClientClick();" />
+    </form>
+</body>
+</html>
+\end{lstlisting}
+\caption{The manual example's resulting HTML source code.}
+\label{fig:manualHtmlSource}
+\end{figure}
 
 In this simple registration form example we have now essentially written JavaScript in a safe manner, we have reused code on server and client side and we have ensured consistency between Html and JavaScript by registering the client side click event in a safe (compile time validated) manner.
 

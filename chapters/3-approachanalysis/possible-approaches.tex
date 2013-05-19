@@ -21,7 +21,7 @@
 
 		\subsubsection{C\# Internal DSL to JavaScript} % (fold)
 		\label{ssub:c_internal_dsl_to_javascript}
-			To approach the project initially we did some experiments with a C\# internal DSL from which JavaScript was created directly (i.e. the C\# or F\# Abstract Syntax tree and JavaScript AST stages are skipped). Using helper factory methods, operator overloading and a mechanism to handle block scope we arrived at a DSL syntax that could only be somewhat compared to JavaScript concrete syntax. Furthermore the syntax was a bit verbose which decreased readability. 
+			To approach the project initially we did some experiments with a C\# internal DSL from which JavaScript was created directly (i.e. the C\# or F\# abstract syntax tree and JavaScript AST stages are skipped). Using helper factory methods, operator overloading and a mechanism to handle block scope we arrived at a DSL syntax that could only be somewhat compared to JavaScript concrete syntax. Furthermore the syntax was a bit verbose which decreased readability. 
 
 			Another problem with the C\# DSL implementation was that the assignment operator C\# could not be overloaded which resulted in inconsistent ways of assigning values to variables. This was a critical problem because wrong use of the ‘\texttt{=}’ operator could cause very subtle errors.
 
@@ -29,16 +29,13 @@
 
 		\subsubsection{C\# Internal DSL to Expression Trees to JavaScript} % (fold)
 		\label{ssub:c_internal_dsl_to_expression_trees_to_javascript}
-% <<<<<<< HEAD
-			
-% =======
-			We considered a variation of the C\# DSL approach which included the use of Expression Trees (TODO: REF). This DSL would build an AST consisting of Expression Trees from which JavaScript could be generated (i.e. the C\# or F\# Abstract Syntax tree stage would be included). This approach would somewhat accommodate Server-Client Portability (TODO:REF) because Expression Trees can be dynamically compiled and executed as server side code. However this approach inherits the same problems as the C\# DSL approach.
-% >>>>>>> b58dc982ed6813b2da4c55f5a353d75913654be7
+
+			We considered a variation of the C\# DSL approach which included the use of Expression Trees (TODO: REF). This DSL would build an AST consisting of Expression Trees from which JavaScript could be generated (i.e. the C\# or F\# abstract syntax tree stage would be included). This approach would somewhat accommodate Server-Client Portability (TODO:REF) because Expression Trees can be dynamically compiled and executed as server side code. However this approach inherits the same problems as the C\# DSL approach.
 		% subsubsection c#_internal_dsl_to_expression_trees_to_javascript (end)
 
 		\subsubsection{C\# Lambda to Expression Trees to Script\# to JavaScript} % (fold)
 		\label{ssub:c_lambda_to_expression_trees_to_script_to_javascript}
-		
+			Instead of building Expression Trees manually as in the previous DSL approach this approach utilizes the possibility to generate Expression Trees from lambda expressions. Using lambda expressions would imply that C\# concrete syntax could be used and not a DSL. Therefore the DSL related problems discussed above would be avoided which makes this approach superior to the DSL approaches. However an Expression Tree cannot be generated from lambda \emph{statements} this implies that the use of statements would not be possible with this approach. The use of statements is somewhat important when trying to represent JavaScript so this was a critical shortcoming for this approach.
 		% subsubsection c_lambda_to_expression_trees_to_script#_to_javascript (end)
 
 	% subsection csharp_approaches (end)
