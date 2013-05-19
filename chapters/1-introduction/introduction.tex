@@ -26,8 +26,9 @@ Developing web applications instead of native applications is a strong tendency 
 % subsubsection subsubsection_name (end)
 
 \subsubsection{Obtaining JavaScript-HTML Consistency} % (fold)
+\label{ssub:obtaining_javascript_html_consistency}
 	Compile time guarantee of the consistency between JavaScript code and HTML elements would be beneficial. Web pages typically consist of HTML elements and JavaScript source code. JavaScript is activated in response to user interactions (e.g. when clicking a button). However, due to JavaScripts interpreted nature, there is no guarantee of correct interaction between the JavaScript and the HTML elements. E.g. when calling a JavaScript function from a button click event, it is possible to have misspelled the function name which would cause a client side error. 
-% subsubsection subsubsection_name (end)
+% subsubsection obtaining_javascript_html_consistency (end)
 
 \subsubsection{Server-Client Portability} % (fold)
 	It is beneficial to be able to generate JavaScript from server side code. In some situations, such as form validation, it can be useful to run the same piece of code both on client and server side. As a user experience enriching feature, forms are often validated on client side, as to avoid the waiting time for a page load. However, forms have to be validated on the server side as well since the client side validation is easily bypassed.
@@ -82,11 +83,10 @@ To address these improvements, MiCS uses Microsoft's Roslyn in combination with 
 	\section{Learning goals}
 		\begin{itemize}
 
-		\item Better knowledge of JavaScript in general and the more subtle language features of the language.
+		\item Better knowledge of JavaScript in general and its more subtle language features.
 		\item Better knowledge of ASP.NET Web Forms.
-	 	\item Better understanding of the difference between C\#/.NET (as a static typed) language and JavaScript (dynamically typed language).
-		\item Better understanding of web development and the communication between client and server side...
-		\item Basic knowledge of cross compilers and abstract syntax trees.
+	 	\item Better understanding of the difference between C\#/ (as a statically typed language) and JavaScript (as a dynamically typed language).
+		\item Better knowledge of cross compilers and abstract syntax trees.
 		\end{itemize}
 
 \section{Method}
@@ -132,43 +132,43 @@ To address these improvements, MiCS uses Microsoft's Roslyn in combination with 
 		\end{itemize}
 
 
-	\subsection{Safety Considerations} % (fold)
-	\label{sub:safety_considerations}
-		This section will address some fundamental aspects of safe development that we would like to target in this project.
-		% There are some fundamental aspects of safe development that we will like to target in this project and which we will describe here. 
+	% \subsection{Safety Considerations} % (fold)
+	% \label{sub:safety_considerations}
+	% 	This section will address some fundamental aspects of safe development that we would like to target in this project.
+	% 	% There are some fundamental aspects of safe development that we will like to target in this project and which we will describe here. 
 
-		\subsubsection{Compile Time Errors vs. Runtime Errors} % (fold)
-		\label{ssub:compile_time_errors_vs_runtime_errors}
+	% 	\subsubsection{Compile Time Errors vs. Runtime Errors} % (fold)
+	% 	\label{ssub:compile_time_errors_vs_runtime_errors}
 			
-			When considering web applications, errors can occur both on server side and client side. On server side, errors can occur on either compile time or runtime. On client side, compile time does not exist, and consequently errors can only occur on runtime.
-			Compile time errors are generally easier to debug than runtime errors and thus fixing them is often less time consuming. Client side runtime errors will be exposed to web application's end users which is highly undesirable. Because of this, one of the fundamental goals of MiCS is to move errors from client side runtime to server side (runtime or compile time, see Figure \ref{movingErrors}).
+	% 		When considering web applications, errors can occur both on server side and client side. On server side, errors can occur on either compile time or runtime. On client side, compile time does not exist, and consequently errors can only occur on runtime.
+	% 		Compile time errors are generally easier to debug than runtime errors and thus fixing them is often less time consuming. Client side runtime errors will be exposed to web application's end users which is highly undesirable. Because of this, one of the fundamental goals of MiCS is to move errors from client side runtime to server side (runtime or compile time, see Figure \ref{movingErrors}).
 
-			\begin{figure}
-				\begin{center}
-					\centerline{\includegraphics[width=11cm]{resources/images/MovingErrors.eps}}
-				\end{center}
-				\caption{Improving safe development by trying to move errors from client side to server side.}
-				\label{movingErrors}
-			\end{figure}
-		% subsubsection compile_time_errors_vs_runtime_errors (end)
+	% 		\begin{figure}
+	% 			\begin{center}
+	% 				\centerline{\includegraphics[width=11cm]{resources/images/MovingErrors.eps}}
+	% 			\end{center}
+	% 			\caption{Improving safe development by trying to move errors from client side to server side.}
+	% 			\label{movingErrors}
+	% 		\end{figure}
+	% 	% subsubsection compile_time_errors_vs_runtime_errors (end)
 
-		\subsubsection{JavaScript-HTML Consistency} % (fold)
-		\label{ssub:javascript_html_consistency}
-			When building a web page a typical setup is a document consisting of HTML elements (DOM elements) and some client side JavaScript. The client side scripts then modifies the HTML elements in response to user interactions. There are however no guarantee of correct interaction between the JavaScript and the HTML elements. E.g. when calling a JavaScript function from a button \texttt{onclick} event it is possible to have misspelled the function name which would cause a client side error.
+	% 	\subsubsection{JavaScript-HTML Consistency} % (fold)
+	% 	\label{ssub:javascript_html_consistency}
+	% 		When building a web page a typical setup is a document consisting of HTML elements (DOM elements) and some client side JavaScript. The client side scripts then modifies the HTML elements in response to user interactions. There are however no guarantee of correct interaction between the JavaScript and the HTML elements. E.g. when calling a JavaScript function from a button \texttt{onclick} event it is possible to have misspelled the function name which would cause a client side error.
 
-			\begin{figure}
-				\begin{center}
-					\centerline{\includegraphics[width=11cm]{resources/images/javascript-html-consistency.eps}}
-				\end{center}
-				\caption{TODO: Figure text}
-				\label{fig:javascript_html_consistency}
-			\end{figure}
+	% 		\begin{figure}
+	% 			\begin{center}
+	% 				\centerline{\includegraphics[width=11cm]{resources/images/javascript-html-consistency.eps}}
+	% 			\end{center}
+	% 			\caption{TODO: Figure text}
+	% 			\label{fig:javascript_html_consistency}
+	% 		\end{figure}
 
-			In the context of safe JavaScript development in the browser this can be considered a somewhat critical issue. Therefore a compile time guarantee of the consistency between JavaScript code and DOM elements (or vice versa) would be an improvement.
+	% 		In the context of safe JavaScript development in the browser this can be considered a somewhat critical issue. Therefore a compile time guarantee of the consistency between JavaScript code and DOM elements (or vice versa) would be an improvement.
 
-		% subsubsection server_client_consistency (end)
+	% 	% subsubsection server_client_consistency (end)
 
-	% subsection safety_considerations (end)
+	% % subsection safety_considerations (end)
 
 	\subsection{Focus} % (fold)
 	\label{sub:focus}
