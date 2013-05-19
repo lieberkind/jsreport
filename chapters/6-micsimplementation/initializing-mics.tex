@@ -27,7 +27,7 @@ The MiCSManager now first builds the Roslyn AST by using the \texttt{SyntaxTree.
 var userTree = SyntaxTree.ParseText(source);
 TypeManager.Initate(userTree);
 \end{lstlisting}
-\caption{Initiaing the TypeManager. Todo: Change this example to fit code}
+\caption{Initiaing the TypeManager.}
 \label{fig:init_mics_init_typemanager}
 \end{figure}
 
@@ -44,22 +44,22 @@ var tree = SyntaxTree.ParseText(userTree.GetText() + ScriptSharp.TextSources.Web
 \label{fig:init_mics_add_dom_types}
 \end{figure}
 
-The supported .NET types are added as references to the semantic model when it is created, as shown in figure \ref{fig:init_mics_create_semantic_model}.
+The supported .NET types are added as a reference to the semantic model when it is created.
 
 
 % When creating the C\# Semantic Model it is therefore necessary to make sure that these supported .NET types can be recognized when they are looked up. This is done by handing the correct assemblies to the semantic model upon creation, as shown in figure \ref{fig:init_mics_create_semantic_model}.
 
-\begin{figure}[H]
-\begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={MetadataFileReference,Regex,String,Compilation}]
-var mscorlib = new MetadataFileReference(typeof(String).Assembly.Location);
-var systemTextRegularExpression = new MetadataFileReference(typeof(System.Text.RegularExpressions.Regex).Assembly.Location);
+% \begin{figure}[H]
+% \begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={MetadataFileReference,Regex,String,Compilation}]
+% var mscorlib = new MetadataFileReference(typeof(String).Assembly.Location);
+% var systemTextRegularExpression = new MetadataFileReference(typeof(System.Text.RegularExpressions.Regex).Assembly.Location);
 
-var compilation = Compilation.Create("Compilation", syntaxTrees: new[] { tree }, references: new[] { mscorlib, SystemTextRegularExpression });
-SemanticModel = compilation.GetSemanticModel(tree);
-\end{lstlisting}
-\caption{Creating the C\# Semantic Model}
-\label{fig:init_mics_create_semantic_model}
-\end{figure}
+% var compilation = Compilation.Create("Compilation", syntaxTrees: new[] { tree }, references: new[] { mscorlib, SystemTextRegularExpression });
+% SemanticModel = compilation.GetSemanticModel(tree);
+% \end{lstlisting}
+% \caption{Creating the C\# Semantic Model}
+% \label{fig:init_mics_create_semantic_model}
+% \end{figure}
 
 The \texttt{ScriptSharpTypeManager} only holds the types defined in the Script\# mscorlib.dll and therefore when creating the Script\# Semantic Model no other assemblies are needed.
 

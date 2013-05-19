@@ -6,20 +6,20 @@
 
 \input{chapters/6-micsimplementation/syntaxtreevalidation}
 
-\section{Mapping to ScriptSharp AST} % (fold)
+\section{Mapping to Script\# AST} % (fold)
 \label{sec:mapping_to_scriptsharp_ast}
-	When converting the validated Roslyn AST to its corresponding ScriptSharp AST, a logical division of the process has been made. 
+	When converting the validated Roslyn AST to its corresponding Script\# AST, a logical division of the process has been made. 
 
 	\begin{itemize}
-		\item Mapping a Roslyn AST node to its equivalent ScriptSharp AST node
-		\item Building a ScriptSharp AST from all the mapped nodes
+		\item Mapping a Roslyn AST node to its equivalent Script\# AST node
+		\item Building a Script\# AST from all the mapped nodes
 	\end{itemize}
 
 	It is important to realize that the mapping is a sub process of the building process. The mapping is discussed in this section. 
 
 	\subsection{Expressions, Statements and Symbols} % (fold)
 	\label{sub:subsection_mapping_to_scriptsharp_expressions_statements_and_symbols}
-		The mapping of Expressions, Statements and Symbols is implemented in three classes (ExpressionMapper.cs, StatementMapper.cs and SymbolMapper.cs). The three classes are logically divided (and named) after the kind of ScriptSharp AST node they map to. 
+		The mapping of Expressions, Statements and Symbols is implemented in three classes (ExpressionMapper.cs, StatementMapper.cs and SymbolMapper.cs). The three classes are logically divided (and named) after the kind of Script\# AST node they map to. 
 
 		\begin{figure}[H]
 			\begin{center}
@@ -29,9 +29,7 @@
 			\label{mapperClasses}
 		\end{figure}
 
-		TODO: Clarify this sentence
-
-		The mapping of the AST nodes is somewhat straightforward as most of the mappings we have done the Roslyn AST maps one to one with the ScriptSharp AST. A Roslyn return statement node maps to a ScriptSharp return statement etc. The three classes define \texttt{Map(...)} extension methods to the Roslyn objects they map from (see example figures \ref{returnStatementMap} and \ref{conditionaleExpressionMap}).
+		Mapping of AST nodes is somewhat straightforward as most Roslyn AST nodes have an equivalent Script\# AST node. E.g. a Roslyn return statement node maps to a Script\# return statement etc. The three mapper classes define \texttt{Map(...)} extension methods to the Roslyn node objects they map from (see example figures \ref{returnStatementMap} and \ref{conditionaleExpressionMap}).
 
 		\begin{figure}[H]
 			\begin{center}
