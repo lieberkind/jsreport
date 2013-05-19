@@ -16,7 +16,7 @@
 		
 		\subsubsection{C\# to Roslyn to Script\# to JavaScript} % (fold)
 		\label{ssub:c_to_roslyn_to_script_to_javascript}
-			By using a combination of Roslyn it would be possible to generate an AST representing the developers C\# code. The work on our hand in this solution is to map the generated C\# AST to a corresponding Script\# AST representing JavaScript. Script\# would then be able to generate JavaScript from this AST.
+			By using a combination of Roslyn and Script\# it would be possible to generate an AST representing the developers C\# code. The work on our hand in this solution is to map the generated C\# AST to a corresponding Script\# AST representing JavaScript. Script\# would then be able to generate JavaScript from this AST.
 		% subsubsection c_to_roslyn_to_script_to_javascript (end)
 
 		\subsubsection{C\# Internal DSL to JavaScript} % (fold)
@@ -29,7 +29,7 @@
 
 		\subsubsection{C\# Internal DSL to Expression Trees to JavaScript} % (fold)
 		\label{ssub:c_internal_dsl_to_expression_trees_to_javascript}
-		
+			
 		% subsubsection c#_internal_dsl_to_expression_trees_to_javascript (end)
 
 		\subsubsection{C\# Lambda to Expression Trees to Script\# to JavaScript} % (fold)
@@ -44,12 +44,12 @@
 	
 		\subsubsection{F\# Internal DSL to Script\# to JavaScript} % (fold)
 		\label{ssub:f_internal_dsl_to_script_to_javascript}
-		
+			An alternative to an C\# internal DSL is an F\# internal DSL. The problem with not being able to overload the assignment operator would not be an issue in F\#. It is even possible to implement new operators consisting of one or more characters from a given set, consequently making it possible to implement some special JavaScript operators such as strict equal (===).
 		% subsubsection f_internal_dsl_to_script_to_javascript (end)
 
 		\subsubsection{F\# Code Quotations to Script\# to JavaScript} % (fold)
 		\label{ssub:f_code_quotations_to_script_to_javascript}
-		
+			An alternative to using C\# and Roslyn is F\# and Code Quotations. As with Roslyn, the work on our hand would be to map the F\# AST to it's corresponding Script\# JavaScript AST. A disadvantage of using Code Quotations is that they require the developer to know a different language from the one in which ASP.NET Web Forms applications are typically written (C\#). This would probably not be a very great barrier if the syntax of the language didn't vary as much as F\# does from C\#. Also, C\# and JavaScript are somewhat similar in syntax, whereas F\#'s and JavaScripts syntaxes are beyond comparison. A problem related to F\#'s syntax is that the mapping between the F\# AST and the Script\# JavaScript AST could possibly be more difficult than with C\# and Roslyn and thus impose a greater work load on us.
 		% subsubsection f_code_quotations_to_script_to_javascript (end)
 
 	% subsection f_approaches (end)
