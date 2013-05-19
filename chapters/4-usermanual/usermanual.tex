@@ -170,7 +170,7 @@ If the user does not enter a valid e-mail address or doesn't accept the terms, h
 The resulting HTML and JavaScript source code is shown in Figure \ref{fig:manualHtmlSource}.
 
 \begin{figure}[H]
-\begin{lstlisting}[language=html]
+\begin{lstlisting}[language=html,style=HTMLJSStyle]
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head><title></title></head>
@@ -203,11 +203,11 @@ The resulting HTML and JavaScript source code is shown in Figure \ref{fig:manual
     //]]>
     </script>
     ...
-    <input name="EmailBox" type="text" value="E-mail" id="EmailBox" />
-    <input id="CheckBox" type="checkbox" name="CheckBox" />
+    <input name="EmailBox" type="text" value="E-mail" id="EmailBox">
+    <input id="CheckBox" type="checkbox" name="CheckBox">
     <label for="CheckBox">I accept the terms.</label>
     <input type="submit" name="ctl03" value="Submit" 
-     onclick="var obj = new MiCSManual$Default(); return obj.button_ClientClick();" />
+     onclick="var obj = new MiCSManual$Default(); return obj.button_ClientClick();">
     </form>
 </body>
 </html>

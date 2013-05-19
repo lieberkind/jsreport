@@ -116,19 +116,28 @@ namespace System {
 
 \section{TODO: Deciding on Approach} % (fold)
 \label{sec:deciding_on_approach}
-	todo: text
+	In the previos sections we have described varios technologies, how they can be used in combination to form approaches, and some of the benefits and disadvantages of these approaches. To make a final decission on which approach to choose for implementation, an approach matrix has been made. The matrix evaluates the different approaches based on 9 different critera. The approach matrix is shown in figure \ref{approachMatrix}, and below each criterion is explained.
 
-		\begin{figure}[H]
-			\begin{center}
-				\centerline{\includegraphics[width=16cm]{resources/images/approachmatrix.eps}}
-			\end{center}
-			\caption{Approach Matrix.}
-			\label{approachMatrix}
-		\end{figure}
+	\begin{figure}
+		\begin{center}
+			\centerline{\includegraphics[width=16cm]{resources/images/approachmatrix.eps}}
+		\end{center}
+		\caption{Approach Matrix.}
+		\label{approachMatrix}
+	\end{figure}
 
+	\begin{itemize}
+		\item \textbf{Server Client Portability} The ability to generate JavaScript from working server side code
+		\item \textbf{Ease of Use} How easy the approach is to use for the developer
+		\item \textbf{Compile Time Errors} Amount of errors this approach will catch on compile time
+		\item \textbf{AST Benefits} How easily AST the developer's code can be converted to an AST
+		\item \textbf{Consise Syntax} How concise the syntax of the approach will be
+		\item \textbf{Existing Infrastructure} The degree to which the approach makes use of existing C\# or F\# constructs
+		\item \textbf{Experience with .NET Language} How well we know the language in which the approach is implemented
+		\item \textbf{Ease of Unit Testing} How easily the developer can unit test his code with the approach
+	\end{itemize}
 
-	todo: shorter column titles on approach matrix + concluding text
-
+	\FloatBarrier
 
 	\subsection{MiCS: Mixed Side C\#} % (fold)
 	\label{sub:mics_mixed_side_csharp}
