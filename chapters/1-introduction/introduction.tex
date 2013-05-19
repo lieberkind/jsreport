@@ -1,26 +1,40 @@
 
 \chapter{Introduction} % (fold)
 \label{cha:introduction}
-	This bachelor project has been produced by Tomas Alan Lieberkind and Asger Schlichtkrull from the 1st February 2013 to the 22nd May 2013 at the IT-University of Copenhagen. The project has been supervised by Peter Sestoft.
-
+	MiCS (Mixed Side C Sharp) is created as a bachelor project at the IT-University of Copenhagen. The project  has been produced by Tomas Alan Lieberkind and Asger Schlichtkrull from the 1st February 2013 to the 22nd May 2013. The project has been supervised by Peter Sestoft. 
 	\section{Motivation} % (fold)
 \label{sec:motivation}
-	We would like to improve development of web applications with ASP.NET Web Forms and therefore it is beneficial to investigate how JavaScript can be from a .NET language such as C\# or F\# in order to achieve compile time validation. % Todo: synes denne første del er lidt underlig...
+	% We would like to improve development of web applications with ASP.NET Web Forms and therefore it is beneficial to investigate how JavaScript can be from a .NET language such as C\# or F\# in order to achieve compile time validation. % Todo: synes denne første del er lidt underlig...
 
-	Developing web applications instead of native applications is a strong tendency in software development today. JavaScript contributes to enriching the user experience and sometimes provide functionality which is indispensable for such web applications.
+	% Developing web applications instead of native applications is a strong tendency in software development today. JavaScript contributes to enriching the user experience and sometimes provide functionality which is indispensable for such web applications.
 
-	ASP.NET Web Forms provides the possibility of building HTML documents using C\# which improves correctness through compile time validation. Writing JavaScript code using C\# is not possible in the same way as with HTML documents. JavaScript is embedded into the application as text strings and thus compile time validation is not possible. This increases the possibility of writing faulty scripts that emits errors which are not discovered before client side runtime. Runtime errors are generally harder to debug and in worst case exposed to the end user while leaving the application in a corrupt state.
+	% ASP.NET Web Forms provides the possibility of building HTML documents using C\# which improves correctness through compile time validation. Writing JavaScript code using C\# is not possible in the same way as with HTML documents. JavaScript is embedded into the application as text strings and thus compile time validation is not possible. This increases the possibility of writing faulty scripts that emits errors which are not discovered before client side runtime. Runtime errors are generally harder to debug and in worst case exposed to the end user while leaving the application in a corrupt state.
 
-	Achieving compile time validation of JavaScript is not a ground-breaking thought, and there are several existing projects that do exactly this; TypeScript by Microsoft and Dart by Google are just a few.
+	% Achieving compile time validation of JavaScript is not a ground-breaking thought, and there are several existing projects that do exactly this; TypeScript by Microsoft and Dart by Google are just a few.
 
-	Depending on the situation one weakness with some of these solutions are that the server side code and the client side code is written as two independent units, and nothing ties them safely together. 
+	% Depending on the situation one weakness with some of these solutions are that the server side code and the client side code is written as two independent units, and nothing ties them safely together. 
 
-	Another problem is that of reusability. In cases such as form validation it is necessary to write the same piece of code in two different languages in order to validate both on client side and server side.
+	% Another problem is that of reusability. In cases such as form validation it is necessary to write the same piece of code in two different languages in order to validate both on client side and server side.
 
-	This project aims to find a solution for safe JavaScript development that; incorporates compile time validation, enables reusability of server side code on client side and tries to ensure consistency between the server side generated Html document and the client side script code.
+	% This project aims to find a solution for safe JavaScript development that; incorporates compile time validation, enables reusability of server side code on client side and tries to ensure consistency between the server side generated Html document and the client side script code.
 % section motivation (end)
 
+Developing web applications instead of native applications is a strong tendency in software development today. JavaScript contributes to enriching the user experience and sometimes provide functionality which is indispensable for such web applications. However, JavaScript has language features that can be considered unsafe, such as no compile-time validation, dynamic type system and implicit type conversions. We would like to improve the way JavaScript is used when developing web applications with ASP.NET Web Forms. Especially, we would like to address the three following improvements:
 
+\subsubsection{Moving JavaScript Errors from Client Side to Server Side} % (fold)
+	When considering web applications built with ASP.NET Web Forms, errors can occur both on server and client side. On server side, errors can occur on either compile time or runtime. On client side, compile time does not exist as JavaScript is an interpreted language and consequently client side errors can only occur at runtime. Client side errors will be exposed to the end users while leaving the web application in a corrupt state which is highly undesirable. Server side errors occur before the web applications is displayed on client side. Therefore, moving client side errors to server side will prevent a web application from being exposed to the end user in a corrupt state.
+% subsubsection subsubsection_name (end)
+
+\subsubsection{Obtaining JavaScript-HTML Consistency} % (fold)
+	Compile time guarantee of the consistency between JavaScript code and HTML elements would be beneficial. Web pages typically consist of HTML elements and JavaScript source code. JavaScript is activated in response to user interactions (e.g. when clicking a button). However, due to JavaScripts interpreted nature, there is no guarantee of correct interaction between the JavaScript and the HTML elements. E.g. when calling a JavaScript function from a button click event, it is possible to have misspelled the function name which would cause a client side error. 
+% subsubsection subsubsection_name (end)
+
+\subsubsection{Server-Client Portability} % (fold)
+	It is beneficial to be able to generate JavaScript from server side code. In some situations, such as form validation, it can be useful to run the same piece of code both on client and server side. As a user experience enriching feature, forms are often validated on client side, as to avoid the waiting time for a page load. However, forms have to be validated on the server side as well since the client side validation is easily bypassed.
+% subsubsection subsubsection_name (end)
+
+
+To address these improvements, MiCS uses Microsoft's Roslyn in combination with Script\# to generate JavaScript from C\# source code. Furthermore, MiCS ensures JavaScript-HTML consistency by extending the way ASP.NET Web Forms works with HTML elements.
 
 \section{Reading Guide}
 
@@ -49,25 +63,20 @@
 	Chapter nine is the report conclusion.
 
 	In the report we use the terms developer and end user. The developer is a person that uses MiCS to write mixed side and client side code. The end user is the person that use the web application created by the developer.
-	% Todo: Update reading guide as one the last things...
+	% Todo: Update reading guide as one of the last things...
 	% Todo: Introduce DOM, Safety vs security, when we say JavaScript we JavaScript in the browser
 	% Todo: The read should have knowledge of DSL, JavaScript (script), client server side, DOM
 
 
 \section{Problem definition}
-	The problem definition has changed since the beginning of this project. Originally we wanted to represent JavaScript as an internal DSL in C\#. Instead we widened our perspective, to include other possible approaches to safe JavaScript development in ASP.NET Web Forms. Below, the revised problem definition is listed.
+	The problem definition has changed since the beginning of this project. Originally we wanted to represent JavaScript as an internal DSL in C\#. Instead we widened the project scope to include other possible approaches to improving JavaScript development in ASP.NET Web Forms. Below, the revised problem definition is listed.
+	
 	\begin{itemize}
-
-	\item Study JavaScript and describe its unsafe language features.
-
-	\item Investigate how JavaScript can be generated from C\# or F\#.
-	\item Investigate how correct interaction between JavaScript and Html elements can be guaranteed.
-
-	\item Investigate how to implement a solution that generates JavaScript from server side code (client-server side portability).
-
-	\item Implement and test a class library that supports safe JavaScript development from Code Behind.
-
-
+		\item Study JavaScript and describe its unsafe language features.
+		\item Investigate how to move JavaScript errors from client side to server side. 
+		\item Investigate how to implement a solution that generates JavaScript from working server side code in order to acheive server-client portability.
+		\item Investigate how to achieve compile time guarantee of the consistincy between the generated JavaScript and HTML elements.
+		\item Implement and test a framework for ASP.NET Web Forms that encompassses all of the above.
 	\end{itemize}
 
 	\section{Learning goals}
