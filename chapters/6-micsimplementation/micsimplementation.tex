@@ -50,22 +50,22 @@
 
 	\subsection{Type Mapping} % (fold)
 	\label{sub:type_mapping}
-		Roslyn type symbols are mapped to Script\# type symbols using the SymbolMapper’s Map(...) extension method created for the Roslyn TypeSymbol. The mapping of TypeSymbols from Roslyn to Script\# can be somewhat confusing since there are the different kinds of types (illustrated in figure \ref{typesOverview}) and there are some special cases (such as null which is mapped to the type Object in JavaScript). To illustrate the functionality of the TypeSymbol Map(...) method we have created the flowchart in figure \ref{typeMappingFlowchart}.
+		Roslyn type symbols are mapped to Script\# type symbols using the \texttt{SymbolMapper}’s \texttt{Map(...)} extension method created for the Roslyn \texttt{TypeSymbol}. The mapping of type symbols from Roslyn to Script\# can be somewhat confusing since there are the different kinds of types (illustrated in figure \ref{typesOverview}) and there are some special cases (such as \texttt{null} which is mapped to the type \texttt{Object} in JavaScript). To illustrate the functionality of the \texttt{TypeSymbol} \texttt{Map(...)} method we have created the flowchart in figure \ref{typeMappingFlowchart}.
 
 			\begin{figure}
 			\begin{center}
 					\includegraphics[width=14cm]{resources/images/TypeMappingFlowchart.png}
 					\end{center}
-				\caption{Illustration of the type mapping process performed in SymbolMapper.Map(this TypeSymbol typeSymbol) extension method.}
+				\caption{The type mapping process performed in \texttt{SymbolMapper.Map(this TypeSymbol typeSymbol)} extension method.}
 				\label{typeMappingFlowchart}
 			\end{figure}
 
 
 		\subsubsection{Core Type Mapping} % (fold)
 		\label{subsub:core:type_mapping}
-			In contrast to using Script\# in the original manner (where the Script\# core types are used when writing code instead of the .NET core types) our project only uses the Script\# core types when mapping to the Script\# JavaScript AST. For this reason the Script\# core types are handled by its own type manager class (ScriptSharpTypeManager.cs). The Script\# core types’ source code are loaded into their own SemanticModel on the TypeManager class. From here the (Roslyn) types are retrieved before they are mapped to Script\# TypeSymbols needed when building the Script\# AST.
+			In contrast to using Script\# in the original manner (where the Script\# core types are used when writing code instead of the .NET core types) our project only uses the Script\# core types when mapping to the Script\# JavaScript AST. For this reason the Script\# core types are handled by its own type manager class (\texttt{ScriptSharpTypeManager.cs}). From the \texttt{ScriptSharpTypeManager} the Roslyn type symbols are retrieved before they are mapped to Script\# type symbols needed when building the Script\# AST.
 
-			Since the .NET core types are used when writing MiCS code and since these are mapped to the ScriptSharp core types a mapping specification is needed. To facilitate this mapping we have created some simple classes to hold the specification (MiCSCoreMapping.cs, MiCSCoreTypeMapping.cs and MiCSCoreMemberMapping.cs) which then can queried using LINQ. This mapping specification contains information on the core types that we currently support. So if a core type is not described in the specification then it is not supported. If the core type is found in the specification then the same pattern applies for its members. If a type member is not found then it is not supported. The mapping specification also holds information on a member’s return type, number of arguments and the arguments’ types.
+			Since the .NET core types are used when writing code with MiCS and since these are mapped to the Script\# core types a mapping specification is needed. To facilitate this mapping we have created some simple classes to hold the specification (\texttt{MiCSCoreMapping.cs}, \texttt{MiCSCoreTypeMapping.cs} and \texttt{MiCSCoreMemberMapping.cs}) which can be queried using LINQ. This mapping specification contains information on the core types that we currently support. If a core type is not described in the specification then it is not supported. If the core type is found in the specification then the same pattern applies for its members. If a type member is not found then it is not supported. The mapping specification also holds information on a member’s return type, number of arguments and the arguments’ types.
 
 			\begin{figure}[H]
 					\includegraphics[width=8cm]{resources/images/InitiationOfTypeMapping.png}
@@ -73,19 +73,19 @@
 				\label{coreTypeMapping}
 			\end{figure}
 
-			An example of a core type mapping is the C\# System.String (see figure \ref{coreTypeMapping}) type which is mapped to the ScriptSharp defined System.String. We are only mapping two of the String type’s members. The field Length which is mapped to the ScriptSharp String type’s Length field (which is the equivalent of the JavaScript String object property length). The second member we map is the IndexOf(Char char) method that returns an int. There are other IndexOf methods that take multiple arguments or a single argument of a different type (than Char) but these are not mapped in our mapping specification.
+			An example of a core type mapping is the C\# System.String (see figure \ref{coreTypeMapping}) type which is mapped to the Script\# defined \texttt{System.String}. We are only mapping two of the String type’s members. The field \texttt{Length} which is mapped to the Script\# \texttt{String} type’s \texttt{Length} field (which is the equivalent of the JavaScript \texttt{String} object's property \texttt{length}). The second member we map is the \texttt{IndexOf(Char char)} method that returns an int. There are other \texttt{IndexOf} methods that take multiple arguments or a single argument of a different type (than \texttt{Char}) but these are not mapped in our mapping specification.
 		% subsection subsection_name (end)
 	% subsection type_mapping (end)
 % section mapping_to_scriptsharp_ast (end)
 
-\section{Building the ScriptSharp AST} % (fold)
+\section{Building the Script\# AST} % (fold)
 \label{sec:building_the_scriptsharp_ast}
-	Building the Script\# AST consists of taking the mapped (Script\#) AST nodes and putting them together to form the Script\# AST. The builder classes uses the Roslyn infrastructure by extending the \texttt{SyntaxWalker} class which makes them capable of traversing the Roslyn AST.
+	Building the Script\# AST consists of taking the mapped AST nodes and putting them together to form the Script\# AST. The builder classes uses the Roslyn infrastructure by extending the \texttt{SyntaxWalker} class which makes them capable of traversing the Roslyn AST.
 	\begin{figure}[H]
 		\begin{center}
 			\centerline{\includegraphics[width=16cm]{resources/images/BuilderClasses.png}}
 		\end{center}
-		\caption{Classes that build the Script\# AST by traversing the Roslyn AST and using the Map(...) extension methods.}
+		\caption{Classes that build the Script\# AST by traversing the Roslyn AST and using the \texttt{Map(...)} extension methods.}
 		\label{builderClasses}
 	\end{figure}
 
@@ -99,11 +99,11 @@
 		\label{visitClassDeclaration}
 	\end{figure}
 
-	The \texttt{NamespaceBuilder} and \texttt{ClassBuilder} classes are somewhat trivial. The \texttt{ClassBuilder} however ensures that DOM or core types are not be mapped to the Script\# as these types obviously already exists in JavaScript.
+	The \texttt{NamespaceBuilder} and \texttt{ClassBuilder} classes are somewhat trivial. The \texttt{ClassBuilder} however ensures that DOM or core types are not be mapped to Script\#. The DOM and core types doesn't need to be generated as JavaScript types because they are built in types that already exists in JavaScript.
 
 	The \texttt{MethodBuilder} class is a little more complex. It needs to build only the methods that are mixed side or client side methods. Furthermore it needs to handle a method’s return type, arguments and body statements. 
 
-	Likewise the \texttt{StatementBuilder} and \texttt{ExpressionBuilder} are somewhat complex as building compound statements and expressions also bares some complexity. Before a compound statement or expression can be built all its child nodes and their associated types (if any) needs to be mapped.
+	Likewise the \texttt{StatementBuilder} and \texttt{ExpressionBuilder} are somewhat complex as building compound statements and expressions also bares some complexity. Before a compound statement or expression can be built all its child nodes and their associated types (if any) needs to be mapped. Figure \ref{visitIfStatement} shows an if-statement AST node is built.
 
 	\begin{figure}[H]
 		\begin{center}
@@ -123,9 +123,9 @@
 
 \section{Integration with Web Forms} % (fold)
 \label{sec:integration_with_web_forms}
-	Because of the time constraint on this project integration with Web Forms has only received a minimum amount of our time. We have ensured that we could implement our case study however there should be made improvements to the Web Forms Integration code which we will discuss in section \ref{ssub:integration_with_web_forms}.
+	Because of the time constraint on this project integration with Web Forms has only received a minimum amount of our time. We have ensured that we could implement our case study however there should be made improvements to the Web Forms integration code which we will discuss in section \ref{ssub:integration_with_web_forms}.
 
-	However integration with Web Forms is currently done using the \texttt{MiCSPage} class. The \texttt{MiCSPage} class inherits from the \texttt{System.Web.UI.Page} class so that it’s possible to inherit from the \texttt{MiCSPage} class in one's Code Behind file.  The \texttt{MiCSPage} class searches the specific project's file structure for C\# files, reads their content and passes this content to the \texttt{MiCSManager} who then starts the entire MiCS workflow so that the client side script will be generated. The generated script is then registered with the \texttt{ScriptManager} which is how scripts are embedded into a page from Code Behind.
+	However integration with Web Forms is currently done using the \texttt{MiCSPage} class. The \texttt{MiCSPage} class inherits from the \texttt{System.Web.UI.Page} class so that it’s possible to inherit from the \texttt{MiCSPage} class in one's Code Behind file.  The \texttt{MiCSPage} class searches the specific project's file structure for C\# files, reads their content and passes this content to the \texttt{MiCSManager} who then starts the entire MiCS workflow so that the client side script will be generated. The generated script is then registered with a \texttt{ScriptManager} which is how scripts are embedded into a page from Code Behind.
 
 	Another important aspect of integration with Web Forms is how the generated client side scripts are initially called. Client side scripts are usually initiated through DOM events such as \texttt{onload} and \texttt{onclick} which are triggered when a web page is loaded and when a button is clicked respectively. MiCS currently only supports registering a client side method on a buttons click event using our extension method \texttt{OnClientClick(…)}.
 
