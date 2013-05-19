@@ -22,7 +22,7 @@
 Developing web applications instead of native applications is a strong tendency in software development today. JavaScript contributes to enriching the user experience and sometimes provide functionality which is indispensable for such web applications. However, JavaScript has language features that can be considered unsafe, such as no compile-time validation, dynamic type system and implicit type conversions. We would like to improve the way JavaScript is used when developing web applications with ASP.NET Web Forms. Especially, we would like to address the three following improvements:
 
 \subsubsection{Moving JavaScript Errors from Client Side to Server Side} % (fold)
-	When considering web applications built with ASP.NET Web Forms, errors can occur both on server and client side. On server side, errors can occur on either compile time or runtime. On client side, compile time does not exist as JavaScript is an interpreted language and consequently client side errors can only occur at runtime. Client side errors will be exposed to the end users while leaving the web application in a corrupt state which is highly undesirable. Server side errors occur before the web applications is displayed on client side. Therefore, moving client side errors to server side will prevent a web application from being exposed to the end user in a corrupt state.
+	When considering web applications built with ASP.NET Web Forms, errors can occur both on server and client side. On server side, errors can occur on either compile time or runtime. On client side, compile time does not exist as JavaScript is an interpreted language and consequently client side errors can only occur at runtime. Client side errors will be exposed to the end users while leaving the web application in a corrupt state which is highly undesirable. Server side errors occur before the web applications is displayed on client side; if a server side error occurs, the web application is not displayed. Therefore, moving client side errors to server side can prevent a web application in a corrupt state from being exposed to the end user. 
 % subsubsection subsubsection_name (end)
 
 \subsubsection{Obtaining JavaScript-HTML Consistency} % (fold)
@@ -31,7 +31,7 @@ Developing web applications instead of native applications is a strong tendency 
 % subsubsection obtaining_javascript_html_consistency (end)
 
 \subsubsection{Server-Client Portability} % (fold)
-	It is beneficial to be able to generate JavaScript from server side code. In some situations, such as form validation, it can be useful to run the same piece of code both on client and server side. As a user experience enriching feature, forms are often validated on client side, as to avoid the waiting time for a page load. However, forms have to be validated on the server side as well since the client side validation is easily bypassed.
+	It is beneficial to be able to generate JavaScript from server side code. First of all, this would enable compile time validation of JavaScript code. Secondly, in some situations, such as form validation, it can be useful to run the same piece of code both on client and server side. As a user experience enriching feature, forms are often validated on client side, as to avoid the waiting time for a page load. However, forms have to be validated on the server side as well since the client side validation is easily bypassed (this can be done by simply disabling JavaScript in the browser). \newline
 % subsubsection subsubsection_name (end)
 
 
@@ -82,29 +82,28 @@ To address these improvements, MiCS uses Microsoft's Roslyn in combination with 
 
 	\section{Learning goals}
 		\begin{itemize}
-
-		\item Better knowledge of JavaScript in general and its more subtle language features.
-		\item Better knowledge of ASP.NET Web Forms.
-	 	\item Better understanding of the difference between C\#/ (as a statically typed language) and JavaScript (as a dynamically typed language).
-		\item Better knowledge of cross compilers and abstract syntax trees.
+			\item Better knowledge of JavaScript in general and its more subtle language features.
+			\item Better knowledge of ASP.NET Web Forms.
+		 	\item Better understanding of the difference between statically dynamically typed languages.
+			\item Better understanding of programming languages represented as abstract syntax trees.
 		\end{itemize}
 
 \section{Method}
 	\begin{itemize}
-	\item We will study JavaScript literature to obtain a better understanding JavaScript and which of its features can be considered unsafe. 
-	\item We will investigate what technologies and libraries can contribute to the project and how these combined can be used to approach solutions in different ways.
-	\item We will analyse and compare the solutions in order to find the one that best fits this project
-	\item We will design and implement the solution from step 2.
-	\item We will set up a unit test suite in order to ensure that everything works as expected.
+	\item We will study JavaScript literature to obtain a better understanding of JavaScript and which of its features can be considered unsafe. 
+	\item We will investigate which technologies can contribute to moving JavaScript errors from client side to server side, and contribute to gaining server-client portability. To address these problems, we will describe different solutions that use these technologies in combination.
+	\item We will analyse and compare the solutions in order to find the one that best fits this project. 
+	\item In order to achieve JavaScript-HTML consistincy, this solution will be implemented as a framework for ASP.NET Web Forms.
+	\item We will set up a unit test suite in order to ensure that the implemented framework works as expected.
 	\end{itemize}
 
 \section{Scope}
 	% Todo: Do we say something about the use of DOM types is down prioritized?
 	% Todo: Only JavaScript in the browser.
-	Mapping the entire C\# language to JavaScript is unrealistic given the time constraints on this project. Therefore, the project is based on a case study concerning form validation. Only the subset of C\# needed to fulfill the requirements set by the case study will be taken into account.
+	As stated in the problem definition, it is the intention to generate JavaScript from a server side language (C\# or F\#). However, mapping an entire language to JavaScript is unrealistic given the time constraints on this project. Therefore, the project is based on a case study concerning form validation. Only the subset of the language needed to fulfill the requirements set by the case study will be taken into account.
 
 	\subsection{Case Study}
-		A common use case of JavaScript is form validation. As a user experience enriching feature, forms are often validated on client side, as to avoid the waiting time for a page load. However, forms have to be validated on the server side as well since the client side validation is easily bypassed. Our case study concerns the validation of a registration form. Specifically, we would like to be able to:
+		A common use case of JavaScript is form validation. As mentioned earlier, form validation is a great example of a situation in which the same piece of code is necessary to run both on server and client side. Our case study concerns the validation of a registration form. Specifically, we would like to be able to:
 
 		\begin{itemize}
 			\item Validate strings using Regular Expressions to check if email addresses, postal addresses and phone numbers are correctly formatted
@@ -174,11 +173,11 @@ To address these improvements, MiCS uses Microsoft's Roslyn in combination with 
 	\label{sub:focus}
 		This project primarily serves as a proof-of-concept and therefore the main focus will be to generate code that actually works, and can fulfill the requirements set by the case study. 
 
-		This project will only be considering solutions that can be use with Microsoft’s ASP.NET Web Forms. Furthermore the solution has to be utilized using C\#.
+		This project will only consider solutions that can be used with Microsoft's ASP.NET Web Forms. This is due to the fact the ASP.NET Web Forms contains a namespace that contains classes for representing HTML (\texttt{System.Web.UI.WebControls}).
 
-		The quality of the generated JavaScript will not be assessed. The primary reason for this is that the JavaScript will be generated by reusing parts of the Script\# framework in the solution we suggest in this project.
+		The quality of the generated JavaScript will not be assessed. The primary reason for this is that the suggested solution will be using parts of the Script\# framework to generate the actual JavaScript source code.
 
-		Likewise overall performance will not be analyzed because of time constraints on the project.
+		Likewise overall performance will not be analyzed due to the time constraints on the project.
 	% subsection focus (end)
 
 
