@@ -23,8 +23,8 @@ namespace RoslynTest
         }
       ";
 
-      var syntaxTree = SyntaxTree.ParseText(smallProgram);
-      var testWalker = new TestWalker();
+      SyntaxTree syntaxTree = SyntaxTree.ParseText(smallProgram);
+      TestWalker testWalker = new TestWalker();
 
       testWalker.Visit(syntaxTree.GetRoot());
       Console.Read();
@@ -35,13 +35,15 @@ namespace RoslynTest
   {
     public override void VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
     {
-      Console.WriteLine("Hello, this is namespace {0}!", node.Name.ToString());
+      string namespaceName = node.Name.ToString();
+      Console.WriteLine("Hello, this is namespace {0}!", namespaceName);
       base.VisitNamespaceDeclaration(node);
     }
 
     public override void VisitClassDeclaration(ClassDeclarationSyntax node)
     {
-      Console.WriteLine("Hello, this is class {0}!", node.Identifier.ValueText);
+      string className = node.Identifier.ValueText;
+      Console.WriteLine("Hello, this is class {0}!", className);
       base.VisitClassDeclaration(node);
     }
   }
