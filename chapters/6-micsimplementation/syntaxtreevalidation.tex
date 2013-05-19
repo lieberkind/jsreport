@@ -2,7 +2,7 @@
 \label{sec:syntax_tree_validation}
 	% As we only support a fairly limited set of C\#’s built-in constructs and types, it is important to make sure that users only make use of those that we are able to map to Script\#. Should users utilise one of the constructs or types that we are not able to map, this should be pointed out with an understandable error message. It should not be left to the users to debug or understand a Roslyn or Script\# exception. Furthermore, it is important to make sure that users use their own code correctly. The remainder of this section will describe how a Validator class is used to achieve this.
 
-	Before the Roslyn AST is mapped to Script\# it is necessary to verify that types and their members are used correcly. This is handled by the \texttt{Validator} class. If the developer only uses .NET types that we can map to ScriptSharp and adhere to the MixedSide Principle, the validation passes. The remainder of this section focus on how this validation is done.
+	Before the Roslyn AST is mapped to Script\# it is necessary to verify that types and their members are used correcly. This is handled by the \texttt{Validator} class. If the developer only uses .NET types that we can map to Script\# and adhere to the Mixed Side Principle, the validation passes. The remainder of this section focus on how this validation is done.
 	%Understanding “correct usage of .NET built-in types and members” is straightforward; it means that users are only allowed to use the types and members that can be mapped correctly to Script\#. How this is achieved is described later in this section. However, “correct usage of the types defined by the users themselves” requires some explanation. For this, the MixedSide Principle is introduced.
 
 %To explain correct usage of types and their members, it is beneficial to divide them into two categories; types that are built into the .NET platform and types developers define themselves.
@@ -17,12 +17,12 @@ There are essentially three situations in which it is necessary to verify correc
 	\item Invocation of methods on .NET core types; it is then necessary to check whether the invocation is done correctly, using the correct arguments and return type. Normally, the C\# compiler complains if an invocation is done using an incorrect signature, but as the interface between .NET core types and Script\# core types does not always match, it is important to make sure that the Script\# core type has a member with the corresponding arguments and return type. An invocation that is perfectly legal on .NET core types might be illegal on Script\# core types.
 \end{itemize}
 
-The Validator class extends Roslyn's SyntaxWalker class and it is thus able to traverse syntax nodes. The Validator takes a CompilationUnit which holds the code to be validated, a string containing an attribute name (''MixedSide'' or ''ClientSide'') that decides what methods to validate, and a structure of types and members that the validated methods are allowed to use. This structure of members has been built by a \texttt{Collector} class which traverses the Roslyn AST and collects all MixedSide and ClientSide members.
-It works by looking for classes in the CompilationUnit that contains methods annotated with the given attribute name and validates the body of these methods against the provided structure of members.
+The \texttt{Validator} class extends Roslyn's \texttt{SyntaxWalker} class and it is thus able to traverse syntax nodes. The \texttt{Validator} takes a syntax tree, a string containing an attribute name (''MixedSide'' or ''ClientSide'') that decides what methods to validate, and a structure of types and members that legally be used without violating the Mixed Side Principle. This structure of members has been built by a \texttt{Collector} class which traverses the Roslyn AST and collects all \texttt{MixedSide} and \texttt{ClientSide} members.
+The \texttt{Validator} works by looking for classes in the syntax tree that contains methods annotated with the given attribute name and validates the body of these methods against the provided structure of allowed members.
 
-The nature of the Validator requires the Syntax Tree to be validated twice. Once validating all the MixedSide methods against a structure containing all MixedSide types and their members, and once validating all the ClientSide methods against a structure containing all ClientSide types and members, MixedSide types and members and ScriptSharp DOM types and members. This is done by creating two instances of the Validator and validating them both.
+The nature of the \texttt{Validator} requires the syntax tree to be validated twice. Once validating all the \texttt{MixedSide} methods against a structure containing all \texttt{MixedSide} types and their members, and once validating all the \texttt{ClientSide} methods against a structure containing all \texttt{ClientSide} types and members, \texttt{MixedSide} types and members and Script\# DOM types and members. This is done by creating two instances of the Validator and validating them both.
 
-The Validation process is best explained by looking at an example. Consider the situation showed in Figure \ref{fig:mixedSideValidationExample}. 
+TODO: The Validation process is best explained by looking at an example. Consider the situation showed in Figure \ref{fig:mixedSideValidationExample}. 
 
 \begin{figure}[H]
 	\begin{center}
@@ -32,7 +32,7 @@ The Validation process is best explained by looking at an example. Consider the 
 	\label{fig:mixedSideValidationExample}
 \end{figure}		
 
-The Validator traverses the CompilationUnit depth-first and discovers the Validator class. It then finds all of the Validator class's methods and checks if they have the MixedSide attribute. When a method annotated with the MixedSide attribute is found, the validator visits it straight away, as shown in Figure \ref{fig:ValidatorVisitClassDeclaration}. 
+In a mixed side validation the \texttt{Validator} traverses the syntax tree and discovers developer defined classes. It then finds all of the classes' methods and checks if they have the \texttt{MixedSide} attribute. When a method annotated with the MixedSide attribute is found, the \texttt{Validator} visits it straight away, as shown in Figure \ref{fig:ValidatorVisitClassDeclaration}. 
 
 \begin{figure}[H]
 	\begin{center}
