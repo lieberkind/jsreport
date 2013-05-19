@@ -21,7 +21,10 @@
 
 		\subsubsection{C\# Internal DSL to JavaScript} % (fold)
 		\label{ssub:c_internal_dsl_to_javascript}
-		
+			To approach the project initially we did some experiments with a C\# internal DSL from which JavaScript was created directly (i.e. the C\# or F\# Abstract Syntax tree and JavaScript AST stages are skipped). Using helper factory methods, operator overloading and a mechanism to handle block scope we arrived at a DSL syntax that could only be somewhat compared to JavaScript concrete syntax. Furthermore the syntax was a bit verbose which decreased readability. 
+
+			Another problem with the C\# DSL implementation was that the assignment operator C\# could not be overloaded which resulted in inconsistent ways of assigning values to variables. This was a critical problem because wrong use of the ‘\texttt{=}’ operator could cause very subtle errors.
+
 		% subsubsection c_internal_dsl_to_javascript (end)
 
 		\subsubsection{C\# Internal DSL to Expression Trees to JavaScript} % (fold)
