@@ -74,6 +74,8 @@
 			\end{figure}
 
 			An example of a core type mapping is the C\# System.String (see figure \ref{coreTypeMapping}) type which is mapped to the Script\# defined \texttt{System.String}. We are only mapping two of the String type’s members. The field \texttt{Length} which is mapped to the Script\# \texttt{String} type’s \texttt{Length} field (which is the equivalent of the JavaScript \texttt{String} object's property \texttt{length}). The second member we map is the \texttt{IndexOf(Char char)} method that returns an int. There are other \texttt{IndexOf} methods that take multiple arguments or a single argument of a different type (than \texttt{Char}) but these are not mapped in our mapping specification.
+
+			Apart from the regular core types (i.e. the core types defined in the .NET \texttt{mscorlib.dll}) Script\# defines additional types in its \texttt{mscorlib.dll} file. One example is the regular expression class \texttt{Regex} which is of special interest as it is used in our case study. Usually the \texttt{Regex} class is placed in the \texttt{System.Text.RegularExpressions} namespace. In the Script\# \texttt{mscorlib.dll} however \texttt{Regex} is placed in the \texttt{System} namespace. The core type mapping should also express such differences in namespaces.
 		% subsection subsection_name (end)
 	% subsection type_mapping (end)
 % section mapping_to_scriptsharp_ast (end)
