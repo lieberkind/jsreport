@@ -1,1 +1,16 @@
 \chapter{Conclusion}
+In this project we have shown how the use of JavaScript can be improved when developing web applications with ASP.NET Web Forms. Especially the three following improvements have been adressed:
+
+\begin{enumerate}
+	\item Moving errors from client side to server side
+	\item Obtaining Server-Client portability
+	\item Obtaining JavaScript-HTML consistency
+\end{enumerate}
+
+These improvements have been adressed by implementing the MiCS Framework that lets developers write C\# code and have it translated to JavaScript. MiCS uses a combination of Microsoft's Roslyn and Script\# to do this. 
+
+To address point 1 and 2 from the above list MiCS uses Microsoft's Roslyn to generate an AST representing the developer's code. The AST is traversed and mapped to its corresponding Script\# JavaScript AST. MiCS uses Script\#'s built-in script generator to generate actual JavaScript source code from the Script\# AST. 
+
+In order to obtain JavaScript-HTML consistincy, MiCS defines the \texttt{MiCSPage} class - an extension to the ASP.NET Web Forms framework. This class makes sure that the generated JavaScript is registrered to the developer's page correctly.
+
+The case study introduced in chapter \ref{cha:introduction} has been successfully implemented using the MiCS Framework. Furthermore, shortcomings of the implementation of MiCS has been adressed in the evaluation, and the road map in section \ref{sec:futurework} describes which direction the project should take from here.
