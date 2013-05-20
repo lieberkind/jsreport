@@ -137,13 +137,13 @@ namespace System {
 		\item \textbf{Ease of Unit Testing} How easily the developer can unit test his code with the approach
 	\end{itemize}
 
-	We have rated approach criteria from 0 to 3 where three is the best. With the approach matrix as support we decided on to implement the C# to Roslyn to Script\# to JavaScript approach. The approach was named Mixed Side C Sharp (MiCS).
+	We have rated approach criteria from 0 to 3 where three is the best. With the approach matrix as support we decided to implement the C\# to Roslyn to Script\# to JavaScript approach. The approach was named Mixed Side C Sharp (MiCS).
 
 	\FloatBarrier
 
 	\subsection{MiCS: Mixed Side C\#} % (fold)
 	\label{sub:mics_mixed_side_csharp}
-	MiCS will use Roslyn and Script\# in combination. Roslyn will be used to generate an AST representing the developer's C\# source code. The core functionality of MiCS will be to map this generated AST to a Script\# JavaScript AST. Script\#'s JavaScript generator will be used to generate the actual JavaScript source code. In the following chapters this approach will be described in detail.
+	MiCS will use Roslyn and Script\# in combination. Roslyn will be used to generate an AST representing the developer's C\# source code. The core functionality of MiCS will be to map this generated AST to a Script\# JavaScript AST. Script\#'s JavaScript generator will be used to generate the actual JavaScript source code. In the following chapters the design and implementation of this approach will be described in detail.
 
 	% subsection mics_mixed_side_csharp (end)
 
