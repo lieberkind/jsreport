@@ -19,9 +19,16 @@ There are essentially three situations in which it is necessary to verify correc
 
 The \texttt{Validator} class extends Roslyn's \texttt{SyntaxWalker} class and it is thus able to traverse syntax nodes. The \texttt{Validator} takes a syntax tree that holds the source code to be validated, a string containing an attribute name (''MixedSide'' or ''ClientSide'') that decides what methods to validate, and a structure of types and members that can legally be used without violating the Mixed Side Principle. The \texttt{Validator} works by looking for classes in the syntax tree that contains methods annotated with the given attribute name and validates the body of these methods against the provided structure of allowed members.
 
-The nature of the \texttt{Validator} requires the syntax tree to be validated twice. Once validating all the \texttt{MixedSide} methods against a structure containing all \texttt{MixedSide} types and their members, and once validating all the \texttt{ClientSide} methods against a structure containing all \texttt{ClientSide} types and members, \texttt{MixedSide} types and members and Script\# DOM types and members. This is done by creating two instances of the Validator and validating them both.
+The nature of the \texttt{Validator} requires the syntax tree to be validated twice. This is done by creating two instances of the Validator class, a \emph{MixedSide Validator} and a \emph{ClientSide Validator}, and validating them both. 
+The MixedSide validator will do \emph{MixedSide validation} and the ClientSide validator will do \emph{ClientSide validation}:
 
-TODO: The Validation process is best explained by looking at an example. Consider the situation showed in Figure \ref{fig:mixedSideValidationExample}. 
+\begin{itemize}
+	\item \emph{MixedSide validation} requires validating all the \texttt{MixedSide} methods against a structure containing all \texttt{MixedSide} types and their members
+	\item \emph{ClientSide validation} requires validating all the \texttt{ClientSide} methods against a structure containing all \texttt{ClientSide} types and members, \texttt{MixedSide} types and members and Script\# DOM types and members.
+\end{itemize}
+
+
+The Validation process is best explained by looking at an example. Consider a syntax tree holding the simple piece of code shown in figure \ref{fig:mixedSideValidationExample}. The methods of \texttt{ExampleClass} are subjects for MixedSide validation.
 
 \begin{figure}[H]
 	\begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={ExampleClass,AnotherExampleClass,MixedSide}]
@@ -43,30 +50,41 @@ namespace ExampleNamespace
   }
 }
 	\end{lstlisting}
-\end{figure}
-
-
-
-
-\begin{figure}[H]
-	\begin{center}
-		\centerline{\includegraphics[width=14cm]{resources/images/MixedSideValidationExample.png}}
-	\end{center}
-	\caption{TODO: Update example so that Validator is not used as example class}
+	\caption{Code subject to MixedSide validation}
 	\label{fig:mixedSideValidationExample}
 \end{figure}		
 
-In a mixed side validation the \texttt{Validator} traverses the syntax tree and discovers developer defined classes. It then finds all of the classes' methods and checks if they have the \texttt{MixedSide} attribute. When a method annotated with the MixedSide attribute is found, the \texttt{Validator} visits it straight away, as shown in Figure \ref{fig:ValidatorVisitClassDeclaration}. 
+The MixedSide Validator traverses the syntax tree and discovers the \texttt{ExampleClass} class. It then finds all of the class' methods and checks if they have the \texttt{MixedSide} attribute. When a method annotated with the MixedSide attribute is found, the MixedSide Validator visits it straight away, as shown in Figure \ref{fig:ValidatorVisitClassDeclaration}. 
 
 \begin{figure}[H]
-	\begin{center}
-		\centerline{\includegraphics[width=14cm]{resources/images/ValidatorVisitClassDeclaration.png}}
-	\end{center}
-	\caption{Visiting a ClassDeclaration and deciding whether its methods should be validated or not}
+	\begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={ClassDeclarationSyntax,SyntaxKind,MethodDeclarationSyntax,List}]
+/// <summary>
+/// Visits the ClassDeclaration and determines wether its members should be validated
+/// </summary>
+public override void VisitClassDeclaration(ClassDeclarationSyntax @class)
+{
+  List<MethodDeclarationSyntax> methods = @class.DescendantNodes().Where(a => a.Kind == SyntaxKind.MethodDeclaration);
+  bool visit = false;
+
+  foreach (var method in methods)
+  {
+    visit = ((MethodDeclarationSyntax)method).HasAttribute(attributeName);
+
+    if (visit)
+      VisitMethodDeclaration((MethodDeclarationSyntax)method);
+  }
+}
+	\end{lstlisting}
+	\caption{Visiting a \texttt{ClassDeclarationSyntax} and deciding whether or not its methods should be validated}
 	\label{fig:ValidatorVisitClassDeclaration}
 \end{figure}
 
-The first method visited is the \texttt{IsStringValid()} method. The first statement of the method contains an object creation expression and the Validator now needs to check if the object creation is legal. It is legal either if the created object is a supported core type, or if the object is a user defined MixedSide type (residing within the members structure). As the type exists in the allowed members structure (shown in figure \ref{fig:mixedSideValidationExample}) the object creation is legal and the traversal continues. If it had not existed in the allowed member structure (this could happen if it had been ClientSide), and had not been a supported core type, the MixedSide Principle would have been violated, and an exception of type \texttt{MixedSidePrincipleViolatedException} had been thrown.
+
+The first method visited is the \texttt{ExampleMethod()} method. The first statement of the method contains an object creation expression and the MixedSide Validator now needs to check if the object creation is legal. It is legal either if the created object is a supported core type, or if the created object is MixedSide type defined by the developer.
+
+
+
+As the type exists in the allowed members structure (shown in figure \ref{fig:mixedSideValidationExample}) the object creation is legal and the traversal continues. If it had not existed in the allowed member structure (this could happen if it had been ClientSide), and had not been a supported core type, the MixedSide Principle would have been violated, and an exception of type \texttt{MixedSidePrincipleViolatedException} had been thrown.
 
 The validation of a member access is done in a very similar way, only checking if the member exists in the allowed-members structure or in the core mapping as well.
 
