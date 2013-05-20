@@ -19,10 +19,17 @@
 	% This project aims to find a solution for safe JavaScript development that; incorporates compile time validation, enables reusability of server side code on client side and tries to ensure consistency between the server side generated Html document and the client side script code.
 % section motivation (end)
 
-Developing web applications instead of native applications is a strong tendency in software development today. JavaScript contributes to enriching the user experience and sometimes provide functionality which is indispensable for such web applications. However, JavaScript has language features that can be considered unsafe, such as no compile-time validation, dynamic type system and implicit type conversions. We would like to improve the way JavaScript is used when developing web applications with ASP.NET Web Forms. Especially, we would like to address the three following improvements:
+Developing web applications instead of desktop applications is a strong tendency in software development today. JavaScript contributes to enriching the user experience and sometimes provide functionality which is indispensable for such web applications. However, JavaScript has language features that can be considered unsafe, such as no compile-time validation, a dynamic type system and implicit type conversions. We would like to make the use of JavaScript safer when developing web applications with ASP.NET Web Forms. Especially, we would like to address the three following improvements:
 
 \subsubsection{Moving JavaScript Errors from Client Side to Server Side} % (fold)
-	When considering web applications built with ASP.NET Web Forms, errors can occur both on server and client side. On server side, errors can occur on either compile time or runtime. On client side, compile time does not exist as JavaScript is an interpreted language and consequently client side errors can only occur at runtime. Client side errors will be exposed to the end users while leaving the web application in a corrupt state which is highly undesirable. Server side errors occur before the web applications is displayed on client side; if a server side error occurs, the web application is not displayed. Therefore, moving client side errors to server side can prevent a web application in a corrupt state from being exposed to the end user. 
+	\begin{figure}
+		\begin{center}
+			\centerline{\includegraphics[width=11cm]{resources/images/MovingErrors.eps}}
+		\end{center}
+		\caption{Improving safe JavaScript development by trying to move errors from client side to server side.}
+		\label{movingErrors}
+	\end{figure}
+	When considering web applications built with ASP.NET Web Forms, errors can occur both on server and client side. On server side, errors can occur on either compile time or runtime. On client side, compile time does not exist as JavaScript is an interpreted language and consequently client side errors can only occur on runtime. Client side errors will be exposed to the end users while leaving the web application in a corrupt state which is highly undesirable. Server side errors occur before the web applications is displayed on client side; if a server side error occurs, the web application is not displayed. Therefore, moving client side errors to server side can prevent a web application in a corrupt state from being exposed to the end user. 
 % subsubsection subsubsection_name (end)
 
 \subsubsection{Obtaining JavaScript-HTML Consistency} % (fold)
@@ -31,11 +38,11 @@ Developing web applications instead of native applications is a strong tendency 
 % subsubsection obtaining_javascript_html_consistency (end)
 
 \subsubsection{Server-Client Portability} % (fold)
-	It is beneficial to be able to generate JavaScript from server side code. First of all, this would enable compile time validation of JavaScript code. Secondly, in some situations, such as form validation, it can be useful to run the same piece of code both on client and server side. As a user experience enriching feature, forms are often validated on client side, as to avoid the waiting time for a page load. However, forms have to be validated on the server side as well since the client side validation is easily bypassed (this can be done by simply disabling JavaScript in the browser). \newline
+	It is beneficial to be able to generate JavaScript from compile time validated server side code. First of all, this would contribute to safe JavaScript development. Secondly, in some situations, such as form validation, it can be useful to run the same piece of code both on client and server side. As a user experience enriching feature, forms are often validated on client side, as to avoid the waiting time for a page load. However, forms have to be validated on the server side as well since the client side validation is easily bypassed (this can be done by simply disabling JavaScript in the browser). \newline
 % subsubsection subsubsection_name (end)
 
 
-To address these improvements, MiCS uses Microsoft's Roslyn in combination with Script\# to generate JavaScript from C\# source code. Furthermore, MiCS ensures JavaScript-HTML consistency by extending the way ASP.NET Web Forms works with HTML elements.
+To address these three improvements, MiCS uses Microsoft's Roslyn in combination with Script\# to generate JavaScript from C\# source code, and by extending the way ASP.NET Web Forms works with HTML elements.
 
 \section{Reading Guide}
 
@@ -76,8 +83,8 @@ To address these improvements, MiCS uses Microsoft's Roslyn in combination with 
 	\begin{itemize}
 		\item Study JavaScript and describe its unsafe language features.
 		\item Investigate how to move JavaScript errors from client side to server side. 
-		\item Investigate how to generate JavaScript from working server side code in order to acheive server-client portability.
-		\item Investigate how to achieve compile time guarantee of the consistincy between the generated JavaScript and HTML elements.
+		\item Investigate how to generate JavaScript from server side code in order to achieve server-client portability.
+		\item Investigate how to achieve compile time guarantee of the consistency between the generated JavaScript and HTML elements.
 		\item Implement and test a framework for ASP.NET Web Forms that encompassses all of the above.
 	\end{itemize}
 
@@ -85,7 +92,7 @@ To address these improvements, MiCS uses Microsoft's Roslyn in combination with 
 		\begin{itemize}
 			\item Better knowledge of JavaScript in general and its more subtle language features.
 			\item Better knowledge of ASP.NET Web Forms.
-		 	\item Better understanding of the difference between statically dynamically typed languages.
+		 	\item Better understanding of the difference between statically and dynamically typed languages.
 			\item Better understanding of programming languages represented as abstract syntax trees.
 		\end{itemize}
 
@@ -94,14 +101,14 @@ To address these improvements, MiCS uses Microsoft's Roslyn in combination with 
 	\item We will study JavaScript literature to obtain a better understanding of JavaScript and which of its features can be considered unsafe. 
 	\item We will investigate which technologies can contribute to moving JavaScript errors from client side to server side, and contribute to gaining server-client portability. To address these problems, we will describe different solutions that use these technologies in combination.
 	\item We will analyse and compare the solutions in order to find the one that best fits this project. 
-	\item In order to achieve JavaScript-HTML consistincy, this solution will be implemented as a framework for ASP.NET Web Forms.
+	\item In order to achieve JavaScript-HTML consistency, we will implement the chosen solution as a framework for ASP.NET Web Forms.
 	\item We will set up a unit test suite in order to ensure that the implemented framework works as expected.
 	\end{itemize}
 
 \section{Scope}
 	% Todo: Do we say something about the use of DOM types is down prioritized?
 	% Todo: Only JavaScript in the browser.
-	As stated in the problem definition, it is the intention to generate JavaScript from a server side language (C\# or F\#). However, mapping an entire language to JavaScript is unrealistic given the time constraints on this project. Therefore, the project is based on a case study concerning form validation. Only the subset of the language needed to fulfill the requirements set by the case study will be taken into account.
+	As stated in the problem definition, it is the intention to generate JavaScript from server side code (C\# or F\#). However, mapping an entire language to JavaScript is unrealistic given the time constraints on this project. Therefore, the project is based on a case study concerning form validation. Only the subset of the language needed to fulfill the requirements set by the case study will be taken into account.
 
 	\subsection{Case Study}
 		A common use case of JavaScript is form validation. As mentioned earlier, form validation is a great example of a situation in which the same piece of code is necessary to run both on server and client side. Our case study concerns the validation of a registration form. Specifically, we would like to be able to:
@@ -124,11 +131,11 @@ To address these improvements, MiCS uses Microsoft's Roslyn in combination with 
 
 		\begin{itemize}
 			\item The name has to consist of at least a first name and a last name, cannot be less than 5 characters long and not exceed 128 characters
-			\item At least one delivery method has to be checked. If “Snailmail” is checked, the address and zip code fields have to be filled in. If “E-mail” is checked, the “E-mail” field has to be filled in.
-			\item The address has to follow the format: \newline\newline \texttt{(streetname) (house number)[, (floor number). (TH|TV|SAL)]}\newline\newline where everything within the brackets is optional. For example, the addresses ``Amagerbrogade 125, 3.TV'' and ``Englodden 4'' are valid addresses whereas ``Griffenfeldsgade'' and ``Svinget 34, 4'' are not.
+			\item At least one delivery method has to be checked. If ``Snailmail'' is checked, the address and zip code fields have to be filled in. If ``E-mail'' is checked, the ``E-mail'' field has to be filled in.
+			\item The address has to follow the format: \newline\newline \texttt{(streetname) (house number)[, (floor number). (TH|TV|SAL)]}\newline\newline where everything within the brackets is optional. For example, the addresses ``Amagerbrogade 125, 3.TV'' and ``Englodden 4'' are valid addresses, whereas ``Griffenfeldsgade'' and ``Svinget 34, 4'' are not.
 			\item The zip code has to consist of four integer characters (Danish zip code).
-			\item The e-mail has to be a valid e-mail
-			\item The phone number has to consist of 8 numbers, where the first number cannot be “0”.
+			\item The e-mail address has to valid.
+			\item The phone number has to consist of 8 numbers, where the first number cannot be “0” (Danish phone number).
 		\end{itemize}
 
 
@@ -172,9 +179,9 @@ To address these improvements, MiCS uses Microsoft's Roslyn in combination with 
 
 	\subsection{Focus} % (fold)
 	\label{sub:focus}
-		This project primarily serves as a proof-of-concept and therefore the main focus will be to generate code that actually works, and can fulfill the requirements set by the case study. 
+		This project primarily serves as a proof-of-concept and therefore the main focus will be to generate JavaScript that actually works, and can fulfill the requirements set by the case study. 
 
-		This project will only consider solutions that can be used with Microsoft's ASP.NET Web Forms. This is due to the fact the ASP.NET Web Forms contains a namespace that contains classes for representing HTML (\texttt{System.Web.UI.WebControls}).
+		This project will only consider solutions that can be used with Microsoft's ASP.NET Web Forms.
 
 		The quality of the generated JavaScript will not be assessed. The primary reason for this is that the suggested solution will be using parts of the Script\# framework to generate the actual JavaScript source code.
 
