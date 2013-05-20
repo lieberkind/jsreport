@@ -78,7 +78,15 @@
 
 	\subsection{Implicit Type Conversion} % (fold)
 	\label{sub:implicit_type_conversion}
-	TODO
+		JavaScript implements a somewhat unpredictable implicit type conversion that sometimes makes it difficult to reason about types. Some examples are listed below.
+
+		\begin{itemize}
+			\item \texttt{1 == "1"} returns \texttt{true}
+			\item \texttt{true + 1} returns \texttt{2}
+			\item \texttt{$\left\{\right\} + \left\{\right\}$} returns \texttt{NaN}
+		\end{itemize}
+
+		This can be somewhat confusing and as no errors or warnings are raised it can be considered an unsafe feature og the JavaScript language. 
 	% subsection implicit_type_conversion (end)
 
 	\subsection{Many ''Falsy'' Values} % (fold)
