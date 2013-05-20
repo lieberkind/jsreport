@@ -9,8 +9,6 @@ As explained in section \ref{sec:syntax_tree_validation}, when validating the Ro
 
 \subsection{Integration with Web Forms} % (fold)
 \label{ssub:integration_with_web_forms}
-	Integration with ASP.NET Web Forms happens through the use of \texttt{MiCSPage} in one's Code Behind file. This is a rather simple and easy approach in our opinion. 
-
 	Currently all C\# source files are however read into MiCS which might be unnecessary and for big projects it could possibly lead to some nontrivial overhead. Therefore giving the developer the possibility of specifying which files should be fed to MiCS could help this problem.
 
 	Furthermore integration with Web Forms happens when registering code with client side events. In the case of MiCS when using the \texttt{OnClientClick} extension method for Buttons. This works but the implementation of this needs some more work and considerations. Furthermore most developers would also require access to all the DOM events for script registration and not only the button click event.
