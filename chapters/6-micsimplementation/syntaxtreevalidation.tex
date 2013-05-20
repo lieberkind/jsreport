@@ -17,12 +17,36 @@ There are essentially three situations in which it is necessary to verify correc
 	\item Invocation of methods on .NET core types; it is then necessary to check whether the invocation is done correctly, using the correct arguments and return type. Normally, the C\# compiler complains if an invocation is done using an incorrect signature, but as the interface between .NET core types and Script\# core types does not always match, it is important to make sure that the Script\# core type has a member with the corresponding arguments and return type. An invocation that is perfectly legal on .NET core types might be illegal on Script\# core types.
 \end{itemize}
 
-The \texttt{Validator} class extends Roslyn's \texttt{SyntaxWalker} class and it is thus able to traverse syntax nodes. The \texttt{Validator} takes a syntax tree, a string containing an attribute name (''MixedSide'' or ''ClientSide'') that decides what methods to validate, and a structure of types and members that legally be used without violating the Mixed Side Principle. This structure of members has been built by a \texttt{Collector} class which traverses the Roslyn AST and collects all \texttt{MixedSide} and \texttt{ClientSide} members.
-The \texttt{Validator} works by looking for classes in the syntax tree that contains methods annotated with the given attribute name and validates the body of these methods against the provided structure of allowed members.
+The \texttt{Validator} class extends Roslyn's \texttt{SyntaxWalker} class and it is thus able to traverse syntax nodes. The \texttt{Validator} takes a syntax tree that holds the source code to be validated, a string containing an attribute name (''MixedSide'' or ''ClientSide'') that decides what methods to validate, and a structure of types and members that can legally be used without violating the Mixed Side Principle. The \texttt{Validator} works by looking for classes in the syntax tree that contains methods annotated with the given attribute name and validates the body of these methods against the provided structure of allowed members.
 
 The nature of the \texttt{Validator} requires the syntax tree to be validated twice. Once validating all the \texttt{MixedSide} methods against a structure containing all \texttt{MixedSide} types and their members, and once validating all the \texttt{ClientSide} methods against a structure containing all \texttt{ClientSide} types and members, \texttt{MixedSide} types and members and Script\# DOM types and members. This is done by creating two instances of the Validator and validating them both.
 
 TODO: The Validation process is best explained by looking at an example. Consider the situation showed in Figure \ref{fig:mixedSideValidationExample}. 
+
+\begin{figure}[H]
+	\begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={ExampleClass,AnotherExampleClass,MixedSide}]
+namespace ExampleNamespace
+{
+  public class ExampleClass
+  {
+  	[MixedSide]
+  	public void ExampleMethod()
+  	{
+  		var a = new AnotherExampleClass();
+  	}
+  }
+  
+  public class AnotherExampleClass
+  {
+  	[MixedSide]
+  	public void AnotherExampleMethod() { }
+  }
+}
+	\end{lstlisting}
+\end{figure}
+
+
+
 
 \begin{figure}[H]
 	\begin{center}
