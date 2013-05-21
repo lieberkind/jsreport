@@ -89,9 +89,9 @@ The \texttt{ExampleMethod()} method has the \texttt{MixedSide} attribute and is 
 
 As the \texttt{AnotherExampleClass} class is also mixed side (it contains a method with the \texttt{MixedSide} attribute) the object creation is legal. If it had not contained any mixed side methods, the object creation would have been illegal and an exception of type \texttt{MixedSidePrincipleViolatedException} had been thrown.
 
-The validation of a member access expression (the access to \texttt{a.AnotherExampleMethod} in Figure~\ref{fig:mixedSideValidationExample}) is done in a very similar way, only checking if the member (in this case, the \texttt{AnotherExampleMethod} method) is a mixed side member, or a supported core type member. 
+The validation of a member access expression (the access to \newline\texttt{a.AnotherExampleMethod} in Figure~\ref{fig:mixedSideValidationExample}) is done in a very similar way, only checking if the member (in this case, the \texttt{AnotherExampleMethod} method) is a mixed side member, or a supported core type member. 
 
-Even though not shown in the example, it is also important to validate invocations (e.g. method calls) on core types. This is done using the \texttt{VerifyCorrectUseOfSupportedCoreType} method on the \texttt{TypeManager}. This method first checks if the given invocation is done on a core type, and subsequently uses the Core Mapping Specification (as discussed in section \ref{sub:type_mapping}) to verify that we are able to map the invocation to Script\#.
+Even though not shown in the example, it is also important to validate invocations (e.g. method calls) on core types. This is done using the \newline\texttt{VerifyCorrectUseOfSupportedCoreType} method on the \texttt{TypeManager}. This method first checks if the given invocation is done on a core type, and subsequently uses the Core Mapping Specification (as discussed in section \ref{sub:type_mapping}) to verify that we are able to map the invocation to Script\#.
 		
 
 

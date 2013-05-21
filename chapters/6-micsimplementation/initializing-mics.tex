@@ -20,7 +20,7 @@ MiCSManager.Initiate(source);
 \label{fig:init_mics_gather_source_code}
 \end{figure}
 
-The MiCSManager now first builds the Roslyn AST by using the \texttt{SyntaxTree.ParseText} method. When this is done, the MiCSManager initiates the TypeManager as shown in figure \ref{fig:init_mics_init_typemanager}
+The MiCSManager now first builds the Roslyn AST by using the \newline\texttt{SyntaxTree.ParseText} method. When this is done, the MiCSManager initiates the TypeManager as shown in figure \ref{fig:init_mics_init_typemanager}
 
 \begin{figure}[H]
 \begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={TypeManager,SyntaxTree}]
@@ -33,7 +33,7 @@ TypeManager.Initate(userTree);
 
 % The CSharpTypeManager holds information about all C\# types that can be used by MiCS, including user types (ClientSide \& MixedSide), DOM Types and supported .NET types.
 
-The \texttt{TypeManager} now initiates the \texttt{CSharpTypeManager} and the \texttt{ScriptSharpTypeManager}. As explained in section \ref{sec:architecture}, the \texttt{CSharpTypeManager} holds type information on the developer defined types, the .NET core types, and the DOM types.
+The \texttt{TypeManager} now initiates the \texttt{CSharpTypeManager} and the \newline\texttt{ScriptSharpTypeManager}. As explained in section \ref{sec:architecture}, the \texttt{CSharpTypeManager} holds type information on the developer defined types, the .NET core types, and the DOM types.
  When creating the \texttt{CSharpTypeManager}'s semantic model it is therefore necessary to make sure that all of these types can be recognized when they are looked up. The developer defined types are already contained in the Roslyn AST, but the other types need to be added. The DOM types are added simply by creating a new Roslyn AST consisting of the source of the developer syntax tree combined with the source of the DOM types from Script\#, as shown in figure \ref{fig:init_mics_add_dom_types}
 
 \begin{figure}[H]
