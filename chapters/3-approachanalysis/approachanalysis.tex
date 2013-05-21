@@ -1,7 +1,24 @@
 \chapter{Approach Analysis}
-	TODO: As mentioned in the problem definition, it was decided to conduct an analysis in order to find out which approach would best fit this project. This chapter will give an overview of different technologies we have considered to use and describe how they can be used in combination to approach the project in different ways. Lastly, a comparison of the approaches will be made, in order to decide on which approach to implement.
+	% TODO: As mentioned in the problem definition, it was decided to conduct an analysis in order to find out which approach would best fit this project. This chapter will give an overview of different technologies we have considered to use and describe how they can be used in combination to approach the project in different ways. Lastly, a comparison of the approaches will be made, in order to decide on which approach to implement.
+	The problem definition stated that we would investigate:
 
-	JavaScript-HTML consistency is accommodated equally by all the approaches considered below. JavaScript-HTML consistency is dependent on the fact that ASP.NET Web Forms provide a compile time validated representation of HTML elements in the form of Web Controls (see \ref{sub:code_behind}). The fact that Web Controls exists in this compile time validated environment (Code Behind) together with a representation of JavaScript is what makes it possible to guarantee JavaScript-HTML consistency. How JavaScript is represented in this environment is not really important when looking at JavaScript-HTML consistency isolated.
+	\begin{itemize}
+		\item How to move JavaScript errors from client to server side
+		\item How to generate JavaScript from server side code in order to gain server-client portability
+		\item How to achieve compile time guarantee of the consistentcy between the generated JavaScript and HTML elements (JavaScript-HTML consistency)
+	\end{itemize}
+
+	This chapter will give an overview of different technologies we have considered to use to address the first two improvements from the above list, and describe how these technologies can be used in combination to approach the project in different ways.
+
+	JavaScript-HTML consistency is dependent on the fact that ASP.NET Web Forms provide a compile time validated representation of HTML elements in the form of Web Controls (see \ref{sub:code_behind}). Therefore, JavaScript-HTML consistency is accommodated equally by all the approaches considered below. The fact that Web Controls exists in this compile time validated environment (Code Behind) together with a representation of JavaScript is what makes it possible to guarantee JavaScript-HTML consistency. How JavaScript is represented in this environment is not really important when looking at JavaScript-HTML consistency isolated.
+
+	Now, it has already been mentioned that MiCS makes use of Microsoft's Roslyn in combination with Script\# to approach this project. This chapter describes \emph{how} we arrived at this approach. Therefore, the most important parts of this chapter is:
+
+	\begin{itemize}
+		\item Section \ref{sub:microsoft_roslyn}, which explains Microsoft's Roslyn in detail
+		\item Section \ref{sub:subsection_scriptsharp}, which explains Script\# in details
+		\item Section \ref{sub:mics_mixed_side_csharp}, which explains how MiCS uses Roslyn and Script\# in combination
+	\end{itemize}
 
 \section{Useful Technologies}
 	\label{sec:useful_technologies}
