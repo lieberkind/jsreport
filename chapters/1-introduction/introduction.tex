@@ -32,9 +32,9 @@ To address these three improvements, MiCS uses Microsoft's Roslyn in combination
 
 \section{Reading Guide}
 
-	This report is directed to people with interest in how JavaScript can be safely written in Microsoft ASP.NET web applications. It is assumed that the reader has a general understanding of \emph{Abstract Syntax Trees} (AST) and a basic understanding of JavaScript. Third party libraries used in the project, namely Roslyn and Script\#, will be introduced and thus knowledge about these is not a prerequisite.
+	This report is directed to people with interest in how JavaScript can be safely written in Microsoft ASP.NET web applications. It is assumed that the reader has a general understanding of \emph{Abstract Syntax Trees} (AST) and a basic understanding of JavaScript and HTML. Third party libraries used in the project, namely Roslyn and Script\#, will be introduced and thus knowledge about these is not a prerequisite.
 
-	This report proposes a solution where JavaScript is written safely by translating C\# to JavaScript. This approach makes it possible to execute the same code both on server and client side and is therefore called Mixed Side C Sharp (MiCS).
+	This report proposes a solution where JavaScript is written safely by translating C\# to JavaScript. This approach makes it possible to execute the same code both on server and client side and is therefore called MiCS, short for Mixed Side C Sharp.
 
 	This document consists of nine chapters.
 
@@ -42,24 +42,21 @@ To address these three improvements, MiCS uses Microsoft's Roslyn in combination
 
 	Chapter two introduces Microsoft ASP.NET Web Forms and the usage of Code Behind to develop web applications. Furthermore it explains why JavaScript can be considered an unsafe language.
 
-	Chapter three introduces various technologies that can be useful to the project. It describes how they can be used in different combinations to address the problems stated in the problem definition. Furthermore an analysis is conducted in order to investigate which of the combinations is most convenient to implement.
+	Chapter three introduces various technologies that can be useful to the project. It describes how they can be used in different combinations to address the problems stated in the problem definition. Furthermore an analysis is conducted in order to investigate which of the combinations best fits this project.
 
 	Chapter four is a short manual that describes how MiCS is used.
 
-	Chapter five describes the MiCS project main workflow, architecture and other design decisions.
+	Chapter five describes the design of the MiCS Framework, including its use of types, its main workflow, its architecture and usability considerations. Furthermore, the Mixed Side Principle is introduced.
 
-	Chapter six describes the implementation of MiCS; how types are handled and mapped, validation of mixed and client side code, mapping of ASTs and script generation.
+	Chapter six describes the implementation of MiCS, including validation of the developer's code, translation from C\# to JavaScript and integration with ASP.NET Web Forms.
 
-	Chapter seven shortly describes the testing done in the MiCS project.
+	Chapter seven describes the testing of the MiCS Framework and the project's case study.
 	
-	Chapter eight evaluates the MiCS solution, reflects on the design goals set in the problem definition and discusses what future directions the project could take from here.
+	Chapter eight evaluates the different aspects of MiCS, reflects on the problems stated in the problem definition, and discusses the direction the project should take from here.
 
 	Chapter nine is the report conclusion.
 
-	In the report we use the terms developer and end user. The developer is a person that uses MiCS to write mixed side and client side code. The end user is the person that use the web application created by the developer.
-	% Todo: Update reading guide as one of the last things...
-	% Todo: Introduce DOM, Safety vs security, when we say JavaScript we JavaScript in the browser
-	% Todo: The read should have knowledge of DSL, JavaScript (script), client server side, DOM
+	In the report we use the terms ``developer'' and ``end user''. The \emph{developer} is a person that uses MiCS to write mixed side and client side code. The \emph{end user} is the person that use the web application created by the developer.
 	% Todo: SS = ScriptSharp namespace in code examples...
 
 
