@@ -24,7 +24,7 @@ The MiCSManager now first builds the Roslyn AST by using the \texttt{SyntaxTree.
 
 \begin{figure}[H]
 \begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={TypeManager,SyntaxTree}]
-var userTree = SyntaxTree.ParseText(source);
+SyntaxTree userTree = SyntaxTree.ParseText(source);
 TypeManager.Initate(userTree);
 \end{lstlisting}
 \caption{Initiaing the TypeManager.}
@@ -38,7 +38,7 @@ The \texttt{TypeManager} now initiates the \texttt{CSharpTypeManager} and the \t
 
 \begin{figure}[H]
 \begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={SyntaxTree}]
-var tree = SyntaxTree.ParseText(userTree.GetText() + ScriptSharp.TextSources.Web.Text);
+SyntaxTree tree = SyntaxTree.ParseText(userTree.GetText() + ScriptSharp.TextSources.Web.Text);
 \end{lstlisting}
 \caption{Creating a SyntaxTree containing both the user types and the DOM types}
 \label{fig:init_mics_add_dom_types}
