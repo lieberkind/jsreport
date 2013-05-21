@@ -8,10 +8,10 @@ This section describes which direction the project should take from here; what n
 	As stated in the introduction, this project has served as a proof of concept. Even though some testing has been done to secure the correctness of MiCS, it is not enough to guarantee that MiCS works correctly in all situations. MiCS ultimately should serve as a framework for other projects to build on thus test quality and coverage should be prioritized as correctness would be critical.
 % subsection fw_testing (end)
 
-\subsection{TODO: Portability of Server Side Values} % (fold)
-\label{sub:portability_of_server_side_values}
-	TODO: Even though server side code can be ported to JavaScript, in some situations the ability to port server side literals could be very handy. 
-% subsection portability_of_server_side_values (end)
+\subsection{Completing JavaScript-HTML Consistency} % (fold)
+\label{sub:completing_javascript_html_consistency}
+	Since JavaScript-HTML consistency was not fully implemented in MiCS this would obviously be one of the first things to develop further. Currently only calls to the generated JavaScript from HTML elements (i.e. from the button’s client side click event) is compile time guaranteed. When JavaScript retrieves HTML elements by looking for an element with a specific ID there is no guarantee that such an HTML element exists. This guarantee constitutes the missing part of JavaScript-HTML consistency and is exemplified in figure \ref{fig:write_mics_code_clienside} where the HTML elements are retrieved using the hardcoded IDs (\texttt{EmailBox} and \texttt{CheckBox}). This is somewhat unsafe and a solution should therefore be implemented. This solution should built on the fact that a HTML representation exists in the same compile time validated environment (Code Behind) as the JavaScript representation (\texttt{ClientSide} code) does. This is also how the implemented part of JavaScript-HTML consistency is made possible.
+% subsection completing_javascript_html_consistency (end)
 
 \subsection{Inheritance} % (fold)
 \label{sub:fw_inheritance}
