@@ -4,14 +4,14 @@
 	\begin{itemize}
 		\item How to move JavaScript errors from client to server side
 		\item How to generate JavaScript from server side code in order to gain server-client portability
-		\item How to achieve compile time guarantee of the consistentcy between the generated JavaScript and HTML elements (JavaScript-HTML consistency)
+		\item How to achieve compile time guarantee of the consistency between the generated JavaScript and HTML elements (JavaScript-HTML consistency)
 	\end{itemize}
 
 	This chapter will give an overview of different technologies we have considered to use to address the first two improvements from the above list, and describe how these technologies can be used in combination to approach the project in different ways.
 
-	JavaScript-HTML consistency is dependent on the fact that ASP.NET Web Forms provide a compile time validated representation of HTML elements in the form of Web Controls (see \ref{sub:code_behind}). Therefore, JavaScript-HTML consistency is accommodated equally by all the approaches considered below. The fact that Web Controls exists in this compile time validated environment (Code Behind) together with a representation of JavaScript is what makes it possible to guarantee JavaScript-HTML consistency. How JavaScript is represented in this environment is not really important when looking at JavaScript-HTML consistency isolated. Because of this, the different approaches have not been rated on this criterion.
+	JavaScript-HTML consistency is dependent on the fact that ASP.NET Web Forms provide a compile time validated representation of HTML elements in the form of Web Controls (see \ref{sub:code_behind}). Therefore, JavaScript-HTML consistency is accommodated equally by all the approaches considered below. The fact that Web Controls exists in a compile time validated environment (Code Behind) together with a representation of JavaScript, is what makes it possible to guarantee JavaScript-HTML consistency. How JavaScript is represented in this environment is not really important when looking at JavaScript-HTML consistency isolated. Because of this, the different approaches have not been rated on this criterion.
 
-	Now, it has already been mentioned that MiCS makes use of Microsoft's Roslyn in combination with Script\# to approach this project. This chapter describes \emph{how} we arrived at this approach. Therefore, the most important parts of this chapter is:
+	Now, it has already been mentioned that MiCS makes use of Microsoft's Roslyn in combination with Script\# to approach this project. This chapter describes \emph{how} we arrived at this approach. Therefore, the most important parts of this chapter are:
 
 	\begin{itemize}
 		\item Section \ref{sub:microsoft_roslyn}, which explains Microsoft's Roslyn in detail
@@ -87,7 +87,7 @@ namespace System {
 			\label{fig:scriptsharp_net_types}
 		\end{figure}
 
-		In short the modified mscorlib.dll file is referenced in one's Visual Studio project (instead of the original one) when a new Script\# project is created. When a Script\# project is compiled a JavaScript file will be generated. This JavaScript file can then be used in other projects (E.g. a Web Forms web application). The C\# source code will not be evaluated.
+		In short the modified mscorlib.dll file is referenced in one's Visual Studio project (instead of the original one) when a new Script\# project is created. When a Script\# project is compiled a JavaScript file is generated. This JavaScript file can then be used in other projects (E.g. a Web Forms web application). The C\# source code will not be evaluated.
 	% subsection subsection_name (end)
 
 

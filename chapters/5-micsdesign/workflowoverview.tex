@@ -17,7 +17,7 @@ When the Roslyn AST has been obtained it needs to be validated to ensure that th
 
 Once the AST has been validated, it is ready to be mapped to the Script\# AST. This is the core functionality of MiCS - transforming a Roslyn AST to a Script\# AST. During the mapping process it is checked that the user does not use any C\# constructs that is not support by MiCS. 
 
-When the Roslyn AST has successfully been mapped to its' corresponding Script\# AST, MiCS utilizes Script\#’s built-in \texttt{ScriptGenerator} to generate the JavaScript corresponding to the developers’s original C\# code. 
+When the Roslyn AST has successfully been mapped to its corresponding Script\# AST, MiCS utilizes Script\#’s built-in \texttt{ScriptGenerator} to generate the JavaScript corresponding to the developers’s original C\# code. 
 
 When JavaScript has been generated, it needs to be embedded into the developer’s web page. Code that calls client side event handlers also needs to be generated so that the JavaScript will be executed.
 
