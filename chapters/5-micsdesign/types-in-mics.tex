@@ -1,6 +1,6 @@
 \section{Types in MiCS} % (fold)
 \label{sec:types_in_mics}
-	To help understand the core type validation and MiCS type mapping in general its beneficial to realise the different kind of types that are utilized in MiCS.
+	It is beneficial to realise the different kinds of types that are utilized in MiCS.
 
 	\begin{figure}[H]
 		\begin{center}
@@ -10,7 +10,7 @@
 		\label{typesOverview}
 	\end{figure}
 
-	Since one of the goals of MiCS is to be able to execute the same code on both client and server side (server client portability) its required that the .NET core types are used when writing MiCS code. This is in contrast to how Script\# works in its original manner where the Script\# core types (that reflect the equivalent JavaScript types) are used. This has some benefits but is also an obstacle that prevents server client portability. This is because it doesn't make sence to use the Script\# core types when evaluating C\# code in a C\# context (see section \ref{sub:subsection_scriptsharp}).
+	Since one of the goals of MiCS is to be able to execute the same code on both client and server side (server-client portability) it is required that the .NET core types are used when writing MiCS code. This is in contrast to how Script\# works in its original manner where the Script\# core types (that reflect the equivalent JavaScript types) are used. This has some benefits but is also an obstacle that prevents server client portability. This is because it doesn't make sence to use the Script\# core types when evaluating C\# code in a C\# context (section \ref{sub:subsection_scriptsharp}). The remainder of this section will describe the three kinds of types used in MiCS; Core Types, User Types and DOM Types (shown in figure \ref{typesOverview})
 
 	\subsection{Core Types} % (fold)
 	\label{sub:core_types}
@@ -27,7 +27,7 @@
 
 	\subsection{User Types} % (fold)
 	\label{sub:user_types}
-		User types are the types that are defined by the developer. The user types considered here are either mixed side types or client side types (i.e. types that have method members that have the either the \texttt{MixedSide} attribute or the \texttt{ClientSide} attribute on them). User type definitions is what the generated client side script eventually will consist of. 
+		User types are the types that are defined by the developer. The user types considered here are either mixed side types or client side types (i.e. types that have method members that have the either the \texttt{MixedSide} attribute or the \texttt{ClientSide} attribute on them). User type definitions is what the generated JavaScript will eventually consist of. 
 
 		Pure server side types are obviously also user types but they are not relevant in a MiCS context as JavaScript will not be generated from these.
 	% subsection user_types (end)

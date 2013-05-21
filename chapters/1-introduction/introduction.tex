@@ -4,20 +4,6 @@
 	MiCS (Mixed Side C Sharp) is created as a bachelor project at the IT-University of Copenhagen. The project  has been produced by Tomas Alan Lieberkind and Asger Schlichtkrull from the 1st February 2013 to the 22nd May 2013. The project has been supervised by Peter Sestoft. 
 	\section{Motivation} % (fold)
 \label{sec:motivation}
-	% We would like to improve development of web applications with ASP.NET Web Forms and therefore it is beneficial to investigate how JavaScript can be from a .NET language such as C\# or F\# in order to achieve compile time validation. % Todo: synes denne første del er lidt underlig...
-
-	% Developing web applications instead of native applications is a strong tendency in software development today. JavaScript contributes to enriching the user experience and sometimes provide functionality which is indispensable for such web applications.
-
-	% ASP.NET Web Forms provides the possibility of building HTML documents using C\# which improves correctness through compile time validation. Writing JavaScript code using C\# is not possible in the same way as with HTML documents. JavaScript is embedded into the application as text strings and thus compile time validation is not possible. This increases the possibility of writing faulty scripts that emits errors which are not discovered before client side runtime. Runtime errors are generally harder to debug and in worst case exposed to the end user while leaving the application in a corrupt state.
-
-	% Achieving compile time validation of JavaScript is not a ground-breaking thought, and there are several existing projects that do exactly this; TypeScript by Microsoft and Dart by Google are just a few.
-
-	% Depending on the situation one weakness with some of these solutions are that the server side code and the client side code is written as two independent units, and nothing ties them safely together. 
-
-	% Another problem is that of reusability. In cases such as form validation it is necessary to write the same piece of code in two different languages in order to validate both on client side and server side.
-
-	% This project aims to find a solution for safe JavaScript development that; incorporates compile time validation, enables reusability of server side code on client side and tries to ensure consistency between the server side generated Html document and the client side script code.
-% section motivation (end)
 
 Developing web applications instead of desktop applications is a strong tendency in software development today. JavaScript contributes to enriching the user experience and sometimes provide functionality which is indispensable for such web applications. However, JavaScript has language features that can be considered unsafe, such as no compile-time validation, a dynamic type system and implicit type conversions. We would like to make the use of JavaScript safer when developing web applications with ASP.NET Web Forms. Especially, we would like to address the three following improvements:
 
@@ -29,7 +15,7 @@ Developing web applications instead of desktop applications is a strong tendency
 		\caption{Improving safe JavaScript development by trying to move errors from client side to server side.}
 		\label{movingErrors}
 	\end{figure}
-	When considering web applications built with ASP.NET Web Forms, errors can occur both on server and client side. On server side, errors can occur on either compile time or runtime. On client side, compile time does not exist as JavaScript is an interpreted language and consequently client side errors can only occur on runtime. Client side errors will be exposed to the end users while leaving the web application in a corrupt state which is highly undesirable. Server side errors occur before the web applications is displayed on client side; if a server side error occurs, the web application is not displayed. Therefore, moving client side errors to server side can prevent a web application in a corrupt state from being exposed to the end user. 
+	When considering web applications built with ASP.NET Web Forms, errors can occur both on server and client side. On server side, errors can occur on either compile time or runtime. On client side, compile time does not exist as JavaScript is an interpreted language and consequently client side errors can only occur on runtime. Client side errors will be exposed to the end users while leaving the web application in a corrupt state which is highly undesirable. Server side errors occur before the web applications is displayed on client side; if a server side error occurs, the web application is not displayed. Therefore, moving client side errors to server side (figure \ref{movingErrors}) can prevent a web application in a corrupt state from being exposed to the end user. 
 % subsubsection subsubsection_name (end)
 
 \subsubsection{Obtaining JavaScript-HTML Consistency} % (fold)
@@ -193,6 +179,11 @@ To address these three improvements, MiCS uses Microsoft's Roslyn in combination
 \label{sec:section_name}
 	The target audience is developers who create web applications using ASP.NET Web Forms with C\# where correctness is of high priority. This implies that the developer aims at displaying a 100\% working web application or nothing at all. An error message is preferred over an application in a corrupt, or partly corrupt, state.
 % section section_name (end)
+
+\section{Special Thanks} % (fold)
+\label{sec:special_thanks}
+We would like to thank our supervisor, Peter Sestoft, for overall guidance throughout the project, and S\o ren Engel for providing invaluable feedback on our report.
+% section special_thanks (end)
 
 
 % chapter introduction (end)
