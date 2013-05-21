@@ -136,3 +136,9 @@
 	Another important aspect of integration with Web Forms is how the generated client side scripts are initially called. Client side scripts are usually initiated through DOM events such as \texttt{onload} and \texttt{onclick} which are triggered when a web page is loaded and when a button is clicked respectively. MiCS currently only supports registering a client side method on a buttons click event using our \texttt{Button} extension method \texttt{OnClientClick(…)}. However this is how JavaScript-HTML consistency is guaranteed which is possible because the \texttt{Button} Web Control exists in the same C\# compile time validated environment (Code Behind) as the mixed side code and client side code does.
 
 % section integration_with_web_forms (end)
+
+\section{Chapter Summary} % (fold)
+\label{sec:chapter_impl_summary}
+	In this section, we have shown how JavaScript is generated from server side C\# code. This is done by using Microsoft's Roslyn in combination with Script\#. Roslyn generates an AST representing the developers source code. This AST is subsequently mapped to its corresponding Script\# JavaScript AST. JavaScript source code is then generated from the Script\# JavaScript AST. Furthermore, we have shown how the generated JavaScript code is embedded into the developer's web page.
+% section chapter_impl_summary (end)
+
