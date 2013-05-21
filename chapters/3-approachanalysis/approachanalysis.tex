@@ -10,7 +10,7 @@
 
 	This chapter will give an overview of different technologies we have considered to use to address the first two improvements from the above list, and describe how these technologies can be used in combination to approach the project in different ways.
 
-	JavaScript-HTML consistency is dependent on the fact that ASP.NET Web Forms provide a compile time validated representation of HTML elements in the form of Web Controls (see \ref{sub:code_behind}). Therefore, JavaScript-HTML consistency is accommodated equally by all the approaches considered below. The fact that Web Controls exists in this compile time validated environment (Code Behind) together with a representation of JavaScript is what makes it possible to guarantee JavaScript-HTML consistency. How JavaScript is represented in this environment is not really important when looking at JavaScript-HTML consistency isolated.
+	JavaScript-HTML consistency is dependent on the fact that ASP.NET Web Forms provide a compile time validated representation of HTML elements in the form of Web Controls (see \ref{sub:code_behind}). Therefore, JavaScript-HTML consistency is accommodated equally by all the approaches considered below. The fact that Web Controls exists in this compile time validated environment (Code Behind) together with a representation of JavaScript is what makes it possible to guarantee JavaScript-HTML consistency. How JavaScript is represented in this environment is not really important when looking at JavaScript-HTML consistency isolated. Because of this, the different approaches have not been rated on this criterion.
 
 	Now, it has already been mentioned that MiCS makes use of Microsoft's Roslyn in combination with Script\# to approach this project. This chapter describes \emph{how} we arrived at this approach. Therefore, the most important parts of this chapter is:
 
@@ -19,6 +19,8 @@
 		\item Section \ref{sub:subsection_scriptsharp}, which explains Script\# in details
 		\item Section \ref{sub:mics_mixed_side_csharp}, which explains how MiCS uses Roslyn and Script\# in combination
 	\end{itemize}
+
+	All other of the following considerations have been important to our process. However, they are not important in order to understand how MiCS works.
 
 \section{Useful Technologies}
 	\label{sec:useful_technologies}
@@ -30,7 +32,7 @@
 	\label{sub:subsection_scriptsharp}
 		Script\# (pronounced ``scriptsharp'') \cite{scriptsharp} is a cross-compiler from C\# to JavaScript that is maintained by Nikhil Kothari \cite{nikhilk} from Microsoft. Script\# works by compiling an entire C\# project to JavaScript. Script\# is interesting for several reasons; it contains an AST-representation of JavaScript in C\# and a way to generate JavaScript source code from this AST. Furthermore, it contains a C\# representation of the DOM (Document Object Model).
 
-		The main assembly, ScriptSharp.dll, is shown in figure \ref{simplifiedOverview} as a simplified dependency diagram. When Script\# is used in a regular manner, an AST representing C\# source code is built using classes from the Parser and CodeModel namespaces. The ScriptModel namespace contains classes which represent the different nodes in the JavaScript AST. The actual JavaScript source is generated using classes in the Generator namespace. Another important assembly is the Script.Web.dll which contains classes for DOM representation.
+		The main assembly, ScriptSharp.dll, is shown in figure \ref{simplifiedOverview} as a simplified dependency diagram. When Script\# is used in a regular manner, an AST representing C\# source code is built using classes from the Parser and CodeModel namespaces. The ScriptModel namespace contains classes which represent the different nodes in the JavaScript AST. The actual JavaScript source code is generated using classes from the Generator namespace. Another important assembly is the Script.Web.dll which contains classes for DOM representation. A DOM representation is needed for our case study to work.
 
 		\begin{figure}[H]
 			\begin{center}
@@ -41,10 +43,9 @@
 		\end{figure}
 
 
-		A thing unique to Script\# is that it defines a modified version of the .NET mscorlib.dll (also shown in figure \ref{simplifiedOverview}) that modifies the .NET core type interfaces to resembles their equivalent JavaScript objects. E.g. the Script\# defined System.String type has a \texttt{CharAt(int index)} function that doesn't exist on the original .NET System.String type but \emph{does} exist on the JavaScript String object. One benefit of the modified mscorlib.dll is that it makes the C\# compiler able to validate the C\# code that represents JavaScript. However, \emph{evaluating} C\# code that uses these modified .NET types will never make sense, as all of the methods and fields on them either returns null, 0, or false, as shown in figure \ref{fig:scriptsharp_net_types}. This implies that the Script\# modified core types can only be used for JavaScript generation.
+		A thing unique to Script\# is that it defines a modified version of the .NET mscorlib.dll (also shown in figure \ref{simplifiedOverview}) that modifies the .NET core type interfaces to resembles their equivalent JavaScript objects. E.g. the Script\#-defined System.String type has a \texttt{CharAt(int index)} function (figure \ref{fig:scriptsharp_net_types}) that doesn't exist on the original .NET \texttt{System.String}. However, it \emph{does} exist on the JavaScript \texttt{String} object. One benefit of the modified mscorlib.dll is that it makes the C\# compiler able to validate the C\# code that represents JavaScript. However, \emph{evaluating} C\# code that uses these modified .NET types will never make sense, as all of the methods and fields on them either returns null, 0, or false, as shown in figure \ref{fig:scriptsharp_net_types}. This implies that the Script\# modified core types can only be used for JavaScript generation, and can not be run on server side.
 
 		\begin{figure}
-		\label{fig:scriptsharp_net_types}
 			\begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={String}]
 namespace System {
 
@@ -70,12 +71,12 @@ namespace System {
     ...
 
     /// <summary>
-    /// Encodes a single part or component of a URI.
+    /// Retrieves the character at the specified position.
     /// </summary>
-    /// <returns>The encoded string.</returns>
-    [ScriptAlias("encodeURIComponent")]
-    public string EncodeUriComponent() {
-      return null;
+    /// <param name="index">The specified 0-based position.</param>
+    /// <returns>The character within the string.</returns>
+    public char CharAt(int index) {
+      return '\0';
     }
 
     ...
@@ -84,6 +85,7 @@ namespace System {
 
 			\end{lstlisting}
 			\caption{Properties and methods on Script\#'s String type}
+			\label{fig:scriptsharp_net_types}
 		\end{figure}
 
 		In short the modified mscorlib.dll file is referenced in one's Visual Studio project (instead of the original one) when a new Script\# project is created. When a Script\# project is compiled a JavaScript file will be generated. This JavaScript file can then be used in other projects (E.g. a Web Forms web application). The C\# source code will not be evaluated.
@@ -97,24 +99,18 @@ namespace System {
 
 	\subsection{Code Quotations} % (fold)
 	\label{ssub:code_quotations}
-		Code Quotations is a built-in feature in the F\# language which lets a developer generate an abstract syntax tree that represents the corresponding F\# code. Code Quotations cover the entire F\# language, meaning that theoretically all F\# constructs can be mapped to a corresponding JavaScript construct.
+		Code Quotations is a built-in feature in the F\# language which lets a developer generate an abstract syntax tree that represents the corresponding F\# code. Code Quotations cover the entire F\# language.
 
 	% subsection code_quotations (end)
 
 	\subsection{Expression Trees} % (fold)
 	\label{ssub:expression_trees}
-			Expression Trees is a built-in feature in the C\# (and Visual Basic) language that “represents code in a tree-like data structure, where each node is an expression, for example, a method call or a binary operation” (REF MSDN). Expression Trees are often used with LINQ to build dynamic queries, which can be useful when fetching data from a database with filters specified by the user (these filters may be provided through a user interface). Expression Trees can be generated from lambda expressions, and thus it is possible to retrieve a representation of simple pieces of code, such as the following:
-
-			\begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={Func}]
-				Func<int, int, bool> function = (a, b) => a > b
-			\end{lstlisting}
-
-			or more sophisticated ones such as LINQ queries. 
+			Expression Trees is a built-in feature in the C\# (and Visual Basic) language that ``represents code in a tree-like data structure, where each node is an expression, for example, a method call or a binary operation'' \cite{expression_trees}. Expression Trees are often used with LINQ to build dynamic queries, which can be useful when fetching data from a database with filters specified by the user. Expression Trees can be generated from lambda expressions, and thus it is possible to retrieve a representation of simple pieces of code.
 	% subsection expression_trees (end)
 
 	\subsection{Internal DSL} % (fold)
 	\label{ssub:internal_dsl}
-		There are different approaches to writing a Domain Specific Languages (DSL) with Internal DSLs you work in your regular language and is therefore also constraint by this language and its features \cite{domain_specific_languages}. Another term for Internal DSL is fluent interface who's central pattern is that of method chaining which is the pattern we somewhat investigated for the use of safe JavaScript representation. In our case we aimed for a Internal DSL that would somewhat the C-like syntax of JavaScript.
+		There are different approaches to writing a Domain Specific Languages (DSL). Internal DSLs are written in a regular language (e.g. C\#) and is therefore also constrained by this language and its features \cite{domain_specific_languages}. This is in contrast to an external DSL, which defines its own syntax. Another term for internal DSL is fluent interface, whose central pattern is that of method chaining which is the pattern we somewhat investigated for the use of safe JavaScript representation. In our case we aimed for an internal DSL that somewhat resembled the C-like syntax of JavaScript.
 	% subsection internal_dsl (end)
 
 \section{Stages When Going From .NET Language to JavaScript} % (fold)
