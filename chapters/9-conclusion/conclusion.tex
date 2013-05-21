@@ -9,8 +9,8 @@ In this project we have shown how the use of JavaScript can be improved when dev
 
 These improvements have been addressed by implementing the MiCS Framework that lets developers write C\# code and have it translated to JavaScript. MiCS uses a combination of Microsoft's Roslyn and Script\# to do this. 
 
-To address point 1 and 2 from the above list MiCS uses Microsoft's Roslyn to generate an AST representing the developer's code. The AST is traversed and mapped to its corresponding Script\# JavaScript AST. MiCS uses Script\#'s built-in script generator to generate actual JavaScript source code from the Script\# AST. 
+To address point 1 and 2 from the above list, MiCS uses Microsoft's Roslyn to generate an AST representing the developer's server side code. The AST is traversed and mapped to its corresponding Script\# JavaScript AST. MiCS uses Script\#'s built-in script generator to generate JavaScript source code from the Script\# AST. 
 
-In order to obtain JavaScript-HTML consistency, MiCS uses the fact that Web Controls (representing HTML) exists in the same compile time validated environment (Code Behind) as the MiCS client side code (representing JavaScript). This together with the \texttt{MiCSPage} class that ensures the generated JavaScript is embedded into the web application makes guaranteed JavaScript-HTML consistency possible.
+In order to obtain JavaScript-HTML consistency, MiCS uses the fact that Web Controls (representing HTML) exists in the same compile time validated environment as the MiCS client side code (representing JavaScript). This, in combination with the \texttt{MiCSPage} class that ensures the generated JavaScript is embedded into the web application, makes JavaScript-HTML consistency possible.
 
 The case study introduced in chapter \ref{cha:introduction} has been successfully implemented using the MiCS Framework. Furthermore, shortcomings of the implementation of MiCS has been addressed in the evaluation, and the road map in section \ref{sec:futurework} describes which direction the project should take from here.

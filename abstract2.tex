@@ -3,9 +3,9 @@
 
 	Developing web applications instead of desktop applications is a strong tendency in software development today. JavaScript contributes to enriching the user experience and sometimes provide functionality which is indispensable for such web applications. However, JavaScript has language features that can be considered unsafe, such as no compile-time validation, a dynamic type system and implicit type conversions.
 
-	To improve this, the report will investigates how to move JavaScript errors from client side to server side, how to generate JavaScript from code written in a server side language, how to ensure reuse of the written code both on server and client side, and how to obtain a compile time validation of the consistency between the generated JavaScript and HTML elements.
+	To improve this, the report will investigates how to move JavaScript errors from client side to server side, how to generate JavaScript from code written in a server side language, and how to obtain a compile time validation of the consistency between the generated JavaScript and HTML elements.
 
-	The report concludes that it is possible to generate JavaScript from C\# code by using Microsoft's Roslyn and Script\# in combination, reuse the code both on server and client side, and that the consistency between the generated JavaScript and HTML can be compile time validated by extending the ASP.NET Web Forms framework.
+	The report concludes that it is possible to generate JavaScript from working C\# code by using Microsoft's Roslyn and Script\# in combination. This eliminates the need for writing actual JavaScript code, and instead have it generated from a safer, compile-time validated language. It also makes it possible to reuse server side code on client side. Furthermore, it is concluded that the consistency between the generated JavaScript and HTML, can be compile time validated by extending the ASP.NET Web Forms framework.
 
 
 \end{abstract}
