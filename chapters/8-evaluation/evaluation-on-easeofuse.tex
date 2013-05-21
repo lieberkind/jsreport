@@ -1,26 +1,14 @@
 \section{Ease of Use} % (fold)
 \label{sec:ease_of_use}
-	Activation of MiCS happens through the use of \texttt{MiCSPage} in one's Code Behind file. This is a rather simple and easy approach in our opinion. When writing mixed side and client side code with MiCS the initial learning effort should be somewhat small. This is because the syntax written is that of C\# which is known to our target audience. Knowledge of regular JavaScript is however also required as objects representing DOM elements will also be used (specifically in client side only code). Since our target audience is used to developing web applications this should be a minor obstacle (if one at all) to overcome. Another aspect of ease of use is the fact that client side, mixed side and server side code can be written next to each other. This can be a bit confusing in some situation and might take some time to get used to. However it is still possible to have client side, mixed side and server side code separated in different file or classes which might help this issue. This in fact might be a good practice in any case. Overall we find the use of MiCS easy and well suited for our target audience.
+	Activation of MiCS happens by inheriting from \texttt{MiCSPage} in one's Code Behind file (shown in figure \ref{fig:mics_enable_web_application}). This is a rather simple and easy approach in our opinion. When writing mixed side and client side code with MiCS the initial learning effort should be somewhat small. This is because the syntax written is that of C\# which is known to our target audience. Knowledge of regular JavaScript is however also required as objects representing DOM elements will also be used (specifically in client side only code). Since our target audience is used to developing web applications this should be a minor obstacle (if one at all) to overcome. Another aspect of ease of use is the fact that client side, mixed side and server side code can be written next to each other. This can be a bit confusing in some situation and might take some time to get used to. However it is still possible to have client side, mixed side and server side code separated in different files or classes which might help this issue. This in fact might be a good practice in any case. Overall we find the use of MiCS easy and well suited for our target audience.
 
 	\subsection{Error messages} % (fold)
 	\label{sub:evaluation_of_error_messages}
 		We have been forced to debug a lot of exceptions thrown by Roslyn and as described in section \ref{sub:design_error_messages}, it should not be left to the end user to debug such exceptions. Therefore, we have sought to find the source of these errors and throw custom MiCS exceptions instead. These have been provided with custom error messages that hints to the developer what might have gone wrong and what he can do to fix the problem. However there might be Roslyn related problems that we have not considered, so the developer might still be exposed to Roslyn exceptions. This should obviously not happen as the developer will have no idea how the Roslyn exception is related to MiCS. This shortcoming of MiCS should preferably be fixed as it could make debugging for the developer very difficult. The errors we have covered are, not surprisingly, the ones that we have had to debug when implementing our case study. This includes errors that are thrown when a developer tries to use unsupported expressions, unsupported statements, C\# core types that MiCS cannot map or when the Mixed Side Principle is violated.
 	% subsection evaluation_of_error_messages (end)
 
-	\label{sub:client_server_confusion}
+	% \label{sub:client_server_confusion}
 	
 	% subsection client_server_confusion (end)
 
-
-
-
-
-
-
-
-	% \begin{itemize}
-	% 	\item Elaborate on the user friendliness of error messages, why they are important
-	% 	and to which degree we have implemented them.
-	% 	\item Indlæringskurve. Tungen lige i munden. Client-Server confusion
-	% \end{itemize}
 % section ease_of_use (end)

@@ -1,6 +1,6 @@
 \chapter{MiCS User Manual}
 \label{chap:mics_manual}
-MiCS is a framework that makes it possible to write JavaScript safely by translating C\# to JavaScript. This approach also makes it possible to execute the same code both on server and client side and it ensures consistency between JavaScript code and Html elements.
+MiCS is a framework for ASP.NET Web Forms that makes it possible to write JavaScript safely by translating C\# to JavaScript. This approach also makes it possible to execute the same code both on server and client side and it ensures consistency between JavaScript code and HTML elements.
 
 This chapter demonstrates how to use MiCS. The manual will illustrate how to write server side code that can be reused on client side in a safe manner. It is assumed that the developer uses Visual Studio and .NET 4.0. In this manual a simple registration form, shown in figure \ref{fig:manual_registrationform}, is created. The code is explained step-by-step but can also be found in its entirety in Appendix X (TODO REF).
 
@@ -40,7 +40,7 @@ namespace MiCSManual
 \end{figure}
 % subsubsection mics_enable_your_web_application (end)
 
-Add the relevant controls to the page, as shown in figure \ref{fig:mics_add_controls}
+Add the relevant Web Controls to the page, as shown in figure \ref{fig:mics_add_controls}
 
 \begin{figure}[H]
 \begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={Default,MiCSPage,Button,CheckBox,TextBox,EventArgs,ClientSide,InputElement,Document,CheckBoxElement,Window,MixedSide,Regex}]
@@ -75,7 +75,7 @@ public partial class Default : MiCSPage
 
 \subsubsection{2. Writing MiCS Code} % (fold)
 \label{ssub:writing_mics_code}
-It is now possible to write code that can be used both on server side and client side. This can be done by adding the MixedSide attribute to a method, as shown in figure \ref{fig:write_mics_code}
+It is now possible to write code that can be used both on server side and client side. This is done by adding the \texttt{MixedSide} attribute to a method, as shown in figure \ref{fig:write_mics_code}
 
 \begin{figure}[H]
 \begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={Default,MiCSPage,Button,CheckBox,TextBox,EventArgs,ClientSide,InputElement,Document,CheckBoxElement,Window,MixedSide,Regex}]
@@ -97,11 +97,11 @@ namespace MiCSManual
   }
 }
 \end{lstlisting}
-\caption{E-mail validation function that can be used both on server and client side.}
+\caption{An e-mail validation function that can be used both on server and client side.}
 \label{fig:write_mics_code}
 \end{figure}
 
-Code that is only intended for use on client side only, can be written in a similar manner, but by adding the \texttt{ClientSide} attribute to the method. In figure \ref{fig:write_mics_code_clienside} a button click event handler has been created. The method is supposed to run on client side when the submit button is clicked. Notice how the method makes use of the \texttt{MixedSide} isEmailValid method.
+Code that is only intended for use on client side, can be written in a similar manner, but by adding the \texttt{ClientSide} attribute to the method. In figure \ref{fig:write_mics_code_clienside} a button click event handler is created. The method is supposed to run on client side when the submit button is clicked. Notice how the method makes use of the mixed side \texttt{isEmailValid} method.
 
 
 \begin{figure}[H]
@@ -134,7 +134,7 @@ bool button_ClientClick()
 
 \subsubsection{3. Register Click Events} % (fold)
 \label{ssub:3_register_click_events}
-	The last thing that needs to be done is registering click events on the submit button, both for the client and server side. Web Controls like buttons also have server side events in ASP.NET Web Forms. Registering click events is done as the last thing in the \texttt{Page\_Load} event as shown in figure \ref{fig:register_events}. Note that the server side click event handler is also defined here.
+	The last thing that needs to be done is registering click events on the submit button, both for the client and server side. Web Controls, like buttons, also have server side events in ASP.NET Web Forms. Registering click events is done as the last thing in the \texttt{Page\_Load} event as shown in figure \ref{fig:register_events}. Note that the server side click event handler is also defined here.
 \begin{figure}[H]
 \begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={Default,MiCSPage,Button,CheckBox,TextBox,EventArgs,ClientSide,InputElement,Document,CheckBoxElement,Window,MixedSide,Regex}]
 protected void Page_Load(object sender, EventArgs e)
@@ -167,7 +167,7 @@ Now the example web application can be run. If the client side validation passes
 
 If the user does not enter a valid e-mail address or doesn't accept the terms, he will be alerted with an error message and the form will not submit. Should the user bypass the client side validation, the server side validation will step in, and the user will be met with an error message generated from server side instead.
 
-The resulting HTML and JavaScript source code is shown in Figure \ref{fig:manualHtmlSource}.
+The generated HTML and JavaScript source code is shown in Figure \ref{fig:manualHtmlSource}.
 
 \begin{figure}[H]
 \begin{lstlisting}[language=html,style=HTMLJSStyle]
@@ -216,5 +216,5 @@ The resulting HTML and JavaScript source code is shown in Figure \ref{fig:manual
 \label{fig:manualHtmlSource}
 \end{figure}
 
-In this simple registration form example we have now essentially written JavaScript in a safe manner, we have reused code on server and client side and we have ensured consistency between Html and JavaScript by registering the client side click event in a safe (compile time validated) manner.
+In this simple registration form example we have now essentially written JavaScript in a safe manner, we have reused server side code on client side and we have ensured consistency between HTML and JavaScript by registering the client side click event in a safe (compile time validated) manner.
 
