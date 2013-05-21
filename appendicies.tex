@@ -1,6 +1,6 @@
 \begin{appendices}
-	\chapter{MiCS Manual Example Code}
-	\label{AppendixA}
+\chapter{MiCS Manual Example Code}
+\label{AppendixA}
 
 \begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={Default, MiCSPage, Button, CheckBox, TextBox, EventArgs, Label, ClientSide, MixedSide, InputElement, CheckboxElement, Document, Window, Regex}]
 using System;
@@ -16,65 +16,282 @@ using System.Html;
 
 namespace MiCSManual
 {
-    public partial class Default : MiCSPage
+  public partial class Default : MiCSPage
+  {
+    
+    Button button;
+    CheckBox checkBox;
+    TextBox emailBox;
+
+    protected void Page_Load(object sender, EventArgs e)
     {
-        
-        Button button;
-        CheckBox checkBox;
-        TextBox emailBox;
+      emailBox = new TextBox() { ID = "EmailBox", Text = "E-mail" };
+      checkBox = new CheckBox() { ID = "CheckBox", Text = "I accept the terms."};
+      button = new Button() { Text = "Submit" };
 
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            emailBox = new TextBox() { ID = "EmailBox", Text = "E-mail" };
-            checkBox = new CheckBox() { ID = "CheckBox", Text = "I accept the terms."};
-            button = new Button() { Text = "Submit" };
+      form1.Controls.Add(emailBox);
+      form1.Controls.Add(checkBox);
+      form1.Controls.Add(button);
 
-            form1.Controls.Add(emailBox);
-            form1.Controls.Add(checkBox);
-            form1.Controls.Add(button);
-
-            button.Click += button_Click;
-            button.OnClientClick(button_ClientClick);
-        }
-
-        void button_Click(object sender, EventArgs e)
-        {
-            if (isEmailValid(emailBox.Text) && checkBox.Checked)
-                form1.Controls.Add(new Label() { Text = "Registration Complete." });
-            else
-                form1.Controls.Add(new Label() { Text = "Server Side Registration Failed!" });
-        }
-
-        [ClientSide]
-        bool button_ClientClick()
-        {
-            var emailField = (InputElement)Document.GetElementById("EmailBox");
-            var termsCheckBox = (CheckBoxElement)Document.GetElementById("CheckBox");
-
-            if (!isEmailValid(emailField.Value))
-            {
-                Window.Alert("Invalid E-mail!");
-                return false;
-            }
-
-            if (!termsCheckBox.Checked)
-            {
-                Window.Alert("Accepting terms are required!");
-                return false;
-            }
-
-            return true;
-        }
-
-        [MixedSide]
-        bool isEmailValid(string email)
-        {
-            var emailRegex = new Regex("^[A-z0-9._%+-]+@[A-z0-9.-]+.[A-z]{2,4}$");
-            return emailRegex.IsMatch(email);
-        }
+      button.Click += button_Click;
+      button.OnClientClick(button_ClientClick);
     }
+
+    void button_Click(object sender, EventArgs e)
+    {
+      if (isEmailValid(emailBox.Text) && checkBox.Checked)
+        form1.Controls.Add(new Label() { Text = "Registration Complete." });
+      else
+        form1.Controls.Add(new Label() { Text = "Server Side Registration Failed!" });
+    }
+
+    [ClientSide]
+    bool button_ClientClick()
+    {
+      var emailField = (InputElement)Document.GetElementById("EmailBox");
+      var termsCheckBox = (CheckBoxElement)Document.GetElementById("CheckBox");
+
+      if (!isEmailValid(emailField.Value))
+      {
+        Window.Alert("Invalid E-mail!");
+        return false;
+      }
+
+      if (!termsCheckBox.Checked)
+      {
+        Window.Alert("Accepting terms are required!");
+        return false;
+      }
+
+      return true;
+    }
+
+    [MixedSide]
+    bool isEmailValid(string email)
+    {
+      var emailRegex = new Regex("^[A-z0-9._%+-]+@[A-z0-9.-]+.[A-z]{2,4}$");
+      return emailRegex.IsMatch(email);
+    }
+  }
 }
 \end{lstlisting}
 
+\chapter{MiCS Case Study Code}
+\label{case_study_appendix}
+
+Validator.cs
+\begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={Default, MiCSPage, Button, CheckBox, TextBox, EventArgs, Label, ClientSide, MixedSide, InputElement, CheckboxElement, Document, Window, Regex, Validator}]       
+using MiCS;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Web;
+
+namespace MiCSCaseStudy
+{
+  class Validator
+  {
+
+    [MixedSide]
+    public bool IsNameValid(string name)
+    {
+      Regex rx = new Regex(@"^([A-z]+ [A-z]+)( [A-z]+)*$");
+      return rx.IsMatch(name) && name.Length > 5 && name.Length < 128;
+    }
+
+    [MixedSide]
+    public bool IsAddressValid(string address, string zipcode)
+    {
+      var addressRegEx = new Regex("^[A-z]+ [0-9]+(, [0-9]+ (SAL|TH|TV))?$");
+      var isAddressFormatValid = addressRegEx.IsMatch(address);
+
+      var zipCodeRegEx = new Regex("^[1-9][0-9][0-9][0-9]$");
+      var isZipCodeFormatValid = zipCodeRegEx.IsMatch(zipcode);
+
+      return isAddressFormatValid && isZipCodeFormatValid;
+    }
+
+    [MixedSide]
+    public bool IsEmailValid(string email)
+    {
+      var emailRegEx = new Regex("^[A-z0-9._%+-]+@[A-z0-9.-]+.[A-z]{2,4}$");
+      var isEmailFormatValid = emailRegEx.IsMatch(email);
+      return isEmailFormatValid;
+    }
+
+    [MixedSide]
+    public bool IsDeliveryMethodsValid(bool[] deliveryMethods, string address, string zipcode, string email)
+    {
+      var snailMailChecked = deliveryMethods[0];
+      var emailChecked = deliveryMethods[1];
+
+      if (!snailMailChecked && !emailChecked)
+      {
+        return false;
+      }
+
+      if (snailMailChecked && emailChecked)
+      {
+        return IsEmailValid(email) && IsAddressValid(address, zipcode);
+      }
+
+      else if (snailMailChecked)
+      {
+        return IsAddressValid(address, zipcode);
+      }
+
+      else
+      {
+        return IsEmailValid(email);
+      }
+    }
+
+    [MixedSide]
+    public bool IsPhoneValid(string phoneNumber)
+    {
+      var phoneNumberRegEx = new Regex("^([1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9])$");
+      var isPhoneFormatValid = phoneNumberRegEx.IsMatch(phoneNumber);
+
+      return isPhoneFormatValid;
+    }
+  }
+}
+\end{lstlisting}     
+
+\newpage
+WebForm1.aspx.cs
+
+\begin{lstlisting}[language=CSharp,classoffset=1,morekeywords={Default, MiCSPage, Button, CheckBox, TextBox, EventArgs, Label, ClientSide, MixedSide, InputElement, CheckboxElement, Document, Window, Regex, Validator, Color, CheckboxElement}]
+using MiCS;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Html;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Drawing;
+
+namespace MiCSCaseStudy
+{
+  public partial class WebForm1 : MiCSPage
+  {
+    TextBox NameBox = new TextBox() { ID = "name", Text = "Name" };
+    Panel CheckBoxGroup = new Panel();
+    CheckBox SnailMailCheck = new CheckBox() { ID = "dmSnailmail", Text = "Snail Mail" };
+    CheckBox EmailCheck = new CheckBox() { ID = "dmEmail", Text = "E-Mail" };
+    TextBox AddressBox = new TextBox() { ID = "address", Text = "Address" };
+    TextBox ZipcodeBox = new TextBox() { ID = "zipcode", Text = "Zip Code" };
+    TextBox EmailBox = new TextBox() { ID = "email", Text = "E-mail" };
+    TextBox PhoneBox = new TextBox() { ID = "phone", Text = "Phone" };
+    Button SubmitButton = new Button() { Text = "Register" };
+
+    protected void Page_Init(object sender, EventArgs e)
+    {
+      form1.Controls.Add(new Label() { Text = "Registration", CssClass = "h2" });
+      form1.Controls.Add(NameBox);
+      form1.Controls.Add(new Label() { Text = "Choose delivery method", CssClass = "h4" });
+      CheckBoxGroup.Controls.Add(SnailMailCheck);
+      CheckBoxGroup.Controls.Add(EmailCheck);
+      form1.Controls.Add(CheckBoxGroup);
+      form1.Controls.Add(AddressBox);
+      form1.Controls.Add(ZipcodeBox);
+      form1.Controls.Add(EmailBox);
+      form1.Controls.Add(new Label() { Text = "And/or", CssClass = "h4" });
+      form1.Controls.Add(PhoneBox);
+      form1.Controls.Add(SubmitButton);
+
+      SubmitButton.OnClientClick(OnClickAction);
+
+      SubmitButton.Click += SubmitButton_Click;
+    }
+
+    void SubmitButton_Click(object sender, EventArgs e)
+    {
+      Validator v = new Validator();
+
+      var isPhoneValid = v.IsPhoneValid(PhoneBox.Text);
+      var isNameValid = v.IsNameValid(NameBox.Text);
+      var isDeliveryMethodsValid = v.IsDeliveryMethodsValid(new bool[] { SnailMailCheck.Checked, EmailCheck.Checked }, AddressBox.Text, ZipcodeBox.Text, EmailBox.Text);
+
+      Color color;
+      if (isPhoneValid && isNameValid && isDeliveryMethodsValid)
+        color = Color.Green;
+      else
+        color = Color.Red;
+      
+      NameBox.BackColor = color;
+      AddressBox.BackColor = color;
+      ZipcodeBox.BackColor = color;
+      EmailBox.BackColor = color;
+      PhoneBox.BackColor = color;
+    }
+
+    [ClientSide]
+    private bool OnClickAction()
+    {
+      Validator v = new Validator();
+
+      bool[] deliveryMethods = new bool[2];
+      
+      CheckBoxElement snailmailCheckBox = (CheckBoxElement)Document.GetElementById("dmSnailmail");
+      deliveryMethods[0] = snailmailCheckBox.Checked;
+
+      CheckBoxElement emailCheckBok = (CheckBoxElement)Document.GetElementById("dmEmail");
+      deliveryMethods[1] = emailCheckBok.Checked;
+
+      InputElement nameField = (InputElement)Document.GetElementById("name");
+      string name = nameField.Value;
+
+      InputElement addressField = (InputElement)Document.GetElementById("address");
+      string address = addressField.Value;
+      
+      InputElement zipcodeField = (InputElement)Document.GetElementById("zipcode");
+      string zipcode = zipcodeField.Value;
+      
+      InputElement emailField = (InputElement)Document.GetElementById("email");
+      string email = emailField.Value;
+
+      InputElement phoneField = (InputElement)Document.GetElementById("phone");
+      string phone = phoneField.Value;
+
+      var isValid = v.IsNameValid(name) && v.IsPhoneValid(phone) && v.IsDeliveryMethodsValid(deliveryMethods, address, zipcode, email);
+
+      if (!isValid)                
+        Window.Alert("The form is not valid!");
+
+      return isValid;
+    }
+
+  }
+}
+
+\end{lstlisting}
+
+\newpage
+Default.aspx
+
+\begin{lstlisting}[language=HTML5]
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs" Inherits="MiCSCaseStudy.WebForm1" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+  <link href="style.css" rel="stylesheet" />
+  <title>MiCS Case Study: Registration Form</title>
+</head>
+<body>
+  <form id="form1" runat="server">
+  <div>
+  
+  </div>
+  </form>
+</body>
+</html>
+\end{lstlisting}
 
 \end{appendices}
