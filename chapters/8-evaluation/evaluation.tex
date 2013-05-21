@@ -19,7 +19,7 @@
 \label{sec:runtime_vs_compile_time_errors}
 	Compile time errors are usually preferred over runtime errors as they are easier to resolve and hence less time consuming. Furthermore runtime errors are potentially exposed to the end user.  When using Script\# as originally intended one gets the benefit of having your code compile time validated in the same manner as when using C\#. This is an important reason for choosing a Script\# only solution for some projects (see section \ref{sec:when_to_use_mics}).
 
-	Code will also be compile time validated when using MiCS there are however some errors that can now occur as runtime errors on server side. This can e.g. happen when unsupported C\# constructs are used (TODO: REF) or when the Mixed Side Principle (section \ref{sub:the_mixedside_principle}) is violated. This is as disadvantage of using MiCS when compared to a Script\# only solution. However this disadvantage is not critical as it is isolated to server side which implies that the end user can be exempt from being exposed to these errors. Furthermore the server side runtime errors will still prevent a web application from running in a corrupt state (TODO: maybe REF). 
+	Code will also be compile time validated when using MiCS there are however some errors that can now occur as runtime errors on server side. This can e.g. happen when unsupported C\# constructs are used (TODO: REF) or when the Mixed Side Principle (section \ref{sub:the_mixedside_principle}) is violated. This is a disadvantage of using MiCS when compared to a Script\# only solution. However this disadvantage is not critical as it is isolated to server side which implies that the end user can be exempt from being exposed to these errors. That is, runtime errors can prevent a web application from running in a corrupt state. 
 
 % section runtime_vs_compile_time_errors (end)
 
@@ -33,9 +33,9 @@
 
 \section{When to Use MiCS} % (fold)
 \label{sec:when_to_use_mics}
-	When choosing to use MiCS or a different safe JavaScript approach it’s beneficial to consider if one’s application is client side heavy, server side heavy or both. Using Script\# in the original manner would be a good approach to a client side heavy application as Script\# will reveal the most errors at compile time. 
+	When choosing to use MiCS or a different safe JavaScript approach it's beneficial to consider if one's application is client side heavy, server side heavy or both. Using Script\# in the original manner would be a good approach to a client side heavy application as Script\# will reveal the most errors at compile time. 
 
-	If you have an application that is both client side heavy and server side heavy using MiCS might be a good choice as it gives you the benefits of mixed side code and 'JavaScript HTML consistency' (section \ref{ssub:obtaining_javascript_html_consistency} TODO: UPDATE REF). The cost is that some of your compile time errors will become runtime errors (on server side) but this doesn’t necessary outweigh the other benefits. 
+	If you have an application that is both client side heavy and server side heavy using MiCS might be a good choice as it gives you the benefits of mixed side code and JavaScript-HTML consistency. The cost is that some of your compile time errors will become runtime errors (on server side) but this doesn't outweigh the other benefits. 
 
 	If you have a web application that is server side heavy you might not use any framework for safe JavaScript development or you could use MiCS as the over head would be low.
 
@@ -46,6 +46,6 @@
 
 \section{Safety Benefits vs. Convenience} % (fold)
 \label{sec:safety_benefits_vs_conveniente}
-	Safety in development is the main target of this project however safety always comes at a cost. Unsafe JavaScript development can be done very fast and even though we think we have a solution to safe JavaScript development with very little over head unsafe JavaScript can be the right choice for some projects. However if a project reach a certain size or complexity (and if correctness matters) it will eventually be beneficial to use JavaScript in safe manner.
+	Safety in development is the main target of this project however safety always comes at a cost. Unsafe JavaScript development can be done very fast and even though we think we have a solution to safe JavaScript development with very little over head unsafe JavaScript can be the right choice for some projects. However if a project reach a certain size or complexity (and if correctness matters) it will eventually be beneficial to use JavaScript in a safe manner.
 
 \input{chapters/8-evaluation/future-work}
