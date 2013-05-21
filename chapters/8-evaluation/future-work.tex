@@ -5,18 +5,18 @@ This section describes which direction the project should take from here; what n
 
 \subsection{Testing} % (fold)
 \label{sub:fw_testing}
-	As stated in the introduction, this project has served as a proof of concept. Even though some testing has been done to secure the correctness of MiCS, it is not enough to guarantee that MiCS works correctly in all situations. MiCS ultimately should serve as a framework for other projects to build on thus test quality and coverage should be prioritized as correctness would be critical.
+	As stated in the introduction, this project has served as a proof of concept. Even though some testing has been done to secure the correctness of MiCS, it is not enough to guarantee that MiCS works correctly in all situations. MiCS ultimately should serve as a framework for other projects to build on and thus test quality and coverage is of utmost importance.
 % subsection fw_testing (end)
 
 \subsection{Completing JavaScript-HTML Consistency} % (fold)
 \label{sub:completing_javascript_html_consistency}
-	Since JavaScript-HTML consistency was not fully implemented in MiCS this would obviously be one of the first things to develop further. Currently only calls to the generated JavaScript from HTML elements (i.e. from the button’s client side click event) is compile time guaranteed. When JavaScript retrieves HTML elements by looking for an element with a specific ID there is no guarantee that such an HTML element exists. This guarantee constitutes the missing part of JavaScript-HTML consistency and is exemplified in figure \ref{fig:write_mics_code_clienside} where the HTML elements are retrieved using the hardcoded IDs (\texttt{EmailBox} and \texttt{CheckBox}). This is somewhat unsafe and a solution should therefore be implemented. This solution should built on the fact that a HTML representation exists in the same compile time validated environment (Code Behind) as the JavaScript representation (\texttt{ClientSide} code) does. This is also how the implemented part of JavaScript-HTML consistency is made possible.
+	Since JavaScript-HTML consistency is not fully implemented in MiCS this should be one of the first things to develop further. Currently only calls to the generated JavaScript from HTML elements is compile time guaranteed (i.e. from the button's client side click event). When JavaScript retrieves HTML elements by looking for an element with a specific ID, there is no guarantee that such an HTML element exists. This guarantee constitutes the missing part of JavaScript-HTML consistency and is examplified in figure \ref{fig:write_mics_code_clienside}. Here, the HTML elements are retrieved using hardcoded IDs (\texttt{EmailBox} and \texttt{CheckBox}). This is unsafe, and a solution should therefore be implemented. This solution should build on the fact that a HTML representation exists in the same compile time validated environment (Code Behind) as the the code from which JavaScript is generated. This is also how the implemented part of JavaScript-HTML consistency is made possible.
 % subsection completing_javascript_html_consistency (end)
 
 \subsection{Inheritance} % (fold)
 \label{sub:fw_inheritance}
 	% Todo: Add to bug list
-	Inheritance is a widely used feature of the C\# programming language and the .NET platform in general. Therefore, it should be prioritized to add support for the portability of inherited types. Currently inheritance is not handled at all in which is somewhat limiting. Apart from the developer not being able to create new types that use inheritance, inherited members on DOM types and core types cannot be used without first casting to the parent type. This should obviously be implemented at some point.
+	Inheritance is a widely used feature of the C\# programming language and the .NET platform in general. Therefore, it should be prioritized to add support for the portability of inherited types. Currently inheritance is not handled at all which is somewhat limiting. Apart from the developer not being able to create new types that use inheritance, inherited members on DOM types and core types cannot be used without first casting to the parent type.
 % subsection fw_inheritance (end)
 
 \subsection{Event Based Programming} % (fold)
