@@ -17,16 +17,15 @@ As explained in section \ref{sec:syntax_tree_validation}, when validating the Ro
 
 \subsection{Initializing MiCS} % (fold)
 \label{ssub:collecting_source_code}
-% Todo: Add to bug list
 When MiCS is initialized, all the developer's source code files are iterated and concatenated into a single string from which the Roslyn AST is built. Roslyn interprets this string as a single source file and builds the AST accordingly. This is not optimal as \texttt{using} statements should always be the first statements of a C\# source file. Consequently, only the \texttt{using} statements from the first file will be registered as being valid and all others are simply ignored. To overcome this, the necessary \texttt{using} statements for our case study are at the moment hardcoded into the beginning of the Roslyn AST. The solution to this problem is simply to generate a Roslyn AST for each of the developer's source files. This, of course, would require MiCS to validate all of these syntax trees and then map them all to Script\#. Apart from correctness, a benefit of having multiple ASTs would allow for. the validation and mapping to Script\# to happen in parallell, e.g. one thread per AST.
 % subsection collecting_source_code (end)
 
 \subsection{Extendability} % (fold)
 \label{sub:extendability}
-% Todo: Should this section be in ease of use?
 At the moment, MiCS is implemented with our case study in mind. Only the C\# constructs and types needed to fulfill the requirements set by the case study are supported. However, MiCS is easily extended to support additional statements, expressions or other constructs. For example, if a \texttt{while}-statement was to be supported, only two classes would have to be extended; the \texttt{StatementBuilder} and \texttt{StatementMapper} classes. In the \texttt{StatementMapper} class, an extension method to Roslyn's \texttt{WhileStatementSyntax} would have to be implemented in order to map the Roslyn while-statement to a Script\# while-statement. In the \texttt{StatementBuilder} class, the \texttt{VisitWhileStatement} method (inherited from Roslyn's \texttt{SyntaxWalker} class) would have to be overwritten in order to start the mapping, and add the while-statement to the Script\# AST.
 
 To add support for a new C\# core type, e.g. the \texttt{Date} type, all that is needed is to add a new entry in the \texttt{MiCSCoreMapping}-specification, as explained in section \ref{subsub:core:type_mapping}
+% subsection known_bugs (end)
 % subsection extendability (end)
 
 % section reflection_on_implementation (end)
